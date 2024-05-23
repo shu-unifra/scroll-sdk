@@ -72,8 +72,6 @@ probes:
   startup:
     <<: *default_probes
 
-# this api is a read-only service, it doesn't need to init and migrate again, since all db procedures are finished in fetcher
-
 additionalContainers:
   redis:
     name: redis
