@@ -95,14 +95,6 @@ persistence:
     mountPath: /l2geth/data
     accessMode: ReadWriteOnce
     size: 10Gi
-#  config-toml:
-#    enabled: yes
-#    type: configMap
-#    mountPath: /l2geth/
-#    name: scroll-smart-contracts-config
-#    items:
-#      - key: config.toml
-#        path: config.toml
   genesis:
     enabled: yes
     type: configMap
