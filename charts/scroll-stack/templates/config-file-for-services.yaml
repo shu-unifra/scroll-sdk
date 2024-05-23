@@ -1,0 +1,55 @@
+{{- if index .Values "balance-checker" "enabled" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    {{- include "scroll-stack.labels" $ | nindent 4 }}
+  name: balance-checker-config
+data:
+{{ (.Files.Glob "balance-checker-config.json").AsConfig | indent 2 }}
+---
+{{- end }}
+{{- if index .Values "bridge-history-api" "enabled" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    {{- include "scroll-stack.labels" $ | nindent 4 }}
+  name: bridge-history-config
+data:
+{{ (.Files.Glob "bridge-history-config.json").AsConfig | indent 2 }}
+---
+{{- end }}
+{{- if index .Values "rollup-relayer" "enabled" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    {{- include "scroll-stack.labels" $ | nindent 4 }}
+  name: rollup-relayer-config
+data:
+{{ (.Files.Glob "rollup-config.json").AsConfig | indent 2 }}
+---
+{{- end }}
+{{- if index .Values "chain-monitor" "enabled" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    {{- include "scroll-stack.labels" $ | nindent 4 }}
+  name: chain-monitor-config
+data:
+{{ (.Files.Glob "chain-monitor-config.json").AsConfig | indent 2 }}
+---
+{{- end }}
+{{- if index .Values "coordinator-api" "enabled" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    {{- include "scroll-stack.labels" $ | nindent 4 }}
+  name: coordinator-config
+data:
+{{ (.Files.Glob "coordinator-config.json").AsConfig | indent 2 }}
+---
+{{- end }}

@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-contracts-deployment
+  labels:
+    {{- include "scroll-stack.labels" $ | nindent 4 }}
+spec:
+  template:
+    spec:
+      containers:
+        - name: contracts-deployment
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          env:
+          {{- range $env := .Values.env }}
+            - name: {{ $env.name }}
+              value: {{ $env.value }}
+          {{- end }}
+          volumeMounts:
+            - mountPath: /contracts/volume
+              name: config
+      restartPolicy: Never
+      volumes:
+        - configMap:
+            name: scroll-smart-contracts-config
+          name: config
+  backoffLimit: 4

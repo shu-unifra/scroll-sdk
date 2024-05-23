@@ -1,0 +1,125 @@
+---
+global:
+  nameOverride: &app_name chain-monitor
+  fullnameOverride: *app_name
+
+image:
+  repository: scrolltech/chain-monitorv2
+  pullPolicy: Always
+  tag: v1.1.20
+
+env:
+  - name: CHAIN_MONITOR_SERVER_PORT
+    value: 8080
+  - name: CHAIN_MONITOR_METRICS_PORT
+    value: 8090
+
+command:
+  [
+    "/bin/sh",
+    "-c",
+    "chain-monitor --config /app/config/chain-monitor-config.json --http --http.port ${CHAIN_MONITOR_SERVER_PORT} \
+    --metrics --metrics.addr 0.0.0.0 --metrics.port ${CHAIN_MONITOR_METRICS_PORT} \
+     --verbosity 3"
+  ]
+
+resources:
+  requests:
+    memory: "100Mi"
+    cpu: "50m"
+  limits:
+    memory: "500Mi"
+    cpu: "100m"
+
+persistence:
+  *app_name:
+    enabled: yes
+    type: configMap
+    mountPath: /app/config/
+    name: chain-monitor-config
+  init-db:
+    enabled: yes
+    type: configMap
+    mountPath: /init-db.sh
+    name: init-db
+    defaultMode: "0777"
+
+service:
+  main:
+    enabled: true
+    ports:
+      http:
+        enabled: true
+        port: 80
+      metrics:
+        enabled: true
+        port: 8090
+        targetPort: 8090
+
+defaultProbes: &default_probes
+  enabled: true
+  custom: true
+  spec:
+    httpGet:
+      path: "/"
+      port: 8090
+
+probes:
+  liveness:
+    << : *default_probes
+  readiness:
+    << : *default_probes
+  startup:
+    << : *default_probes
+
+initContainers:
+  init-db:
+    image: postgres:latest
+    env:
+      - name: POSTGRES_DB
+        value: scroll
+      - name: PG_USER
+        valueFrom:
+          secretKeyRef:
+            name: db-secrets
+            key: PG_USER
+      - name: PGPASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: db-secrets
+            key: PGPASSWORD
+      - name: PG_HOST
+        valueFrom:
+          secretKeyRef:
+            name: db-secrets
+            key: PG_HOST
+      - name: PG_PORT
+        valueFrom:
+          secretKeyRef:
+            name: db-secrets
+            key: PG_PORT
+      - name: DB_USER
+        value: chain_monitor
+      - name: DB_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: db-secrets
+            key: CHAIN_MONITOR_PASSWORD
+    #    command: ["bash", "-c",
+    #      "psql -h $POSTGRES_URL -U $POSTGRES_USER -p 5432 -c \"CREATE DATABASE ${POSTGRES_DB};\""]
+    command: ["bash","-c","./init-db.sh"]
+    volumeMounts:
+      - name: init-db
+        mountPath: /init-db.sh
+        subPath: init-db.sh
+
+serviceMonitor:
+  main:
+    enabled: true
+    labels:
+      release: scroll-stack
+    serviceName: '{{ include "bjw-s.common.lib.chart.names.fullname" $ }}'
+    endpoints:
+      - port: metrics
+        interval: 1m
+        scrapeTimeout: 10s

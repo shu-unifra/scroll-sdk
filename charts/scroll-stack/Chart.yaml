@@ -1,0 +1,88 @@
+---
+apiVersion: v2
+description: scroll helm charts to deploy scroll's stack
+name: scroll-stack
+version: 0.0.1
+appVersion: v0.1.0
+kubeVersion: ">=1.22.0-0"
+maintainers:
+  - name: scroll-sre
+    email: sebastien@scroll.io
+keywords:
+  - scroll
+  - scroll-stack
+home: https://github.com/scroll-tech/scroll-stack
+sources:
+  - A list of URLs to source code for this project (optional)
+icon: A URL to an SVG or PNG image to be used as an icon (optional).
+dependencies:
+  - name: anvil
+    version: 0.0.1
+    condition: anvil.enabled
+  - name: balance-checker
+    version: 0.0.1
+    condition: balance-checker.enabled
+  - name: blockscout
+    version: 0.0.1
+    condition: blockscout.enabled
+  - name: bridge-history-api
+    version: 0.0.1
+    condition: bridge-history-api.enabled
+  - name: bridge-history-fetcher
+    version: 0.0.1
+    condition: bridge-history-fetcher.enabled
+  - name: blockscout-sc-verifier
+    version: 0.0.1
+    condition: blockscout-sc-verifier.enabled
+  - name: chain-monitor
+    version: 0.0.1
+    condition: chain-monitor.enabled
+  - name: contracts
+    version: 0.0.1
+    condition: contracts.enabled
+  - name: coordinator-api
+    version: 0.0.1
+    condition: coordinator-api.enabled
+  - name: coordinator-cron
+    version: 0.0.1
+    condition: coordinator-cron.enabled
+  - name: event-watcher
+    version: 0.0.1
+    condition: event-watcher.enabled
+  - name: frontends
+    version: 0.0.1
+    condition: frontends.enabled
+  - name: gas-oracle
+    version: 0.0.1
+    condition: gas-oracle.enabled
+  - name: l2geth-bootnode
+    version: 0.0.1
+    condition: l2geth-bootnode.enabled
+  - name: l2geth-rpc
+    version: 0.0.1
+    condition: l2geth-rpc.enabled
+  - name: grafana
+    repository: "https://grafana.github.io/helm-charts"
+    version: 6.58.8
+    condition: grafana.enabled
+  - name: l2geth-signer
+    version: 0.0.1
+    condition: l2geth-signer.enabled
+  - name: loki-stack
+    repository: "https://grafana.github.io/helm-charts"
+    version: 2.10.2
+    condition: loki-stack.enabled
+  - name: postgresql
+    repository: "oci://registry-1.docker.io/bitnamicharts"
+    version: 13.2.21
+    condition: postgresql.enabled
+  - name: kube-prometheus-stack
+    repository: "https://prometheus-community.github.io/helm-charts"
+    version: 58.5.1
+    condition: kube-prometheus-stack.enabled
+  - name: rollup-relayer
+    version: 0.0.1
+    condition: rollup-relayer.enabled
+  - name: rpc-gateway
+    version: 0.0.1
+    condition: rpc-gateway.enabled

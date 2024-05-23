@@ -1,0 +1,124 @@
+---
+global:
+  nameOverride: &app_name coordinator-cron
+  fullnameOverride: *app_name
+
+image:
+  repository: scrolltech/coordinator-cron
+  pullPolicy: Always
+  tag: v4.4.7
+
+env:
+  - name: HTTP_PORT
+    value: "8555"
+  - name: WS_PORT
+    value: "8556"
+  - name: RUST_LOG
+    value: info
+  - name: METRICS_PORT
+    value: "8090"
+  - name: GIN_MODE
+    value: "release"
+
+command: [
+  "/bin/sh",
+  "-c",
+  "coordinator_cron --config /app/conf/coordinator-config.json \
+    --metrics --metrics.addr 0.0.0.0 --metrics.port ${METRICS_PORT} \
+    --log.debug",
+]
+
+resources:
+  requests:
+    memory: "50Mi"
+    cpu: "50m"
+  limits:
+    memory: "200Mi"
+    cpu: "100m"
+
+persistence:
+  *app_name:
+    enabled: yes
+    type: configMap
+    mountPath: /app/conf/
+    name: coordinator-config
+  genesis:
+    enabled: yes
+    type: configMap
+    mountPath: /app/genesis/
+    name: genesis-config
+
+service:
+  main:
+    enabled: true
+    ports:
+      http:
+        enabled: true
+        port: 80
+      metrics:
+        enabled: true
+        port: 8090
+        targetPort: 8090
+
+defaultProbes: &default_probes
+  enabled: true
+  custom: true
+  spec:
+    httpGet:
+      path: "/health"
+      port: 8090
+
+probes:
+  liveness:
+    << : *default_probes
+  readiness:
+    << : *default_probes
+  startup:
+    << : *default_probes
+
+#configMaps:
+#  config:
+#    enabled: true
+#    data:
+#      config.json: |
+#        {
+#          "prover_manager": {
+#            "provers_per_session": 1,
+#            "session_attempts": 100,
+#            "chunk_collection_time_sec": 3600,
+#            "batch_collection_time_sec": 600,
+#            "verifier": {
+#              "fork_name": "bernoulli",
+#              "mock_mode": false,
+#              "params_path": "/verifier/params",
+#              "assets_path": "/verifier/assets"
+#            },
+#            "max_verifier_workers": 4,
+#            "min_prover_version": "v4.3.41"
+#          },
+#          "db": {
+#            "driver_name": "postgres",
+#            "dsn": "postgres://postgres:qwerty12345@postgresql:5432/scroll",
+#            "maxOpenNum": 200,
+#            "maxIdleNum": 20
+#          },
+#          "l2": {
+#            "chain_id": 222222
+#          },
+#          "auth": {
+#            "secret": "XXX",
+#            "challenge_expire_duration_sec": 10,
+#            "login_expire_duration_sec": 3600
+#          }
+#        }
+
+serviceMonitor:
+  main:
+    enabled: true
+    labels:
+      release: scroll-stack
+    serviceName: '{{ include "bjw-s.common.lib.chart.names.fullname" $ }}'
+    endpoints:
+      - port: metrics
+        interval: 1m
+        scrapeTimeout: 10s
