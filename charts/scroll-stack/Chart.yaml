@@ -63,7 +63,7 @@ dependencies:
     condition: l2geth-rpc.enabled
   - name: grafana
     repository: "https://grafana.github.io/helm-charts"
-    version: 6.58.8
+    version: 6.61.2
     condition: grafana.enabled
   - name: l2geth-signer
     version: 0.0.1
