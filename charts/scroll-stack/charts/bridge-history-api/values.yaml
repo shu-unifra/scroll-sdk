@@ -34,12 +34,6 @@ service:
         enabled: true
         port: 8090
         targetPort: 8090
-    annotations:
-      external-dns.alpha.kubernetes.io/hostname: scroll-stack-bridge-history-api.devnet.scroll.tech
-      service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
-      service.beta.kubernetes.io/aws-load-balancer-type: nlb
-      service.beta.kubernetes.io/aws-load-balancer-internal: "true"
-    type: LoadBalancer
     
 persistence:
   bridge-history-api:
@@ -76,6 +70,19 @@ additionalContainers:
   redis:
     name: redis
     image: redis
+
+ingress:
+  main:
+    enabled: true
+    primary: true
+    annotations: {}
+    labels: {}
+    ingressClassName: "nginx"
+    hosts:
+      - host: bridge-history-api.local
+        paths:
+          - path: /
+            pathType: Prefix
 
 serviceMonitor:
   main:

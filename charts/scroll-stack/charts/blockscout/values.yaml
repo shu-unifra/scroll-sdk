@@ -159,7 +159,7 @@ ingress:
     labels: {}
     ingressClassName: "nginx"
     hosts:
-      - host: blockscout.devnet.scroll.tech
+      - host: blockscout.local
         paths:
           - path: /
             pathType: Prefix

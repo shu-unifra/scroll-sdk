@@ -69,12 +69,6 @@ service:
         enabled: true
         port: 8090
         targetPort: 8090
-    annotations:
-      external-dns.alpha.kubernetes.io/hostname: scroll-stack-coordinator-api.devnet.scroll.tech
-      service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
-      service.beta.kubernetes.io/aws-load-balancer-type: nlb
-      service.beta.kubernetes.io/aws-load-balancer-internal: "true"
-    type: LoadBalancer
 
 defaultProbes: &default_probes
   enabled: false
