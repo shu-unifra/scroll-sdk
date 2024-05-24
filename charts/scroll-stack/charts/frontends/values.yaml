@@ -19,12 +19,6 @@ service:
       http:
         enabled: true
         port: 80
-    annotations:
-      external-dns.alpha.kubernetes.io/hostname: scroll-stack-frontends.devnet.scroll.tech
-      service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
-      service.beta.kubernetes.io/aws-load-balancer-type: nlb
-      service.beta.kubernetes.io/aws-load-balancer-internal: "true"
-    type: LoadBalancer
 
 resources:
   requests:
@@ -49,3 +43,16 @@ probes:
     <<: *default_probes
   startup:
     <<: *default_probes
+
+ingress:
+  main:
+    enabled: true
+    primary: true
+    annotations: {}
+    labels: {}
+    ingressClassName: "nginx"
+    hosts:
+      - host: frontends.local
+        paths:
+          - path: /
+            pathType: Prefix

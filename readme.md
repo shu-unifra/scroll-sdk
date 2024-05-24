@@ -38,7 +38,7 @@ Then go to your browser and check `http://localhost:8080/`
 2. Using /etc/hosts
 If you enabled ingress on your cluster, you can add the following entries
 ```txt
-1.2.3.4    blockscout.devnet
+1.2.3.4    blockscout.local
 ```
 where `1.2.3.4` is the ip of your cluster.
 Then go to your browser and check `http://blockscout.devnet/`
@@ -53,7 +53,7 @@ Then go to your browser and check `http://localhost:8081/`
 2. Using /etc/hosts
    If you enabled ingress on your cluster, you can add the following entries
 ```txt
-1.2.3.4    grafana.devnet
+1.2.3.4    grafana.local
 ```
 where `1.2.3.4` is the ip of your cluster.
 Then go to your browser and check `http://grafana.devnet/`
