@@ -17,7 +17,7 @@ Run the following script to get the dependencies of each helm charts
 Run this command to generate config.toml file and genesis file
 ```bash
 cd charts/scroll-stack
-time docker run --rm -it -v .:/contracts/volume scrolltech/scroll-stack-contracts:gen-configs-f27d27cb
+time docker run --rm -it -v .:/contracts/volume scrolltech/scroll-stack-contracts:gen-configs-e2b87879
 ```
 
 ## Launch scroll-stack
