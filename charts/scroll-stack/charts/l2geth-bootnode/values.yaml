@@ -64,14 +64,6 @@ command: ["bash",
     --miner.gasprice \"$L2GETH_MIN_GAS_PRICE\" --rpc.gascap 0 --gpo.ignoreprice \"$L2GETH_MIN_GAS_PRICE\" $L2GETH_EXTRA_PARAMS"
   ]
 
-#resources:
-#  requests:
-#    memory: "12Gi"
-#    cpu: "1"
-#  limits:
-#    memory: "16Gi"
-#    cpu: "2"
-
 defaultProbes: &default_probes
   enabled: false
   custom: true

@@ -78,14 +78,6 @@ command: ["bash",
           --metrics --metrics.expensive \
           $L2GETH_EXTRA_PARAMS"]
 
-resources:
-  requests:
-    memory: "1Gi"
-    cpu: "0.5"
-  limits:
-    memory: "4Gi"
-    cpu: "1"
-
 service:
   main:
     enabled: true
