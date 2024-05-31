@@ -25,7 +25,8 @@ service:
         port: &WS_PORT 8546
       metrics:
         enabled: true
-        port: 8090
+        port: 6060
+        targetPort: 6060
 
 defaultProbes: &default_probes
   enabled: true
@@ -101,6 +102,7 @@ command: ["bash",
     --gpo.blocks 100 \
     --l1.endpoint \"$L2GETH_L1_ENDPOINT\" --l1.confirmations \"$L2GETH_L1_WATCHER_CONFIRMATIONS\" --l1.sync.startblock \"$L2GETH_L1_CONTRACT_DEPLOYMENT_BLOCK\" \
     --rollup.verify \
+    --metrics --metrics.expensive \
     $L2GETH_EXTRA_PARAMS"
 ]
 
@@ -116,3 +118,15 @@ persistence:
     type: configMap
     mountPath: /l2geth/genesis/
     name: genesis-config
+
+serviceMonitor:
+  main:
+    enabled: true
+    labels:
+      release: scroll-stack
+    serviceName: '{{ include "bjw-s.common.lib.chart.names.fullname" $ }}'
+    endpoints:
+      - port: metrics
+        interval: 1m
+        scrapeTimeout: 10s
+        path: /debug/metrics/prometheus
