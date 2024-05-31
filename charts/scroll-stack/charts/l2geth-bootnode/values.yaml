@@ -61,7 +61,9 @@ command: ["bash",
     $METRICS_FLAGS \
     --txpool.globalqueue 4096 --txpool.globalslots 40960 --txpool.pricelimit \"$L2GETH_MIN_GAS_PRICE\" $LOCALS_FLAG \
     --l1.endpoint \"$L2GETH_L1_ENDPOINT\" --l1.confirmations \"$L2GETH_L1_WATCHER_CONFIRMATIONS\" --l1.sync.startblock \"$L2GETH_L1_CONTRACT_DEPLOYMENT_BLOCK\" \
-    --miner.gasprice \"$L2GETH_MIN_GAS_PRICE\" --rpc.gascap 0 --gpo.ignoreprice \"$L2GETH_MIN_GAS_PRICE\" $L2GETH_EXTRA_PARAMS"
+    --miner.gasprice \"$L2GETH_MIN_GAS_PRICE\" --rpc.gascap 0 --gpo.ignoreprice \"$L2GETH_MIN_GAS_PRICE\" \ 
+    --metrics --metrics.expensive \
+    $L2GETH_EXTRA_PARAMS"
   ]
 
 defaultProbes: &default_probes
@@ -92,6 +94,7 @@ persistence:
     type: configMap
     mountPath: /l2geth/genesis/
     name: genesis-config
+
 service:
   main:
     enabled: true
@@ -101,4 +104,17 @@ service:
         port: 30303
       metrics:
         enabled: true
-        port: 8090
+        port: 6060
+        targetPort: 6060
+
+serviceMonitor:
+  main:
+    enabled: true
+    labels:
+      release: scroll-stack
+    serviceName: '{{ include "bjw-s.common.lib.chart.names.fullname" $ }}'
+    endpoints:
+      - port: metrics
+        interval: 1m
+        scrapeTimeout: 10s
+        path: /debug/metrics/prometheus
