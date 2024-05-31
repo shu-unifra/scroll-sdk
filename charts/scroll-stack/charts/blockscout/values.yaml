@@ -11,7 +11,7 @@ controller:
 image:
   repository: blockscout/blockscout
   pullPolicy: Always
-  tag: 5.4.0
+  tag: 6.6.0
 
 env:
   - name: CHAIN_ID
@@ -145,7 +145,7 @@ initContainers:
   #      mountPath: /init-db.sh
   #      subPath: init-db.sh
   migrate-db:
-    image: blockscout/blockscout:5.4.0
+    image: blockscout/blockscout:6.6.0
     env:
     - name: DATABASE_URL
       value: "postgresql://postgres:qwerty12345@postgresql:5432/blockscout"
