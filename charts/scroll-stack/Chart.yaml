@@ -63,7 +63,7 @@ dependencies:
     condition: l2geth-rpc.enabled
   - name: grafana
     repository: "https://grafana.github.io/helm-charts"
-    version: 6.61.2
+    version: 7.3.11
     condition: grafana.enabled
   - name: l2geth-signer
     version: 0.0.1
@@ -78,7 +78,7 @@ dependencies:
     condition: postgresql.enabled
   - name: kube-prometheus-stack
     repository: "https://prometheus-community.github.io/helm-charts"
-    version: 58.7.0
+    version: 59.0.0
     condition: kube-prometheus-stack.enabled
   - name: rollup-relayer
     version: 0.0.1

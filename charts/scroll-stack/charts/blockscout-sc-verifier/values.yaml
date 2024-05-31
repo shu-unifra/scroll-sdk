@@ -11,7 +11,7 @@ controller:
 image:
   repository: ghcr.io/blockscout/smart-contract-verifier
   pullPolicy: Always
-  tag: v1.3.1
+  tag: v1.7.0
 
 env:
   - name: SMART_CONTRACT_VERIFIER__SERVER__HTTP__ENABLED
