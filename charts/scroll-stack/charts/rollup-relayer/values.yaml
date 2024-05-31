@@ -124,7 +124,6 @@ initContainers:
 
 # Need genesis file and config.json
 configMaps:
-  #TODO is this needed for rollup-relayer ?
   migrate-db:
     enabled: true
     data:

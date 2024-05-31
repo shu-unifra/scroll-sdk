@@ -2,7 +2,6 @@
 anvil:
   enabled: true
 
-#TODO consumes too many db connection
 blockscout:
   enabled: true
 
@@ -91,13 +90,11 @@ l2geth-rpc:
 l2geth-bootnode:
   enabled: true
 
-#TODO make the name of loki svc predictable for grafana to pick it as datasource
 loki-stack:
   enabled: true
   loki:
     fullnameOverride: loki
     nameOverride: loki
-  #TODO a bit ugly, maybe we can make this dynamic ?
   promtail:
     enabled: true
     fullnameOverride: promtail
@@ -149,7 +146,6 @@ kube-prometheus-stack:
   fullnameOverride: prometheus
   prometheus:
     enabled: yes
-  #TODO check why a svc/alert-manager still exists
   alertmanager:
     enabled: false
   grafana:
