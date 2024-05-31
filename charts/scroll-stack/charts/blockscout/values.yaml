@@ -46,10 +46,8 @@ env:
     value: test-blockscout.scroll.io
   - name: JSON_RPC
     value: http://l2geth-signer:8545
-  #TODO find proper value
   - name: SUBNETWORK
     value: "Scroll Sepolia Testnet"
-  #TODO find proper value
   - name: SUPPORTED_CHAINS
     value: '[{ "title": "Etherscan (Sepolia)", "url": "https://sepolia.etherscan.io", "test_net?": true }, { "title": "Scroll Sepolia Testnet", "url": "http://test-blockscout.scroll.io", "test_net?": true }]'
   - name: DISABLE_EXCHANGE_RATES
@@ -70,9 +68,8 @@ env:
     value: clique
   - name: MICROSERVICE_SC_VERIFIER_ENABLED
     value: true
-    #TODO find proper value
   - name: MICROSERVICE_SC_VERIFIER_URL
-    value: http://smart-contract-verifier:8080
+    value: http://blockscout-sc-verifier:8080
   - name: CHAIN_SPEC_PATH
     value: /app/genesis/genesis.json
 
