@@ -4,3 +4,4 @@
 genesis.json
 config-contracts.toml
 charts/scroll-stack/*.json
+.env.frontend
