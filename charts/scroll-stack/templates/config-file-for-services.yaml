@@ -53,3 +53,14 @@ data:
 {{ (.Files.Glob "coordinator-config.json").AsConfig | indent 2 }}
 ---
 {{- end }}
+{{- if index .Values "frontends" "enabled" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    {{- include "scroll-stack.labels" $ | nindent 4 }}
+  name: frontends-config
+data:
+{{ (.Files.Glob ".env.frontend").AsConfig | indent 2 }}
+---
+{{- end }}
