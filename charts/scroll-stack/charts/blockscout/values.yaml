@@ -42,7 +42,6 @@ env:
     value: /images/logo.svg
   - name: WEBAPP_URL
     value: https://blockscout.scroll.tech
-    #TODO find proper value
   - name: BLOCKSCOUT_HOST
     value: test-blockscout.scroll.io
   - name: JSON_RPC
@@ -122,28 +121,6 @@ persistence:
     defaultMode: "0777"
 
 initContainers:
-  #init-db:
-  #  image: postgres:latest
-  #  env:
-  #    - name: POSTGRES_DB
-  #      value: blockscout
-  #    - name: PG_USER
-  #      value: postgres
-  #    - name: PGPASSWORD
-  #      value: qwerty12345
-  #    - name: PG_HOST
-  #      value: postgresql
-  #    - name: PG_PORT
-  #      value: 5432
-  #    - name: DB_USER
-  #      value: blockscout_user
-  #    - name: DB_PASSWORD
-  #      value: test1234
-  #  command: ["bash","-c","./init-db.sh"]
-  #  volumeMounts:
-  #    - name: init-db
-  #      mountPath: /init-db.sh
-  #      subPath: init-db.sh
   migrate-db:
     image: blockscout/blockscout:6.6.0
     env:
