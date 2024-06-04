@@ -135,6 +135,3 @@ If you don't want to use the Postgres database provided in this chart, you confi
 2. Change the `config.toml` file
 
     Provide the correct db string on the DB section.
-
-## License
-
