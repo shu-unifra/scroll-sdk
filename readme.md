@@ -20,7 +20,11 @@ It also provides a database and a monitoring stack based on Prometheus, Loki and
 The current configuration supports running a devnet but is not yet optimized for production.
 
 ## Prerequisites
-Before getting started, be sure to install Docker, h8util
+Before getting started, be sure to install the following:
+- [Docker Engine](https://docs.docker.com/engine/install/) (or Docker Desktop)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/)
+- [minikube](https://minikube.sigs.k8s.io/docs/start/) (for local dev cluster)
+- [Helm](https://helm.sh/docs/intro/install/)
 
 ## Bootstrap
 ### Get Helm dependencies
@@ -45,6 +49,8 @@ Run this from the `charts/scroll-stack` folder:
 ```bash
 helm install scroll-stack . 
 ```
+
+Run `kubectl get pods` to confirm the status of running services.
 
 ## Web UIs & Monitoring
 
