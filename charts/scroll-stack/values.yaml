@@ -7,6 +7,18 @@ blockscout:
 
 bridge-history-api:
   enabled: true
+  ingress:
+    main:
+      enabled: true
+      primary: true
+      annotations: { }
+      labels: { }
+      ingressClassName: "nginx"
+      hosts:
+        - host: bridge-history-api.local
+          paths:
+            - path: /
+              pathType: Prefix
 
 bridge-history-fetcher:
   enabled: true
@@ -31,6 +43,14 @@ event-watcher:
 
 frontends:
   enabled: true
+  ingress:
+    main:
+      enabled: true
+      hosts:
+        - host: frontends.local
+          paths:
+            - path: /
+              pathType: Prefix
 
 gas-oracle:
   enabled: true
