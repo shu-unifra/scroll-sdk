@@ -14,6 +14,9 @@ process_chart() {
 # Export the function so it can be used by `find`
 export -f process_chart
 
+# Remove all Chart.lock files
+find . -name 'Chart.lock' -delete
+
 # Use `find` to locate all Chart.yaml files, indicating a Helm chart directory
 # -type f ensures that it finds files
 # -name specifies the name of the file to find
