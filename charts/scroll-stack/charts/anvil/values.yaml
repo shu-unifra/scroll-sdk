@@ -13,12 +13,9 @@ image:
   pullPolicy: Always
   tag: nightly-19d69f277de96f621d930cdb767a9693c55ae8e1
 
-env:
-  - name: CHAIN_ID
-    value: 111111
-
 command:
-  ["/bin/sh","-c","anvil --host 0.0.0.0 --port 8545 --chain-id ${CHAIN_ID}"]
+  ["/bin/sh","-c","source /chain-id/chain-id.txt && anvil --host 0.0.0.0 --port 8545 --chain-id ${CHAIN_ID}"]
+
 resources:
   requests:
     memory: "100Mi"
@@ -26,6 +23,37 @@ resources:
   limits:
     memory: "500Mi"
     cpu: "100m"
+
+initContainers:
+  get-chain-id:
+    image: busybox
+    env:
+      - name: DATABASE_URL
+        value: "postgresql://postgres:qwerty12345@postgresql:5432/blockscout"
+    command: ["/bin/sh", "-c"]
+    args:
+      - >
+        CHAIN_ID=$(grep 'CHAIN_ID_L1' /config/config.toml | awk -F'=' '{print $2}' | tr -d ' "') && 
+        echo "CHAIN_ID=\"${CHAIN_ID}\"" > /chain-id/chain-id.txt && cat /chain-id/chain-id.txt;
+
+    volumeMounts:
+      - name: config-toml
+        mountPath: /config
+      - name: chain-id
+        mountPath: /chain-id
+
+persistence:
+  config-toml:
+    enabled: yes
+    type: configMap
+    mountPath: /config
+    name: scroll-smart-contracts-config
+  chain-id:
+    enabled: yes
+    type: pvc
+    accessMode: ReadWriteOnce
+    size: 10Mi
+    mounthPath: /chain-id
 
 service:
   main:
