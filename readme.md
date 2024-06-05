@@ -61,7 +61,7 @@ Accessing browser UIs from your machine will depend on your configuration. The e
 #### Using port-forward
 
 ```bash
-kubectl port-forward svc/frontends 8082:3000
+kubectl port-forward svc/frontends 8082:80
 ```
 
   After starting the project, then go to your browser and check `http://localhost:8082/`
@@ -75,7 +75,8 @@ If you enabled ingress on your cluster, you can add the following entries:
 
 where `1.2.3.4` is the IP of your cluster.
 
-Then go to your browser and check `http://blockscout.local/`
+Then go to your browser and check `http://frontends.local/`
+
 ### Blockscout
 Accessing Blockscout depends on your configuration.
 
