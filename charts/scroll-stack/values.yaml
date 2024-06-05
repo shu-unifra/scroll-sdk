@@ -33,10 +33,10 @@ contracts:
   enabled: true
 
 coordinator-api:
-  enabled: true
+  enabled: false
 
 coordinator-cron:
-  enabled: true
+  enabled: false
 
 event-watcher:
   enabled: true
