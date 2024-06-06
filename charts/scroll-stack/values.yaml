@@ -15,7 +15,7 @@ bridge-history-api:
       labels: { }
       ingressClassName: "nginx"
       hosts:
-        - host: bridge-history-api.local
+        - host: bridge-history-api.scrollsdk
           paths:
             - path: /
               pathType: Prefix
@@ -47,7 +47,7 @@ frontends:
     main:
       enabled: true
       hosts:
-        - host: frontends.local
+        - host: frontends.scrollsdk
           paths:
             - path: /
               pathType: Prefix
@@ -96,7 +96,7 @@ grafana:
     default: grafana-dashboards
   ingress:
     enabled: true
-    hosts: ["grafana.local"]
+    hosts: ["grafana.scrollsdk"]
 
 rollup-relayer:
   enabled: true
