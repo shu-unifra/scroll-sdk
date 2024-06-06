@@ -103,7 +103,7 @@ Then go to your browser and check `http://blockscout.local/`
 #### Using port-forward
 
 ```bash
-kubectl port-forward svc/grafana 8081:3000
+kubectl port-forward svc/grafana 8081:80
 ```
 Then go to your browser and check `http://localhost:8081/`
 
