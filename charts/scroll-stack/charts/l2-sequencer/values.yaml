@@ -1,6 +1,6 @@
 ---
 global:
-  nameOverride: &app_name l2geth-signer
+  nameOverride: &app_name l2-sequencer
   fullnameOverride: *app_name
 
 controller:
@@ -123,11 +123,11 @@ persistence:
     name: l2geth-data
     size: 50Mi
     accessMode: ReadWriteOnce
-  l2geth-signer:
+  l2-sequencer:
     enabled: yes
     type: configMap
     mountPath: /l2geth/conf/
-    name: l2geth-signer-config
+    name: l2-sequencer-config
   genesis:
     enabled: yes
     type: configMap

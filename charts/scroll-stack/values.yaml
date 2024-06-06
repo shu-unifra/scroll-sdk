@@ -101,7 +101,7 @@ grafana:
 rollup-relayer:
   enabled: true
 
-l2geth-signer:
+l2-sequencer:
   enabled: true
 
 l2geth-rpc:

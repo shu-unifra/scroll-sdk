@@ -65,9 +65,9 @@ dependencies:
     repository: "https://grafana.github.io/helm-charts"
     version: 7.3.11
     condition: grafana.enabled
-  - name: l2geth-signer
+  - name: l2-sequencer
     version: 0.0.1
-    condition: l2geth-signer.enabled
+    condition: l2-sequencer.enabled
   - name: loki-stack
     repository: "https://grafana.github.io/helm-charts"
     version: 2.10.2

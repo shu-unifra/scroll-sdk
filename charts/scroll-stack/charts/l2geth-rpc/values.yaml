@@ -52,7 +52,7 @@ env:
   - name: L2GETH_NODEKEY_0
     value: "2f59ff2fdee1c42a3d8c8980c313bc8d6c2557463f7bb92b0f0bc89a6d3cbf01"
   - name: L2GETH_PEER_LIST
-    value: '["enode://848a7d59dd8f60dd1a51160e6bc15c194937855443de9be4b2abd83e11a5c4ac21d61d065448c5c520826fe83f1f29eb5a452daccca27b8113aa897074132507@l2geth-signer:30303"]'
+    value: '["enode://848a7d59dd8f60dd1a51160e6bc15c194937855443de9be4b2abd83e11a5c4ac21d61d065448c5c520826fe83f1f29eb5a452daccca27b8113aa897074132507@l2-sequencer:30303"]'
   - name: L2GETH_L1_CONTRACT_DEPLOYMENT_BLOCK
     value: "0"
   - name: L2GETH_L1_ENDPOINT
