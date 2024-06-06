@@ -134,7 +134,7 @@ If you don't want to use the Postgres database provided in this chart, you confi
       chain_monitor_password: "test1234"
       event_watcher_password: "test1234"
       gas_oracle_password: "test1234"
-      rollup_relayer_password: "test1234"
+      rollup_node_password: "test1234"
       rpc_gateway_password: "test1234"
     ```
     _Note: the user for each service will be created but is not used yet by the service. Every service uses the admin account._

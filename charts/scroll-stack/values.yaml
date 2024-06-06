@@ -188,5 +188,5 @@ db:
   chain_monitor_password: "test1234"
   event_watcher_password: "test1234"
   gas_oracle_password: "test1234"
-  rollup_relayer_password: "test1234"
+  rollup_node_password: "test1234"
   rpc_gateway_password: "test1234"
