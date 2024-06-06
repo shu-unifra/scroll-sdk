@@ -98,7 +98,7 @@ grafana:
     enabled: true
     hosts: ["grafana.local"]
 
-rollup-relayer:
+rollup-node:
   enabled: true
 
 l2-sequencer:

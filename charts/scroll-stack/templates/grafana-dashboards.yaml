@@ -29,8 +29,8 @@ data:
 {{ (.Files.Glob "grafana/gas-oracle.json").AsConfig | indent 2 }}
 {{- end }}
 {{ (.Files.Glob "grafana/geth.json").AsConfig | indent 2 }}
-{{- if index .Values "rollup-relayer" "enabled" }}
-{{ (.Files.Glob "grafana/rollup-relayer.json").AsConfig | indent 2 }}
+{{- if index .Values "rollup-node" "enabled" }}
+{{ (.Files.Glob "grafana/rollup-node.json").AsConfig | indent 2 }}
 {{- end }}
 
 {{- end }}

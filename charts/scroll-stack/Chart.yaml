@@ -80,9 +80,9 @@ dependencies:
     repository: "https://prometheus-community.github.io/helm-charts"
     version: 59.0.0
     condition: kube-prometheus-stack.enabled
-  - name: rollup-relayer
+  - name: rollup-node
     version: 0.0.1
-    condition: rollup-relayer.enabled
+    condition: rollup-node.enabled
   - name: rpc-gateway
     version: 0.0.1
     condition: rpc-gateway.enabled
