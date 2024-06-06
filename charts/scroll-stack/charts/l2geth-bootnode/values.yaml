@@ -25,7 +25,7 @@ env:
   - name: L2GETH_L1_CONTRACT_DEPLOYMENT_BLOCK
     value: "0"
   - name: L2GETH_L1_ENDPOINT
-    value: "http://anvil:8545"
+    value: "http://l1-devnet:8545"
   - name: L2GETH_L1_WATCHER_CONFIRMATIONS
     value: "finalized"
   - name: L2GETH_P2P_PORT

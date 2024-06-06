@@ -31,7 +31,7 @@ env:
   - name: L2GETH_L1_CONTRACT_DEPLOYMENT_BLOCK
     value: "19675003"
   - name: L2GETH_L1_ENDPOINT
-    value: "http://anvil:8545"
+    value: "http://l1-devnet:8545"
   - name: L2GETH_L1_WATCHER_CONFIRMATIONS
     value: "0x6"
   - name: L2GETH_LOCALS

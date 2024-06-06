@@ -141,7 +141,7 @@ configMaps:
         {
           "l1_config": {
             "confirmations": "0x6",
-            "endpoint": "http://anvil:8545",
+            "endpoint": "http://l1-devnet:8545",
             "l1_message_queue_address": "0x08275d41f29bF787D28Ed4a706e29781104d41cd",
             "scroll_chain_address": "0x9Af51261a1f324Df094dc8028F2E5259C23B5336",
             "start_height": 0,
@@ -174,7 +174,7 @@ configMaps:
               "rollup_contract_address": "0x9Af51261a1f324Df094dc8028F2E5259C23B5336",
               "gas_price_oracle_contract_address": "0x08275d41f29bF787D28Ed4a706e29781104d41cd",
               "sender_config": {
-                "endpoint": "http://anvil:8545",
+                "endpoint": "http://l1-devnet:8545",
                 "escalate_blocks": 4,
                 "escalate_multiple_num": 12,
                 "escalate_multiple_den": 10,

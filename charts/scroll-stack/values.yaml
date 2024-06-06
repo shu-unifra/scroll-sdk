@@ -1,5 +1,5 @@
 ---
-anvil:
+l1-devnet:
   enabled: true
 
 blockscout:
