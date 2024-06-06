@@ -133,7 +133,7 @@ ingress:
     labels: {}
     ingressClassName: "nginx"
     hosts:
-      - host: blockscout.local
+      - host: blockscout.scrollsdk
         paths:
           - path: /
             pathType: Prefix

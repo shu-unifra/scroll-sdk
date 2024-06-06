@@ -79,7 +79,7 @@ ingress:
     labels: {}
     ingressClassName: "nginx"
     hosts:
-      - host: bridge-history-api.local
+      - host: bridge-history-api.scrollsdk
         paths:
           - path: /
             pathType: Prefix

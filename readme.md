@@ -70,12 +70,12 @@ kubectl port-forward svc/frontends 8082:80
 If you enabled ingress on your cluster, you can add the following entries:
 
 ```txt
-1.2.3.4    frontends.local
+1.2.3.4    frontends.scrollsdk
 ```
 
 where `1.2.3.4` is the IP of your cluster.
 
-Then go to your browser and check `http://frontends.local/`
+Then go to your browser and check `http://frontends.scrollsdk/`
 
 ### Blockscout
 Accessing Blockscout depends on your configuration.
@@ -92,12 +92,12 @@ kubectl port-forward svc/blockscout 8080:3000
 If you enabled ingress on your cluster, you can add the following entries:
 
 ```txt
-1.2.3.4    blockscout.local
+1.2.3.4    blockscout.scrollsdk
 ```
 
 where `1.2.3.4` is the IP of your cluster.
 
-Then go to your browser and check `http://blockscout.local/`
+Then go to your browser and check `http://blockscout.scrollsdk/`
 
 ### Grafana
 #### Using port-forward
@@ -112,11 +112,11 @@ Then go to your browser and check `http://localhost:8081/`
 If you enabled ingress on your cluster, you can add the following entries:
 
 ```txt
-1.2.3.4    grafana.local
+1.2.3.4    grafana.scrollsdk
 ```
 
 where `1.2.3.4` is the IP of your cluster.
-Then go to your browser and check `http://grafana.local/`
+Then go to your browser and check `http://grafana.scrollsdk/`
 
 ## Changing the database endpoint
 

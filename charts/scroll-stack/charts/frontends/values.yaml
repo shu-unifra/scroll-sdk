@@ -68,7 +68,7 @@ ingress:
     labels: {}
     ingressClassName: "nginx"
     hosts:
-      - host: frontends.local
+      - host: frontends.scrollsdk
         paths:
           - path: /
             pathType: Prefix
