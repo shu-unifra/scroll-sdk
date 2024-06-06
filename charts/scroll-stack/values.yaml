@@ -104,10 +104,10 @@ rollup-relayer:
 l2-sequencer:
   enabled: true
 
-l2geth-rpc:
+l2-rpc:
   enabled: true
 
-l2geth-bootnode:
+l2-bootnode:
   enabled: true
 
 loki-stack:

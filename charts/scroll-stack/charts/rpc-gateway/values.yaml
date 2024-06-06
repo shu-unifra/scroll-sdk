@@ -12,11 +12,11 @@ env:
   - name: INFURA_LOG_LEVEL
     value: info
   - name: INFURA_NODE_ETHURLS
-    value: http://l2geth-rpc:8545
+    value: http://l2-rpc:8545
   - name: INFURA_NODE_ETHWSURLS
-    value: ws://l2geth-rpc:8546
+    value: ws://l2-rpc:8546
   - name: INFURA_NODE_ETHLOGNODES
-    value: http://l2geth-rpc:8545
+    value: http://l2-rpc:8545
   - name: INFURA_ETHRPC_EXPOSEDMODULES
     value: eth web3 net
   - name: INFURA_ETHRPC_ENDPOINT

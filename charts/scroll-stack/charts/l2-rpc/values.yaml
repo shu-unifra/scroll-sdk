@@ -1,6 +1,6 @@
 ---
 global:
-  nameOverride: &app_name l2geth-bootnode
+  nameOverride: &app_name l2-rpc
   fullnameOverride: *app_name
 
 controller:
@@ -13,13 +13,44 @@ image:
   pullPolicy: Always
   tag: scroll-v5.2.0
 
+service:
+  main:
+    enabled: true
+    ports:
+      http:
+        enabled: true
+        port: &HTTP_PORT 8545
+      ws:
+        enabled: true
+        port: &WS_PORT 8546
+      metrics:
+        enabled: true
+        port: 6060
+        targetPort: 6060
+
+defaultProbes: &default_probes
+  enabled: true
+  custom: true
+  spec:
+    httpGet:
+      path: "/"
+      port: 8545
+
+probes:
+  liveness:
+    << : *default_probes
+  readiness:
+    << : *default_probes
+  startup:
+    << : *default_probes
+
 env:
   - name: CHAIN_ID
     value: "222222"
   - name: L2GETH_ROLE
-    value: bootnode
-  - name: L2GETH_NODEKEY
-    value: ""
+    value: rpc
+  - name: L2GETH_NODEKEY_0
+    value: "2f59ff2fdee1c42a3d8c8980c313bc8d6c2557463f7bb92b0f0bc89a6d3cbf01"
   - name: L2GETH_PEER_LIST
     value: '["enode://848a7d59dd8f60dd1a51160e6bc15c194937855443de9be4b2abd83e11a5c4ac21d61d065448c5c520826fe83f1f29eb5a452daccca27b8113aa897074132507@l2-sequencer:30303"]'
   - name: L2GETH_L1_CONTRACT_DEPLOYMENT_BLOCK
@@ -28,6 +59,10 @@ env:
     value: "http://l1-devnet:8545"
   - name: L2GETH_L1_WATCHER_CONFIRMATIONS
     value: "finalized"
+  - name: L2GETH_RPC_HTTP_PORT
+    value: 8545
+  - name: L2GETH_RPC_WS_PORT
+    value: 8546
   - name: L2GETH_P2P_PORT
     value: 30303
   - name: L2GETH_ENABLE_CCC
@@ -48,39 +83,28 @@ env:
 command: ["bash",
   "-c",
   "geth --datadir \"/l2geth/data\" init /l2geth/genesis/genesis.json && \
-   echo \"[Node.P2P] StaticNodes = $L2GETH_PEER_LIST\" > \"/l2geth/config.toml\" && \
-   geth --datadir \"/l2geth/data\" \
-    --port \"$L2GETH_P2P_PORT\" --syncmode full --networkid \"$CHAIN_ID\" --maxpeers \"$L2GETH_MAX_PEERS\" --netrestrict \"$L2GETH_NETRESTRICT\" --nat \"$L2GETH_NAT\" \
-    --bootnodes \"\" \
-    --gcmode archive \
+  echo \"[Node.P2P] StaticNodes = $L2GETH_PEER_LIST\" > \"/l2geth/config.toml\" && \
+  geth \
+    --datadir \"/l2geth/data\" \
+    --port \"$L2GETH_P2P_PORT\" --nodiscover --syncmode full --networkid \"$CHAIN_ID\" \
     --config \"/l2geth/config.toml\" \
-    --cache.noprefetch \
-    --verbosity 3 \
+    --http --http.port \"$L2GETH_RPC_HTTP_PORT\" --http.addr \"0.0.0.0\" --http.vhosts=\"*\" --http.corsdomain '*' --http.api \"eth,scroll,net,web3,debug\" \
     --pprof --pprof.addr \"0.0.0.0\" --pprof.port 6060 \
+    --ws --ws.port \"$L2GETH_RPC_WS_PORT\" --ws.addr \"0.0.0.0\" --ws.api \"eth,scroll,net,web3,debug\" \
     $CCC_FLAG \
     $METRICS_FLAGS \
+    --gcmode archive \
+    --cache.noprefetch \
+    --verbosity 3 \
     --txpool.globalqueue 4096 --txpool.globalslots 40960 --txpool.pricelimit \"$L2GETH_MIN_GAS_PRICE\" $LOCALS_FLAG \
+    --miner.gasprice \"$L2GETH_MIN_GAS_PRICE\" --rpc.gascap 0 --gpo.ignoreprice \"$L2GETH_MIN_GAS_PRICE\" \
+    --gpo.percentile 20 \
+    --gpo.blocks 100 \
     --l1.endpoint \"$L2GETH_L1_ENDPOINT\" --l1.confirmations \"$L2GETH_L1_WATCHER_CONFIRMATIONS\" --l1.sync.startblock \"$L2GETH_L1_CONTRACT_DEPLOYMENT_BLOCK\" \
-    --miner.gasprice \"$L2GETH_MIN_GAS_PRICE\" --rpc.gascap 0 --gpo.ignoreprice \"$L2GETH_MIN_GAS_PRICE\" \ 
+    --rollup.verify \
     --metrics --metrics.expensive \
     $L2GETH_EXTRA_PARAMS"
-  ]
-
-defaultProbes: &default_probes
-  enabled: false
-  custom: true
-  spec:
-    httpGet:
-      path: "/"
-      port: 8545
-
-probes:
-  liveness:
-    << : *default_probes
-  readiness:
-    << : *default_probes
-  startup:
-    << : *default_probes
+]
 
 persistence:
   data:
@@ -94,18 +118,6 @@ persistence:
     type: configMap
     mountPath: /l2geth/genesis/
     name: genesis-config
-
-service:
-  main:
-    enabled: true
-    ports:
-      http:
-        enabled: true
-        port: 30303
-      metrics:
-        enabled: true
-        port: 6060
-        targetPort: 6060
 
 serviceMonitor:
   main:
