@@ -21,13 +21,13 @@ env:
   - name: ECTO_USE_SSL
     value: false
   - name: ETHEREUM_JSONRPC_HTTP_URL
-    value: http://l2geth-signer:8545
+    value: http://l2-sequencer:8545
   - name: ETHEREUM_JSONRPC_TRACE_URL
-    value: http://l2geth-signer:8545
+    value: http://l2-sequencer:8545
   - name: ETHEREUM_JSONRPC_VARIANT
     value: geth
   - name: ETHEREUM_JSONRPC_WS_URL
-    value: ws://l2geth-signer:8546
+    value: ws://l2-sequencer:8546
   - name: INDEXER_DISABLE_PENDING_TRANSACTIONS_FETCHER
     value: true
   - name: PORT
@@ -45,7 +45,7 @@ env:
   - name: BLOCKSCOUT_HOST
     value: test-blockscout.scroll.io
   - name: JSON_RPC
-    value: http://l2geth-signer:8545
+    value: http://l2-sequencer:8545
   - name: SUBNETWORK
     value: "Scroll Sepolia Testnet"
   - name: SUPPORTED_CHAINS

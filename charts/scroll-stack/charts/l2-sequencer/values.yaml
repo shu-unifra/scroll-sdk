@@ -1,6 +1,6 @@
 ---
 global:
-  nameOverride: &app_name l2geth-signer
+  nameOverride: &app_name l2-sequencer
   fullnameOverride: *app_name
 
 controller:
@@ -31,7 +31,7 @@ env:
   - name: L2GETH_L1_CONTRACT_DEPLOYMENT_BLOCK
     value: "19675003"
   - name: L2GETH_L1_ENDPOINT
-    value: "http://anvil:8545"
+    value: "http://l1-devnet:8545"
   - name: L2GETH_L1_WATCHER_CONFIRMATIONS
     value: "0x6"
   - name: L2GETH_LOCALS
@@ -123,11 +123,11 @@ persistence:
     name: l2geth-data
     size: 50Mi
     accessMode: ReadWriteOnce
-  l2geth-signer:
+  l2-sequencer:
     enabled: yes
     type: configMap
     mountPath: /l2geth/conf/
-    name: l2geth-signer-config
+    name: l2-sequencer-config
   genesis:
     enabled: yes
     type: configMap

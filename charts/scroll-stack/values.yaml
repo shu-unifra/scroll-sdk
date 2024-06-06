@@ -1,5 +1,5 @@
 ---
-anvil:
+l1-devnet:
   enabled: true
 
 blockscout:
@@ -98,16 +98,16 @@ grafana:
     enabled: true
     hosts: ["grafana.scrollsdk"]
 
-rollup-relayer:
+rollup-node:
   enabled: true
 
-l2geth-signer:
+l2-sequencer:
   enabled: true
 
-l2geth-rpc:
+l2-rpc:
   enabled: true
 
-l2geth-bootnode:
+l2-bootnode:
   enabled: true
 
 loki-stack:
@@ -188,5 +188,5 @@ db:
   chain_monitor_password: "test1234"
   event_watcher_password: "test1234"
   gas_oracle_password: "test1234"
-  rollup_relayer_password: "test1234"
+  rollup_node_password: "test1234"
   rpc_gateway_password: "test1234"

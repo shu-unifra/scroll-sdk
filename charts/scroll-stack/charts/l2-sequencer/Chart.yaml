@@ -1,7 +1,7 @@
 ---
 apiVersion: v2
-description: l2geth-signer helm charts
-name: l2geth-signer
+description: l2-sequencer helm charts
+name: l2-sequencer
 version: 0.0.1
 appVersion: v0.1.0
 kubeVersion: ">=1.22.0-0"

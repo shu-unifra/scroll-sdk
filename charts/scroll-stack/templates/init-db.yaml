@@ -6,7 +6,7 @@ metadata:
   name: init-db
 data:
   #TODO the password '$DB_PASSWORD' is taken litteraly (not replaced by its value). if using \'$DB_PASSWORD\',got this error
-  #LINE 1: CREATE USER "rollup_relayer" WITH PASSWORD \'test1234\';
+  #LINE 1: CREATE USER "rollup_node" WITH PASSWORD \'test1234\';
   # 30/04/2024 Changed, to check if it works...
   init-db.sh: |
     #!/bin/bash

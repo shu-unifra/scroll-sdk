@@ -1,6 +1,6 @@
 ---
 global:
-  nameOverride: &app_name rollup-relayer
+  nameOverride: &app_name rollup-node
   fullnameOverride: *app_name
 
 controller:
@@ -57,7 +57,7 @@ persistence:
     enabled: yes
     type: configMap
     mountPath: /app/conf/
-    name: rollup-relayer-config
+    name: rollup-node-config
   genesis:
     enabled: yes
     type: configMap
@@ -73,7 +73,7 @@ persistence:
     enabled: yes
     type: configMap
     mountPath: /config/migrate-db.json
-    name: rollup-relayer-migrate-db
+    name: rollup-node-migrate-db
     defaultMode: "0777"
 
 initContainers:
@@ -103,12 +103,12 @@ initContainers:
             name: db-secrets
             key: PG_PORT
       - name: DB_USER
-        value: rollup_relayer
+        value: rollup_node
       - name: DB_PASSWORD
         valueFrom:
           secretKeyRef:
             name: db-secrets
-            key: ROLLUP_RELAYER_PASSWORD
+            key: ROLLUP_NODE_PASSWORD
     command: ["bash","-c","./init-db.sh"]
     volumeMounts:
       - name: init-db

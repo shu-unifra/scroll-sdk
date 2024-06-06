@@ -20,13 +20,13 @@ data:
 {{ (.Files.Glob "bridge-history-config.json").AsConfig | indent 2 }}
 ---
 {{- end }}
-{{- if index .Values "rollup-relayer" "enabled" }}
+{{- if index .Values "rollup-node" "enabled" }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   labels:
     {{- include "scroll-stack.labels" $ | nindent 4 }}
-  name: rollup-relayer-config
+  name: rollup-node-config
 data:
 {{ (.Files.Glob "rollup-config.json").AsConfig | indent 2 }}
 ---

@@ -1,6 +1,6 @@
 ---
 global:
-  nameOverride: &app_name anvil
+  nameOverride: &app_name l1-devnet
   fullnameOverride: *app_name
 
 controller:
