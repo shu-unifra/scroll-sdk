@@ -117,8 +117,8 @@ initContainers:
         mountPath: /init-db.sh
         subPath: init-db.sh
   migrate-db:
-    image: scrolltech/bridgehistoryapi-db-cli
-    command: ["/bin/sh", "-c", "db_cli reset --config /config/migrate-db.json"]
+    image: scrolltech/bridgehistoryapi-db-cli:v4.4.14
+    command: ["/bin/sh", "-c", "db_cli --config /config/migrate-db.json migrate"]
     volumeMounts:
       - name: migrate-db
         mountPath: /config/migrate-db.json
