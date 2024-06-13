@@ -9,12 +9,13 @@ controller:
   type: statefulset
 
 image:
-  repository: ghcr.io/foundry-rs/foundry
+  repository: scrolltech/l1-devnet
   pullPolicy: Always
-  tag: nightly-19d69f277de96f621d930cdb767a9693c55ae8e1
+  tag: v0.0.1
 
 command:
   ["/bin/sh","-c","source /chain-id/chain-id.txt && anvil --host 0.0.0.0 --port 8545 --chain-id ${CHAIN_ID} --state /data/state.json --state-interval 60"]
+
 
 resources:
   requests:
