@@ -1,0 +1,13 @@
+{{- if .Values.grafana.enabled }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-kube-dashboards
+  labels:
+    grafana_dashboard: "1"
+data:
+{{ (.Files.Glob "grafana/global.json").AsConfig | indent 2 }}
+{{ (.Files.Glob "grafana/nodes.json").AsConfig | indent 2 }}
+{{ (.Files.Glob "grafana/pods.json").AsConfig | indent 2 }}
+{{- end }}

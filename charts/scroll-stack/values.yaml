@@ -70,6 +70,9 @@ grafana:
   nameOverride: grafana
   adminUser: admin
   adminPassword: scroll-stack
+  grafana.ini:
+    feature_toggles:
+      autoMigrateOldPanels: true
   datasources:
     datasources.yaml:
       apiVersion: 1
@@ -93,16 +96,25 @@ grafana:
     dashboardproviders.yaml:
       apiVersion: 1
       providers:
-        - name: 'default'
+        - name: 'kube'
+          orgId: 1
+          folder: 'kube'
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/kube/
+        - name: 'scroll'
           orgId: 1
           folder: 'scroll'
           type: file
           disableDeletion: false
           editable: true
           options:
-            path: /var/lib/grafana/dashboards/default/
+            path: /var/lib/grafana/dashboards/scroll/
   dashboardsConfigMaps:
-    default: grafana-dashboards
+    kube: grafana-kube-dashboards
+    scroll: grafana-scroll-dashboards
   ingress:
     enabled: true
     hosts: ["grafana.scrollsdk"]
