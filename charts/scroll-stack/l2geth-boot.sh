@@ -77,13 +77,12 @@ case "$L2GETH_ROLE" in
     ;;
 esac
 
-# Combine common and role specific options
-echo "${COMMON_OPTS[@]}" "${ROLE_OPTS[@]}"
-
 if [ $L2GETH_ROLE == "bootnode" ] || [ $L2GETH_ROLE == "rpc" ]
 then
   echo "[Node.P2P] StaticNodes = $L2GETH_PEER_LIST" > "/l2geth/config.toml"
   geth --datadir "/l2geth/data" init /l2geth/genesis/genesis.json
+  echo "Launching l2geth with this command: "
+  echo "geth \"${COMMON_OPTS[@]}\" \"${ROLE_OPTS[@]}\""
   geth "${COMMON_OPTS[@]}" "${ROLE_OPTS[@]}"
 elif [ $L2GETH_ROLE == "sequencer" ]; then
     mkdir -p /l2geth/data/keystore
@@ -92,6 +91,8 @@ elif [ $L2GETH_ROLE == "sequencer" ]; then
     echo ${L2GETH_KEYSTORE}  > /l2geth/data/keystore/keystore.json
     echo ${L2GETH_NODEKEY} > /l2geth/data/geth/nodekey
     geth --datadir "/l2geth/data" init /l2geth/genesis/genesis.json
+    echo "Launching l2geth with this command: "
+    echo "geth \"${COMMON_OPTS[@]}\" \"${ROLE_OPTS[@]}\""
     geth "${COMMON_OPTS[@]}" "${ROLE_OPTS[@]}"
 else
   echo "L2GETH_ROLE is not set to bootnode,rpc or sequencer. Exiting."
