@@ -84,7 +84,7 @@ defaultProbes: &default_probes
   spec:
     httpGet:
       path: "/"
-      port: *p2p_port
+      port: *pprof_port
 
 probes:
   liveness:

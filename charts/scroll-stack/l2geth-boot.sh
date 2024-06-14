@@ -10,22 +10,20 @@ require () {
   fi
 }
 
-# TODO: check genesis
-
-if [ "${L2GETH_CCC_RUST_LOG_LEVEL}" = "" ]; then
-  export RUST_LOG="info"
-else
-  export RUST_LOG="$L2GETH_CCC_RUST_LOG_LEVEL"
+# Check genesis
+if [ ! -f "/l2geth/genesis/genesis.json" ]; then
+    echo "Configuration error: /l2geth/genesis/genesis.json not found"
+    exit 1
 fi
-echo "using ccc Rust log level \"$RUST_LOG\""
 
+# Check required envs
 require "CHAIN_ID"
 require "L2GETH_L1_CONTRACT_DEPLOYMENT_BLOCK"
 require "L2GETH_L1_ENDPOINT"
 require "L2GETH_L1_WATCHER_CONFIRMATIONS"
 require "L2GETH_ROLE"
 
-# Default values
+# Set default values
 L2GETH_MAX_PEERS=${L2GETH_MAX_PEERS:-500}
 L2GETH_MIN_GAS_PRICE=${L2GETH_MIN_GAS_PRICE:-1000000}
 L2GETH_P2P_PORT=${L2GETH_P2P_PORT:-30303}
@@ -33,6 +31,10 @@ L2GETH_PPROF_PORT=${L2GETH_PPROF_PORT:-6060}
 L2GETH_RPC_HTTP_PORT=${L2GETH_RPC_HTTP_PORT:-8545}
 L2GETH_RPC_WS_PORT=${L2GETH_RPC_WS_PORT:-8546}
 VERBOSITY=${VERBOSITY:-3}
+
+# Export RUST_LOG for CCC
+export RUST_LOG="${L2GETH_CCC_RUST_LOG_LEVEL:-"info"}"
+echo "using ccc Rust log level \"$RUST_LOG\""
 
 # Common command options
 COMMON_OPTS=(
@@ -94,7 +96,7 @@ case "${L2GETH_ROLE}" in
 esac
 
 # configure peers
-echo "[Node.P2P] StaticNodes = ${L2GETH_PEER_LIST}" > "/l2geth/config.toml"
+echo "[Node.P2P] StaticNodes = ${L2GETH_PEER_LIST:-"[]"}" > "/l2geth/config.toml"
 
 # configure node p2p identity
 if [[ -n "${L2GETH_NODEKEY}" ]]; then
@@ -112,9 +114,12 @@ if [ "${L2GETH_ROLE}" == "sequencer" ]; then
     echo "${L2GETH_KEYSTORE}"  > /l2geth/data/keystore/keystore.json
 fi
 
+echo
 echo "Initializing genesis config"
-geth --datadir "/l2geth/data" init /l2geth/genesis/genesis.json
+geth --datadir "/l2geth/data" init "/l2geth/genesis/genesis.json"
 
-echo "Launching l2geth with this command: "
+echo
+echo "Launching l2geth $L2GETH_ROLE node with this command: "
 echo "geth \"${COMMON_OPTS[*]}\" \"${ROLE_OPTS[*]}\""
+echo
 geth "${COMMON_OPTS[@]}" "${ROLE_OPTS[@]}"
