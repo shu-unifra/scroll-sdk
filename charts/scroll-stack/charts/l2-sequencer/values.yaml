@@ -61,7 +61,7 @@ service:
   main:
     enabled: true
     ports:
-      p2p:
+      http:
         enabled: true
         port: *p2p_port
         targetPort: *p2p_port
