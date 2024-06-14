@@ -14,10 +14,10 @@ image:
   tag: v5.2.1-arm64
 
 env:
-  - name: CHAIN_ID
-    value: "222222"
   - name: L2GETH_ROLE
     value: "sequencer"
+  - name: CHAIN_ID
+    value: "222222"
   - name: L2GETH_SIGNER_ADDRESS
     value: "0x756EA06BDEe36de11F22DCca45a31d8a178eF3c6"
   - name: L2GETH_KEYSTORE
@@ -26,57 +26,18 @@ env:
     value: "scroll2022"
   - name: L2GETH_NODEKEY
     value: "2f59ff2fdee1c42a3d8c8980c313bc8d6c2557463f7bb92b0f0bc89a6d3cbf01"
-  - name: L2GETH_PEER_LIST
-    value: [""]
   - name: L2GETH_L1_CONTRACT_DEPLOYMENT_BLOCK
     value: "0"
   - name: L2GETH_L1_ENDPOINT
     value: "http://l1-devnet:8545"
   - name: L2GETH_L1_WATCHER_CONFIRMATIONS
     value: "0x6"
-  - name: L2GETH_LOCALS
-    value: ""
-  - name: L2GETH_ENABLE_CCC
-    value: "true"
-  - name: L2GETH_MINER_GASLIMIT
-    value: "10000000"
-  - name: L2GETH_RPC_HTTP_PORT
-    value: &http_port 8545
-  - name: L2GETH_RPC_WS_PORT
-    value: &ws_port 8546
   - name: L2GETH_P2P_PORT
-    value: 30303
-  - name: L2GETH_MIN_GAS_PRICE
-    value: "1000000"
-  - name: VERBOSITY
-    value: "3"
-
-#command: ["bash",
-#          "-c",
-#          "mkdir -p /l2geth/data/keystore && \
-#          mkdir -p /l2geth/data/geth && \
-#          echo ${L2GETH_PASSWORD} > /l2geth/password && \
-#          echo ${L2GETH_KEYSTORE}  > /l2geth/data/keystore/keystore.json && \
-#          echo ${L2GETH_NODEKEY} > /l2geth/data/geth/nodekey && \
-#          geth --datadir \"/l2geth/data\" init /l2geth/genesis/genesis.json && \
-#          geth --datadir \"/l2geth/data\" \
-#          --port \"$L2GETH_P2P_PORT\" --nodiscover --syncmode full --networkid \"$CHAIN_ID\" \
-#          --http --http.port \"$L2GETH_RPC_HTTP_PORT\" --http.addr \"0.0.0.0\" --http.vhosts=\"*\" --http.corsdomain \'*\' --http.api \"eth,scroll,net,web3,debug\" \
-#          --pprof --pprof.addr \"0.0.0.0\" --pprof.port 6060 \
-#          --ws --ws.port \"$L2GETH_RPC_WS_PORT\" --ws.addr \"0.0.0.0\" --ws.api \"eth,scroll,net,web3,debug\" \
-#          --unlock \"$L2GETH_SIGNER_ADDRESS\" --password \"/l2geth/password\" --allow-insecure-unlock --mine \
-#          $CCC_FLAG \
-#          --gcmode archive \
-#          --cache.noprefetch \
-#          --verbosity ${VERBOSITY} \
-#          --txpool.globalqueue 4096 --txpool.globalslots 40960 --txpool.pricelimit \"$L2GETH_MIN_GAS_PRICE\" $LOCALS_FLAG \
-#          --miner.gasprice \"$L2GETH_MIN_GAS_PRICE\" --rpc.gascap 0 --gpo.ignoreprice \"$L2GETH_MIN_GAS_PRICE\" \
-#          --gpo.percentile 20 \
-#          --gpo.blocks 100 \
-#          --l1.endpoint \"$L2GETH_L1_ENDPOINT\" --l1.confirmations \"$L2GETH_L1_WATCHER_CONFIRMATIONS\" --l1.sync.startblock \"$L2GETH_L1_CONTRACT_DEPLOYMENT_BLOCK\" \
-#          --rollup.verify \
-#          --metrics --metrics.expensive \
-#          $L2GETH_EXTRA_PARAMS"]
+    value: &p2p_port 30303
+  - name: L2GETH_PPROF_PORT
+    value: &pprof_port 6060
+  - name: L2GETH_EXTRA_PARAMS
+    value: "--ccc"
 
 command: [
   "bash",
@@ -100,22 +61,14 @@ service:
   main:
     enabled: true
     ports:
-      http:
-        enabled: true
-        port: *http_port
-        targetPort: *http_port
-      ws:
-        enabled: true
-        port: *ws_port
-        targetPort: *ws_port
       p2p:
         enabled: true
-        port: 30303
-        targetPort: 30303
+        port: *p2p_port
+        targetPort: *p2p_port
       metrics:
         enabled: true
-        port: 6060
-        targetPort: 6060
+        port: *pprof_port
+        targetPort: *pprof_port
 
 resources:
   requests:
@@ -131,7 +84,7 @@ defaultProbes: &default_probes
   spec:
     httpGet:
       path: "/"
-      port: 8545
+      port: *p2p_port
 
 probes:
   liveness:
