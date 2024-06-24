@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    {{- include "scroll-stack.labels" $ | nindent 4 }}
+  name: extract-env-script
+data:
+  extract-env.sh: |
+    #!/bin/sh
+    
+    # Check if the correct number of arguments is given
+    if [ "$#" -lt 2 ]; then
+      echo "Usage: $0 tome_file source_target_pairs"
+      echo "Example: $0 tome_file.txt var1:target1 var2:target2 ..."
+      exit 1
+    fi
+    
+    # The first argument is the toml file
+    toml_file=$1
+    shift
+    
+    # Function to extract and export variables
+    extract_and_export() {
+      local source_var=$1
+      local target_var=$2
+      local value
+    
+      # Extract the value of the source variable from the toml file
+      value=$(grep -E "^${source_var} =" "$toml_file" | sed 's/ *= */=/' | cut -d'=' -f2-)
+    
+      # Check if the value is found
+      if [ -z "$value" ]; then
+        echo "Warning: Variable $source_var not found in $toml_file"
+        return
+      fi
+    
+      # Export the value as the target variable
+      echo "export $target_var=$value" >> /tmp/.env
+    }
+    
+    # Loop through the source:target pairs
+    for pair in "$@"; do
+      source_var=$(echo $pair | cut -d':' -f1)
+      target_var=$(echo $pair | cut -d':' -f2)
+    
+      if [ -z "$source_var" ] || [ -z "$target_var" ]; then
+      echo "Invalid pair: $pair. Skipping..."
+      continue
+      fi
+    
+      extract_and_export "$source_var" "$target_var"
+    done
