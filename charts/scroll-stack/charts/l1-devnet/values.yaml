@@ -11,7 +11,7 @@ controller:
 image:
   repository: scrolltech/l1-devnet
   pullPolicy: Always
-  tag: v0.0.1
+  tag: v0.0.2
 
 command:
   ["/bin/bash","-c","source /chain-id/chain-id.txt && anvil --host 0.0.0.0 --port 8545 --chain-id ${CHAIN_ID} --state /data/state.json --state-interval 60"]
