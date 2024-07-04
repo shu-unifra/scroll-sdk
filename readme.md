@@ -29,19 +29,12 @@ Before getting started, be sure to install the following:
 - [kubectl](https://kubernetes.io/docs/tasks/tools/)
 - [minikube](https://minikube.sigs.k8s.io/docs/start/) (for local dev cluster)
 - [Helm](https://helm.sh/docs/intro/install/)
+- `make` command
 
 ## Bootstrap
-### Get Helm dependencies
-Run the following script to get the dependencies of each Helm chart:
+Run the following command to bootstrap helm and the config files:
 ```bash
-./helm-bootstrap.sh
-```
-
-### Generate the config files
-Run this command to generate a `config.toml` file and genesis file:
-```bash
-cd charts/scroll-stack
-time docker run --rm -it -v .:/contracts/volume scrolltech/scroll-stack-contracts:gen-configs-977f5701
+make bootstrap
 ```
 
 ## Launch Scroll SDK
