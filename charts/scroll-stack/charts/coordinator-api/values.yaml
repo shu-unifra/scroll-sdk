@@ -93,7 +93,7 @@ initContainers:
     command: ["sh", "-c", "/download-params.sh "]
     env:
       - name: RELEASE_VERSION
-        value: "v0.10.3"
+        value: "v0.11.4"
     volumeMounts:
       - name: verifier
         mountPath: /data
@@ -163,6 +163,13 @@ configMaps:
         fi
         fi
 
+        if [ -f /data/params/params25 ]; then
+        if ! check_shasum "/data/params/params24" "$PARAMS25_SHASUM"; then
+        echo "Removing incorrect file /data/params/params25\n"
+        rm /data/params/params25
+        fi
+        fi
+        
         if [ -f /data/params/params26 ]; then
         if ! check_shasum "/data/params/params26" "$PARAMS26_SHASUM"; then
         echo "Removing incorrect file /data/params/params26\n"
@@ -216,6 +223,14 @@ configMaps:
         if ! check_shasum "/data/params/params24" "$PARAMS24_SHASUM"; then exit 1; fi
         fi
 
+        if [ ! -f /data/params/params25 ]; then
+        mkdir -p /data/params
+        echo "Downloading /data/params/params25..."
+        wget https://circuit-release.s3.us-west-2.amazonaws.com/setup/params25 -O /data/params/params25
+        echo "Download completed\n"
+        if ! check_shasum "/data/params/params25" "$PARAMS25_SHASUM"; then exit 1; fi
+        fi
+        
         if [ ! -f /data/params/params26 ]; then
         mkdir -p /data/params
         echo "Downloading /data/params/params26..."
@@ -263,6 +278,8 @@ configMaps:
         echo "Download completed\n"
         if ! check_shasum "/data/assets/layer4.config" "$CFG4_SHASUM"; then exit 1; fi
         fi
+        
+        ls -l /data/assets
 
 serviceMonitor:
   main:
