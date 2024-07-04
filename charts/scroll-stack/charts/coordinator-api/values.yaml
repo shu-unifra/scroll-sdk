@@ -139,6 +139,7 @@ configMaps:
         fi
 
         PARAMS24_SHASUM=$(echo "$P_CHECKSUMS" | grep "params24" | cut -d " " -f 1)
+        PARAMS25_SHASUM=$(echo "$P_CHECKSUMS" | grep "params25" | cut -d " " -f 1)
         PARAMS26_SHASUM=$(echo "$P_CHECKSUMS" | grep "params26" | cut -d " " -f 1)
         CHUNK_VK_SHASUM=$(echo "$R_CHECKSUMS" | grep "chunk_vk.vkey" | cut -d " " -f 1)
         BATCH_VK_SHASUM=$(echo "$R_CHECKSUMS" | grep "agg_vk.vkey" | cut -d " " -f 1)
@@ -164,7 +165,7 @@ configMaps:
         fi
 
         if [ -f /data/params/params25 ]; then
-        if ! check_shasum "/data/params/params24" "$PARAMS25_SHASUM"; then
+        if ! check_shasum "/data/params/params25" "$PARAMS25_SHASUM"; then
         echo "Removing incorrect file /data/params/params25\n"
         rm /data/params/params25
         fi
