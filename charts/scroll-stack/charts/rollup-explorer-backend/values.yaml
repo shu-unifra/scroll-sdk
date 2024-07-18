@@ -1,0 +1,99 @@
+---
+global:
+  nameOverride: &app_name rollup-explorer-backend
+  fullnameOverride: *app_name
+
+controller:
+  replicas: 1
+  strategy: Recreate
+  type: deployment
+
+image:
+  repository: scrolltech/rollup-explorer-backend
+  pullPolicy: Always
+  tag: v0.0.11
+
+ports:
+  - containerPort: &container_port 8080
+
+env:
+  - name: BIND_PORT
+    value: *container_port
+    #TODO change this to read only user and make the variable dynamic
+  - name: DB_URL
+    value: "postgres://postgres:qwerty12345@postgresql:5432/scroll?sslmode=disable"
+  - name: OPEN_API_ADDR
+    value: "/rollupscan"
+  - name: MAX_PER_PAGE
+    value: 500
+  - name: RUST_LOG
+    value: debug
+
+command: [
+  "/bin/sh",
+  "-c",
+  "mkdir /app/config/ && cp /config/rollup-config.json /app/config/config.json && rollup_explorer"
+]
+
+resources:
+  requests:
+    memory: "50Mi"
+    cpu: "10m"
+  limits:
+    memory: "200Mi"
+    cpu: "50m"
+
+service:
+  main:
+    labels:
+      app: *app_name
+    enabled: true
+    ports:
+      http:
+        enabled: true
+        port: 8080
+        targetPort: *container_port
+      metrics:
+        enabled: true
+        port: 8090
+        targetPort: 8090
+
+#TODO
+probes:
+  liveness:
+    enabled: false
+  readiness:
+    enabled: false
+  startup:
+    enabled: false
+
+persistence:
+  *app_name:
+    enabled: yes
+    type: configMap
+    mountPath: /app/config/
+    name: rollup-explorer-config
+
+ingress:
+  main:
+    enabled: true
+    primary: true
+    annotations: {}
+    labels: {}
+    ingressClassName: "nginx"
+    hosts:
+      - host: rollup-explorer-backend.scrollsdk
+        paths:
+          - path: /
+            pathType: Prefix
+
+serviceMonitor:
+  main:
+    enabled: true
+    labels:
+      release: scroll-stack
+    serviceName: '{{ include "bjw-s.common.lib.chart.names.fullname" $ }}'
+    endpoints:
+      - port: http
+        interval: 1m
+        scrapeTimeout: 10s
