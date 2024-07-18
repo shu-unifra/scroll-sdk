@@ -48,6 +48,15 @@ GAS_ORACLE_DB_CONNECTION_STRING = "postgres://postgres:qwerty12345@postgresql:54
 L1_EXPLORER_DB_CONNECTION_STRING = "postgresql://postgres:qwerty12345@postgresql:5432/l1-explorer"
 ROLLUP_NODE_DB_CONNECTION_STRING = "postgresql://postgres:qwerty12345@postgresql:5432/scroll?sslmode=disable"
 
+[frontend]
+
+EXTERNAL_RPC_URI_L1 ="http://l1-devnet.scrollsdk"
+EXTERNAL_RPC_URI_L2 = "http://l2-rpc.scrollsdk"
+BRIDGE_API_URI = "http://bridge-history-api.scrollsdk/api"
+ROLLUPSCAN_API_URI = "http://rollup-explorer-backend.scrollsdk/api"
+EXTERNAL_EXPLORER_URI_L1 = "http://l1-explorer.scrollsdk"
+EXTERNAL_EXPLORER_URI_L2 = "http://blockscout.scrollsdk"
+
 [genesis]
 
 L2_MAX_ETH_SUPPLY = "226156424291633194186662080095093570025917938800079226639565593765455331328"
