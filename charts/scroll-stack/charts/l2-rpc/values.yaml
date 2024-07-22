@@ -51,8 +51,6 @@ env:
     value: ""
   - name: L2GETH_PEER_LIST
     value: '["enode://848a7d59dd8f60dd1a51160e6bc15c194937855443de9be4b2abd83e11a5c4ac21d61d065448c5c520826fe83f1f29eb5a452daccca27b8113aa897074132507@l2-sequencer:30303"]'
-  - name: L2GETH_L1_CONTRACT_DEPLOYMENT_BLOCK
-    value: "0"
   - name: L2GETH_L1_WATCHER_CONFIRMATIONS
     value: "0x6"
   - name: L2GETH_RPC_HTTP_PORT
@@ -107,16 +105,19 @@ command: ["bash",
 ]
 
 initContainers:
-  wait-for-l1-devnet:
-    image: atkrad/wait4x:latest
-    args:
-      - http
-      - $(L2GETH_L1_ENDPOINT)
-      - --expect-status-code
-      - "400"
+  1-wait-for-l1:
+    image: scrolltech/scroll-alpine:v0.0.1
+    command:
+      - /bin/sh
+      - -c
+      - /wait-for-l1.sh $L2GETH_L1_ENDPOINT
     envFrom:
       - configMapRef:
           name: l2-rpc-env
+    volumeMounts:
+      - name: wait-for-l1-script
+        mountPath: /wait-for-l1.sh
+        subPath: wait-for-l1.sh
 
 persistence:
   data:
@@ -135,6 +136,11 @@ persistence:
     type: configMap
     mountPath: /l2geth/genesis/
     name: genesis-config
+  wait-for-l1-script:
+    enabled: yes
+    type: configMap
+    name: wait-for-l1-script
+    defaultMode: "0777"
 
 serviceMonitor:
   main:
