@@ -4,6 +4,22 @@
 
 CONFIG_TOML="charts/scroll-stack/config.toml"
 
+# Function to check if a file exists and delete it if it does
+delete_file_if_exists() {
+    # Check if the parameter is provided
+    if [ -z "$1" ]; then
+        echo "No file specified."
+        return 1
+    fi
+
+    # Check if the file exists
+    if [ -f "$1" ]; then
+        # File exists, delete it
+        rm "$1"
+        echo "File '$1' exists, deleting it ..."
+    fi
+}
+
 # Function to get variables for a given service
 get_service_variables() {
     local service_name=$1
@@ -118,6 +134,7 @@ services=("balance-checker" "bridge-history-api" "bridge-history-fetcher" "block
 # Loop over the list of services and execute the function
 for service in "${services[@]}"; do
     get_service_variables $service
-    rm charts/scroll-stack/configs/$service.env
+    env_file="charts/scroll-stack/configs/$service.env"
+    delete_file_if_exists $env_file
     extract_from_config_toml $CONFIG_TOML $service $(get_service_variables $service)
 done
