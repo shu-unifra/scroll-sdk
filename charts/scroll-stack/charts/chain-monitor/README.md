@@ -25,10 +25,7 @@ Kubernetes: `>=1.22.0-0`
 | command[0] | string | `"/bin/sh"` |  |
 | command[1] | string | `"-c"` |  |
 | command[2] | string | `"chain-monitor --config /app/config/chain-monitor-config.json --http --http.port ${CHAIN_MONITOR_SERVER_PORT} --metrics --metrics.addr 0.0.0.0 --metrics.port ${CHAIN_MONITOR_METRICS_PORT} --verbosity 3"` |  |
-| defaultProbes.custom | bool | `true` |  |
-| defaultProbes.enabled | bool | `true` |  |
-| defaultProbes.spec.httpGet.path | string | `"/"` |  |
-| defaultProbes.spec.httpGet.port | int | `8090` |  |
+| defaultProbes.enabled | bool | `false` |  |
 | env[0].name | string | `"CHAIN_MONITOR_SERVER_PORT"` |  |
 | env[0].value | int | `8080` |  |
 | env[1].name | string | `"CHAIN_MONITOR_METRICS_PORT"` |  |
@@ -37,7 +34,7 @@ Kubernetes: `>=1.22.0-0`
 | global.nameOverride | string | `"chain-monitor"` |  |
 | image.pullPolicy | string | `"Always"` |  |
 | image.repository | string | `"scrolltech/chain-monitorv2"` |  |
-| image.tag | string | `"v1.1.20"` |  |
+| image.tag | string | `"v1.1.26"` |  |
 | initContainers.1-wait-for-postgres.args[0] | string | `"tcp"` |  |
 | initContainers.1-wait-for-postgres.args[1] | string | `"postgresql:5432"` |  |
 | initContainers.1-wait-for-postgres.args[2] | string | `"--timeout"` |  |
@@ -75,6 +72,12 @@ Kubernetes: `>=1.22.0-0`
 | initContainers.3-check-postgres-connection.args[3] | string | `"0"` |  |
 | initContainers.3-check-postgres-connection.envFrom[0].configMapRef.name | string | `"chain-monitor-env"` |  |
 | initContainers.3-check-postgres-connection.image | string | `"atkrad/wait4x:latest"` |  |
+| initContainers.4-migrate-db.command[0] | string | `"/bin/sh"` |  |
+| initContainers.4-migrate-db.command[1] | string | `"-c"` |  |
+| initContainers.4-migrate-db.command[2] | string | `"chain-monitor --config /app/config/chain-monitor-config.json --db --db.migrate"` |  |
+| initContainers.4-migrate-db.image | string | `"scrolltech/chain-monitorv2:v1.1.26"` |  |
+| initContainers.4-migrate-db.volumeMounts[0].mountPath | string | `"/app/config/"` |  |
+| initContainers.4-migrate-db.volumeMounts[0].name | string | `"chain-monitor"` |  |
 | initContainers.4-wait-for-l1.command[0] | string | `"/bin/sh"` |  |
 | initContainers.4-wait-for-l1.command[1] | string | `"-c"` |  |
 | initContainers.4-wait-for-l1.command[2] | string | `"/wait-for-l1.sh $SCROLL_L1_RPC"` |  |
@@ -103,25 +106,16 @@ Kubernetes: `>=1.22.0-0`
 | persistence.wait-for-l1-script.enabled | string | `"yes"` |  |
 | persistence.wait-for-l1-script.name | string | `"wait-for-l1-script"` |  |
 | persistence.wait-for-l1-script.type | string | `"configMap"` |  |
-| probes.liveness.<<.custom | bool | `true` |  |
-| probes.liveness.<<.enabled | bool | `true` |  |
-| probes.liveness.<<.spec.httpGet.path | string | `"/"` |  |
-| probes.liveness.<<.spec.httpGet.port | int | `8090` |  |
-| probes.readiness.<<.custom | bool | `true` |  |
-| probes.readiness.<<.enabled | bool | `true` |  |
-| probes.readiness.<<.spec.httpGet.path | string | `"/"` |  |
-| probes.readiness.<<.spec.httpGet.port | int | `8090` |  |
-| probes.startup.<<.custom | bool | `true` |  |
-| probes.startup.<<.enabled | bool | `true` |  |
-| probes.startup.<<.spec.httpGet.path | string | `"/"` |  |
-| probes.startup.<<.spec.httpGet.port | int | `8090` |  |
+| probes.liveness.<<.enabled | bool | `false` |  |
+| probes.readiness.<<.enabled | bool | `false` |  |
+| probes.startup.<<.enabled | bool | `false` |  |
 | resources.limits.cpu | string | `"100m"` |  |
 | resources.limits.memory | string | `"500Mi"` |  |
 | resources.requests.cpu | string | `"50m"` |  |
 | resources.requests.memory | string | `"100Mi"` |  |
 | service.main.enabled | bool | `true` |  |
 | service.main.ports.http.enabled | bool | `true` |  |
-| service.main.ports.http.port | int | `80` |  |
+| service.main.ports.http.port | int | `8080` |  |
 | service.main.ports.metrics.enabled | bool | `true` |  |
 | service.main.ports.metrics.port | int | `8090` |  |
 | service.main.ports.metrics.targetPort | int | `8090` |  |

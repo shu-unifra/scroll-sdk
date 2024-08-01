@@ -107,9 +107,8 @@ grafana:
     enabled: true
     hosts: ["grafana.scrollsdk"]
 
-# Service under testing, do not use
 rollup-explorer-backend:
-  enabled: false
+  enabled: true
   ingress:
     main:
       enabled: true
@@ -127,7 +126,7 @@ rollup-node:
   enabled: true
 
 l1-explorer:
-  enabled: true
+  enabled: false
   ingress:
     main:
       enabled: true
@@ -175,6 +174,15 @@ blockscout-sc-verifier:
 
 rpc-gateway:
   enabled: true
+  ingress:
+    main:
+      enabled: true
+      ingressClassName: "nginx"
+      hosts:
+        - host: l2-rpc-gateway.scrollsdk
+          paths:
+            - path: /
+              pathType: Prefix
 
 postgresql:
   enabled: true
@@ -198,7 +206,7 @@ postgresql:
       enabled: false
     resources:
       requests:
-        cpu: 2
+        cpu: 1
         memory: 512Mi
       limits:
         cpu: 3
