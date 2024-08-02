@@ -16,6 +16,7 @@ image:
 service:
   main:
     enabled: true
+    sessionAffinity: ClientIp
     ports:
       http:
         enabled: true
@@ -119,13 +120,14 @@ initContainers:
         mountPath: /wait-for-l1.sh
         subPath: wait-for-l1.sh
 
-persistence:
-  data:
-    enabled: yes
+volumeClaimTemplates:
+  - name: data
+    accessMode: "ReadWriteOnce"
+    size: "10Gi"
+    mountPath: "/l2geth/data"
     type: pvc
-    mountPath: /l2geth/data
-    accessMode: ReadWriteOnce
-    size: 10Gi
+
+persistence:
   env:
     enabled: yes
     type: configMap
