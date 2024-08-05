@@ -142,7 +142,7 @@ initContainers:
       - "0"
     envFrom:
       - configMapRef:
-          name: event-watcher-env
+          name: gas-oracle-env
   4-migrate-db:
     image: scrolltech/rollup-db-cli
     command: ["/bin/sh","-c","db_cli migrate --config /config/migrate-db.json"]

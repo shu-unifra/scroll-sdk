@@ -73,7 +73,7 @@ Kubernetes: `>=1.22.0-0`
 | initContainers.3-check-postgres-connection.args[1] | string | `"$(DATABASE_URL)"` |  |
 | initContainers.3-check-postgres-connection.args[2] | string | `"--timeout"` |  |
 | initContainers.3-check-postgres-connection.args[3] | string | `"0"` |  |
-| initContainers.3-check-postgres-connection.envFrom[0].configMapRef.name | string | `"event-watcher-env"` |  |
+| initContainers.3-check-postgres-connection.envFrom[0].configMapRef.name | string | `"gas-oracle-env"` |  |
 | initContainers.3-check-postgres-connection.image | string | `"atkrad/wait4x:latest"` |  |
 | initContainers.4-migrate-db.command[0] | string | `"/bin/sh"` |  |
 | initContainers.4-migrate-db.command[1] | string | `"-c"` |  |

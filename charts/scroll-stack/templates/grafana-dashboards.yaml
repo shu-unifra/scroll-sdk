@@ -22,9 +22,6 @@ data:
 {{- if index .Values "coordinator-cron" "enabled" }}
 {{ (.Files.Glob "grafana/coordinator-cron.json").AsConfig | indent 2 }}
 {{- end }}
-{{- if index .Values "event-watcher" "enabled" }}
-{{ (.Files.Glob "grafana/event-watcher.json").AsConfig | indent 2 }}
-{{- end }}
 {{- if index .Values "gas-oracle" "enabled" }}
 {{ (.Files.Glob "grafana/gas-oracle.json").AsConfig | indent 2 }}
 {{- end }}

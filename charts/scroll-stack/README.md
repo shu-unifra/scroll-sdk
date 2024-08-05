@@ -31,7 +31,6 @@ Kubernetes: `>=1.22.0-0`
 |  | contracts | 0.0.1 |
 |  | coordinator-api | 0.0.1 |
 |  | coordinator-cron | 0.0.1 |
-|  | event-watcher | 0.0.1 |
 |  | frontends | 0.0.1 |
 |  | gas-oracle | 0.0.1 |
 |  | l1-devnet | 0.0.1 |
@@ -64,12 +63,11 @@ Kubernetes: `>=1.22.0-0`
 | bridge-history-api.ingress.main.labels | object | `{}` |  |
 | bridge-history-api.ingress.main.primary | bool | `true` |  |
 | bridge-history-fetcher.enabled | bool | `true` |  |
-| chain-monitor.enabled | bool | `true` |  |
-| contracts.enabled | bool | `false` |  |
+| chain-monitor.enabled | bool | `false` |  |
+| contracts.enabled | bool | `true` |  |
 | coordinator-api.enabled | bool | `false` |  |
 | coordinator-cron.enabled | bool | `false` |  |
 | db | object | `{"bridge_history_password":"test1234","chain_monitor_password":"test1234","event_watcher_password":"test1234","gas_oracle_password":"test1234","pg_host":"postgresql","pg_password":"qwerty12345","pg_port":"5432","pg_user":"postgres","rollup_node_password":"test1234","rpc_gateway_password":"test1234"}` | each services. A user with admin privilege is required. |
-| event-watcher.enabled | bool | `true` |  |
 | frontends.enabled | bool | `true` |  |
 | frontends.ingress.main.enabled | bool | `true` |  |
 | frontends.ingress.main.hosts[0].host | string | `"frontends.scrollsdk"` |  |
@@ -121,7 +119,7 @@ Kubernetes: `>=1.22.0-0`
 | l1-devnet.ingress.main.hosts[0].paths[0].path | string | `"/"` |  |
 | l1-devnet.ingress.main.hosts[0].paths[0].pathType | string | `"Prefix"` |  |
 | l1-devnet.ingress.main.ingressClassName | string | `"nginx"` |  |
-| l1-explorer.enabled | bool | `true` |  |
+| l1-explorer.enabled | bool | `false` |  |
 | l1-explorer.ingress.main.enabled | bool | `true` |  |
 | l1-explorer.ingress.main.hosts[0].host | string | `"l1-devnet-explorer.scrollsdk"` |  |
 | l1-explorer.ingress.main.hosts[0].paths[0].path | string | `"/"` |  |
