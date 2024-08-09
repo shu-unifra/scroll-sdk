@@ -15,7 +15,7 @@ RUN curl -L https://foundry.paradigm.xyz | bash
 ENV PATH="/root/.foundry/bin:${PATH}"
 
 # Run foundryup to update Foundry
-RUN foundryup
+RUN foundryup -v nightly-7f0f5b4c1aa75dc4fd2eb15aca9757491d885902
 
 # Expose the port Anvil uses (default: 8545)
 EXPOSE 8545
