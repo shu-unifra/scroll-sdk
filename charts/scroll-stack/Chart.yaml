@@ -46,9 +46,6 @@ dependencies:
   - name: coordinator-cron
     version: 0.0.1
     condition: coordinator-cron.enabled
-  - name: event-watcher
-    version: 0.0.1
-    condition: event-watcher.enabled
   - name: frontends
     version: 0.0.1
     condition: frontends.enabled

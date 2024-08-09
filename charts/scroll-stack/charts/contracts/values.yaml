@@ -1,7 +1,8 @@
 ---
 image:
-  repository: jayjayjayjay/scroll-stack-contracts
-  tag: deploy-gastoken-v0.0.3
+  repository: scrolltech/scroll-stack-contracts
+  tag: deploy-v0.0.9-gas-token
+
 
 envFrom:
   - configMapRef:

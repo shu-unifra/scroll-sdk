@@ -47,9 +47,6 @@ coordinator-api:
 coordinator-cron:
   enabled: false
 
-event-watcher:
-  enabled: true
-
 frontends:
   enabled: true
   ingress:
