@@ -8,9 +8,9 @@ controller:
   type: deployment
 
 image:
-  repository: jayjayjayjay/bridge-history-fetcher
+  repository: scrolltech/bridgehistoryapi-fetcher
   pullPolicy: Always
-  tag: v0.0.5
+  tag: v4.4.45
 
 command:
   [

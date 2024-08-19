@@ -4,9 +4,10 @@ global:
   fullnameOverride: *app_name
 
 image:
-  repository: jayjayjayjay/chain-monitor
+  repository: scrolltech/chain-monitorv2
   pullPolicy: Always
-  tag: v0.0.2
+  tag: v1.1.27
+
 env:
   - name: CHAIN_MONITOR_SERVER_PORT
     value: 8080
