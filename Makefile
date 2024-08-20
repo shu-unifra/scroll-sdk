@@ -10,7 +10,6 @@ install:
 deploy-contracts:
 		cd charts/scroll-stack && time docker run --rm -it -v .:/contracts/volume -v ./broadcast:/contracts/broadcast  --env-file ./configs/contracts.env --network host scrolltech/scroll-stack-contracts:deploy-v0.0.15
 
-
 reload-env-files:
 		bash create-env-files.sh
 

@@ -3,7 +3,6 @@ image:
   repository: scrolltech/scroll-stack-contracts
   tag: deploy-v0.0.15
 
-
 envFrom:
   - configMapRef:
       name: contracts-env
