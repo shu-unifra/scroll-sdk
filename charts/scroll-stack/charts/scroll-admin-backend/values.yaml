@@ -1,6 +1,6 @@
 ---
 global:
-  nameOverride: &app_name scroll-sdk-backend
+  nameOverride: &app_name admin-system-backend
   fullnameOverride: *app_name
 
 controller:
@@ -73,6 +73,11 @@ persistence:
     type: configMap
     mountPath: /app/genesis/
     name: genesis-config
+  init-db:
+    enabled: yes
+    type: configMap
+    mountPath: /init-db.sh
+    name: init-db
 
 initContainers:
   1-wait-for-postgres:
