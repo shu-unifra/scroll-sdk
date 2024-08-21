@@ -89,3 +89,6 @@ dependencies:
   - name: rpc-gateway
     version: 0.0.1
     condition: rpc-gateway.enabled
+  - name: admin-system-backend
+    version: 0.0.1
+    condition: admin-system-backend.enabled

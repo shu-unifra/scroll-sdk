@@ -181,6 +181,9 @@ rpc-gateway:
             - path: /
               pathType: Prefix
 
+admin-system-backend:
+  enabled: true
+
 postgresql:
   enabled: true
   nameOverride: postgresql
@@ -245,3 +248,4 @@ db:
   gas_oracle_password: "test1234"
   rollup_node_password: "test1234"
   rpc_gateway_password: "test1234"
+  scroll_admin_system_password: "test1234"

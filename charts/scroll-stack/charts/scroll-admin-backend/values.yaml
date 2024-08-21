@@ -1,0 +1,151 @@
+---
+global:
+  nameOverride: &app_name scroll-sdk-backend
+  fullnameOverride: *app_name
+
+controller:
+  replicas: 1
+  strategy: Recreate
+  type: deployment
+
+image:
+  repository: scrolltech/scroll-admin-system
+  pullPolicy: Always
+  tag: v0.0.17-stack
+
+env:
+  - name: HTTP_PORT
+    value: "8080"
+  - name: METRICS_PORT
+    value: "8090"
+  - name: GIN_MODE
+    value: "release"
+
+command: [
+    "/bin/sh",
+    "-c",
+    "scroll-admin-system --config /app/config/config.json \
+    --genesis /genesis/genesis.mainnet.json \
+    --http.port ${HTTP_PORT} \
+    --metrics --metrics.port ${METRICS_PORT}",
+  ]
+
+resources:
+  requests:
+    memory: "50Mi"
+    cpu: "50m"
+  limits:
+    memory: "200Mi"
+    cpu: "100m"
+
+service:
+  main:
+    enabled: true
+    primary: true
+    ports:
+      http:
+        primary: true
+        enabled: true
+        port: 8080
+        protocol: HTTP
+      metrics:
+        enabled: true
+        port: 8090
+        targetPort: 8090
+
+probes:
+  liveness:
+    enabled: false
+  readiness:
+    enabled: false
+  startup:
+    enabled: false
+
+
+persistence:
+  *app_name:
+    enabled: yes
+    type: configMap
+    mountPath: /app/config/
+    name: admin-system-backend-config
+  genesis:
+    enabled: yes
+    type: configMap
+    mountPath: /app/genesis/
+    name: genesis-config
+
+initContainers:
+  1-wait-for-postgres:
+    image: atkrad/wait4x:latest
+    args:
+      - tcp
+      - $(DATABASE_HOST):$(DATABASE_PORT)
+      - --timeout
+      - "0"
+    envFrom:
+      - configMapRef:
+          name: admin-system-backend-env
+  2-init-db:
+    image: postgres:latest
+    env:
+      - name: POSTGRES_DB
+        value: scroll
+      - name: PG_USER
+        valueFrom:
+          secretKeyRef:
+            name: db-secrets
+            key: PG_USER
+      - name: PGPASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: db-secrets
+            key: PGPASSWORD
+      - name: PG_HOST
+        valueFrom:
+          secretKeyRef:
+            name: db-secrets
+            key: PG_HOST
+      - name: PG_PORT
+        valueFrom:
+          secretKeyRef:
+            name: db-secrets
+            key: PG_PORT
+      - name: DB_USER
+        value: scroll_admin_system
+      - name: DB_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: db-secrets
+            key: SCROLL_ADMIN_SYSTEM_PASSWORD
+    command: ["bash","-c","./init-db.sh"]
+    volumeMounts:
+      - name: init-db
+        mountPath: /init-db.sh
+        subPath: init-db.sh
+  3-check-postgres-connection:
+    image: atkrad/wait4x:latest
+    args:
+      - postgresql
+      - $(DATABASE_URL)
+      - --timeout
+      - "0"
+    envFrom:
+      - configMapRef:
+          name: admin-system-backend-env
+  4-migrate-db:
+    image: scrolltech/scroll-admin-system:v0.0.17-stack
+    command: ["/bin/sh","-c","ENV=fake CHAIN_ID=222222 db_cli migrate --config /config/config.json"]
+    volumeMounts:
+      - name: *app_name
+        mountPath: /app/config/
+
+serviceMonitor:
+  main:
+    enabled: true
+    labels:
+      release: scroll-stack
+    serviceName: '{{ include "scroll.common.lib.chart.names.fullname" $ }}'
+    endpoints:
+      - port: http
+        interval: 1m
+        scrapeTimeout: 10s
