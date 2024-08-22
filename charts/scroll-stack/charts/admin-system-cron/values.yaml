@@ -18,6 +18,8 @@ env:
     value: "fake"
   - name: CHAIN_ID
     value: "222222"
+  - name: HTTP_PORT
+    value: "8080"
   - name: METRICS_PORT
     value: "8090"
   - name: GIN_MODE
@@ -39,6 +41,21 @@ resources:
     memory: "1Gi"
     cpu: "1"
 
+service:
+  main:
+    enabled: true
+    primary: true
+    ports:
+      http:
+        primary: true
+        enabled: true
+        port: 8080
+        protocol: HTTP
+      metrics:
+        enabled: true
+        port: 8090
+        targetPort: 8090
+
 probes:
   liveness:
     enabled: false
@@ -46,7 +63,6 @@ probes:
     enabled: false
   startup:
     enabled: false
-
 
 persistence:
   *app_name:
