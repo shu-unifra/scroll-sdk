@@ -106,6 +106,7 @@ If you have enabled ingress on your cluster and are not using `ingress-dns`, add
 1.2.3.4 l2-rpc.scrollsdk
 1.2.3.4 blockscout.scrollsdk
 1.2.3.4 bridge-history-api.scrollsdk
+1.2.3.4 admin-system-dashboard.scrollsdk
 ```
 
 ### Access using port-forward

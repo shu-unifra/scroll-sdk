@@ -138,7 +138,7 @@ initContainers:
         valueFrom:
           secretKeyRef:
             name: db-secrets
-            key: SCROLL_ADMIN_SYSTEM_PASSWORD
+            key: ADMIN_SYSTEM_PASSWORD
     command: ["bash","-c","./init-db.sh"]
     volumeMounts:
       - name: init-db
