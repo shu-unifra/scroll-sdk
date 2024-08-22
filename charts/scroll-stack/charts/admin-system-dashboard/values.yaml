@@ -30,14 +30,10 @@ resources:
 service:
   main:
     enabled: true
-    primary: true
     ports:
       http:
-        primary: true
         enabled: true
         port: 80
-        protocol: HTTP
-    type: LoadBalancer
 
 probes:
   liveness:
@@ -89,3 +85,16 @@ serviceMonitor:
       - port: http
         interval: 1m
         scrapeTimeout: 10s
+
+ingress:
+  main:
+    enabled: true
+    primary: true
+    annotations: {}
+    labels: {}
+    ingressClassName: "nginx"
+    hosts:
+      - host: admin-system-dashboard.scrollsdk
+        paths:
+          - path: /
+            pathType: Prefix
