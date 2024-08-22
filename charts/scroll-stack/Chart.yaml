@@ -92,3 +92,9 @@ dependencies:
   - name: admin-system-backend
     version: 0.0.1
     condition: admin-system-backend.enabled
+  - name: admin-system-cron
+    version: 0.0.1
+    condition: admin-system-cron.enabled
+  - name: admin-system-dashboard
+    version: 0.0.1
+    condition: admin-system-dashboard.enabled

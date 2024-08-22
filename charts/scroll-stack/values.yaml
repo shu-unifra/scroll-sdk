@@ -184,6 +184,20 @@ rpc-gateway:
 admin-system-backend:
   enabled: true
 
+admin-system-cron:
+  enabled: true
+
+admin-system-dashboard:
+  enabled: true
+  ingress:
+    main:
+      enabled: true
+      hosts:
+        - host: admin-system-dashboard.scrollsdk
+          paths:
+            - path: /
+              pathType: Prefix
+
 postgresql:
   enabled: true
   nameOverride: postgresql
