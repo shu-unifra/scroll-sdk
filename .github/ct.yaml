@@ -1,7 +1,0 @@
-remote: origin
-target-branch: develop
-chart-dirs:
-  - ./
-validate-maintainers: false
-check-version-increment: false
-debug: true
