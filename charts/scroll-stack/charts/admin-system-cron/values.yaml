@@ -11,7 +11,7 @@ controller:
 image:
   repository: scrolltech/scroll-admin-cron
   pullPolicy: Always
-  tag: v0.0.17
+  tag: v0.1.0
 
 env:
   - name: ENV
@@ -136,7 +136,7 @@ initContainers:
       - configMapRef:
           name: admin-system-backend-env
   4-migrate-db:
-    image: scrolltech/scroll-admin-system:v0.0.17-stack
+    image: scrolltech/scroll-admin-system:v0.1.0
     command: ["/bin/sh","-c","ENV=fake CHAIN_ID=222222 db_cli migrate --config /app/config/admin-system-backend-config.json"]
     volumeMounts:
       - name: *app_name
