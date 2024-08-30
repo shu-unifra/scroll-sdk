@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards
+  labels:
+    grafana_dashboard: "1"
+data:
+{{ (.Files.Glob "grafana/bridge-history-api.json").AsConfig | indent 2 }}
+{{ (.Files.Glob "grafana/bridge-history-fetcher.json").AsConfig | indent 2 }}
+{{ (.Files.Glob "grafana/chain-monitor.json").AsConfig | indent 2 }}
+{{ (.Files.Glob "grafana/coordinator-api.json").AsConfig | indent 2 }}
+{{ (.Files.Glob "grafana/coordinator-cron.json").AsConfig | indent 2 }}
+{{ (.Files.Glob "grafana/gas-oracle.json").AsConfig | indent 2 }}
+{{ (.Files.Glob "grafana/geth.json").AsConfig | indent 2 }}
+{{ (.Files.Glob "grafana/rollup-node.json").AsConfig | indent 2 }}
