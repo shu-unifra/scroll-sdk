@@ -20,6 +20,10 @@ env:
   - name: GIN_MODE
     value: "release"
 
+envFrom:
+  - configMapRef:
+      name: coordinator-cron-env
+
 command: [
   "/bin/sh",
   "-c",
@@ -33,12 +37,12 @@ initContainers:
     image: atkrad/wait4x:latest
     args:
       - postgresql
-      - $(DATABASE_URL)
+      - $(SCROLL_COORDINATOR_DB_DSN)
       - --timeout
       - "0"
     envFrom:
       - configMapRef:
-          name: coordinator-env
+          name: coordinator-cron-env
 
 resources:
   requests:
