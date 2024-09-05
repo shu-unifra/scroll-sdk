@@ -11,7 +11,7 @@ controller:
 image:
   repository: scrolltech/l2geth
   pullPolicy: Always
-  tag: scroll-v5.7.5
+  tag: scroll-v5.7.6
 
 env:
   - name: L2GETH_ROLE
@@ -36,6 +36,8 @@ env:
     value: "1000000"
   - name: VERBOSITY
     value: "3"
+  - name: CCC_NUM_WORK_FLAG
+    value: "--ccc.numworkers 5"
 
 envFrom:
   - configMapRef:
@@ -57,7 +59,7 @@ command:
     --pprof --pprof.addr \"0.0.0.0\" --pprof.port 6060 \
     --ws --ws.port \"$L2GETH_RPC_WS_PORT\" --ws.addr \"0.0.0.0\" --ws.api \"eth,scroll,net,web3,debug\" \
     --unlock \"$L2GETH_SIGNER_ADDRESS\" --password \"/l2geth/password\" --allow-insecure-unlock --mine \
-    $CCC_FLAG \
+    $CCC_FLAG $CCC_NUM_WORK_FLAG \
     --gcmode archive \
     --cache.noprefetch \
     --verbosity ${VERBOSITY} \
