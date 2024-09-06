@@ -62,7 +62,7 @@ Kubernetes: `>=1.22.0-0`
 | global.nameOverride | string | `"l2-rpc"` |  |
 | image.pullPolicy | string | `"Always"` |  |
 | image.repository | string | `"scrolltech/l2geth"` |  |
-| image.tag | string | `"scroll-v5.7.6"` |  |
+| image.tag | string | `"scroll-v5.7.10"` |  |
 | ingress.main.annotations | object | `{}` |  |
 | ingress.main.enabled | bool | `true` |  |
 | ingress.main.hosts[0].host | string | `"l2-rpc.scrollsdk"` |  |
