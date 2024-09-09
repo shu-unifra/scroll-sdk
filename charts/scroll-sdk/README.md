@@ -26,7 +26,7 @@ Kubernetes: `>=1.22.0-0`
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | blockscout-sc-verifier | 0.0.2 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | bridge-history-api | 0.0.6 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | bridge-history-fetcher | 0.0.7 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | chain-monitor | 0.0.5 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | chain-monitor | 0.0.6 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | contracts | 0.0.5 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | coordinator-api | 0.0.6 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | coordinator-cron | 0.0.6 |
