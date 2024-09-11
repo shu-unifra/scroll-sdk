@@ -14,8 +14,6 @@ image:
   tag: scroll-v5.7.11
 
 env:
-  - name: L2GETH_NODEKEY
-    value: ""
   - name: L2GETH_L1_CONTRACT_DEPLOYMENT_BLOCK
     value: "0"
   - name: L2GETH_L1_WATCHER_CONFIRMATIONS
@@ -96,12 +94,6 @@ probes:
     <<: *default_probes
 
 persistence:
-  data:
-    enabled: true
-    type: pvc
-    mountPath: /l2geth/data
-    accessMode: ReadWriteOnce
-    size: 10Gi
   env:
     enabled: true
     type: configMap
@@ -117,6 +109,12 @@ persistence:
     type: configMap
     name: wait-for-l1-script
     defaultMode: "0777"
+
+volumeClaimTemplates:
+  - name: data
+    accessMode: "ReadWriteOnce"
+    size: "10Gi"
+    mountPath: "/l2geth/data"
 
 service:
   main:
