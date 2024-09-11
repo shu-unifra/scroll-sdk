@@ -93,12 +93,15 @@ initContainers:
       - configMapRef:
           name: bridge-history-fetcher-env
   2-migrate-db:
-    image: scrolltech/bridgehistoryapi-db-cli:v4.4.14
+    image: scrolltech/bridgehistoryapi-db-cli:v4.4.59
     command: ["/bin/sh", "-c", "db_cli --config /config/migrate-db.json migrate"]
     volumeMounts:
       - name: migrate-db
         mountPath: /config/migrate-db.json
         subPath: migrate-db.json
+    envFrom:
+      - configMapRef:
+          name: bridge-history-fetcher-env
   3-wait-for-l1:
     image: scrolltech/scroll-alpine:v0.0.1
     command:
@@ -137,7 +140,7 @@ configMaps:
             "driver_name": "postgres",
             "maxOpenNum": 50,
             "maxIdleNume": 5,
-            "dsn": "postgres://postgres:qwerty12345@postgresql:5432/scroll?sslmode=disable"
+            "dsn": ""
           }
         }
 
