@@ -1,13 +1,13 @@
 ---
 apiVersion: v2
-description: rollup-node helm charts
-name: rollup-node
-version: 0.0.10
+description: admin-system-backend helm charts
+name: admin-system-backend
+version: 0.0.1
 appVersion: v0.1.0
 kubeVersion: ">=1.22.0-0"
 maintainers:
   - name: scroll-tech
-    email: sebastien@scroll.io
+    email: weichi@scroll.io
 dependencies:
   - name: common
     repository: "oci://ghcr.io/scroll-tech/scroll-sdk/helm"

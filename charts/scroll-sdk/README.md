@@ -1,6 +1,6 @@
 # scroll-sdk
 
-![Version: 0.0.34](https://img.shields.io/badge/Version-0.0.34-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
+![Version: 0.0.35](https://img.shields.io/badge/Version-0.0.35-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
 
 scroll helm charts to deploy scroll sdk
 
@@ -21,13 +21,16 @@ Kubernetes: `>=1.22.0-0`
 | https://grafana.github.io/helm-charts | grafana | 7.3.11 |
 | https://grafana.github.io/helm-charts | loki-stack | 2.10.2 |
 | https://prometheus-community.github.io/helm-charts | kube-prometheus-stack | 59.0.0 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | admin-system-backend | 0.0.1 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | admin-system-cron | 0.0.1 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | admin-system-dashboard | 0.0.1 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | balance-checker | 0.0.2 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | blockscout | 0.0.3 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | blockscout-sc-verifier | 0.0.2 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | bridge-history-api | 0.0.6 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | bridge-history-fetcher | 0.0.8 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | chain-monitor | 0.0.7 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | contracts | 0.0.6 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | contracts | 0.0.7 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | coordinator-api | 0.0.7 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | coordinator-cron | 0.0.6 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | frontends | 0.0.7 |
@@ -38,7 +41,7 @@ Kubernetes: `>=1.22.0-0`
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | l2-rpc | 0.0.10 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | l2-sequencer | 0.0.9 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | rollup-explorer-backend | 0.0.3 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | rollup-node | 0.0.9 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | rollup-node | 0.0.10 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | rpc-gateway | 0.0.2 |
 | oci://registry-1.docker.io/bitnamicharts | postgresql | 15.5.0 |
 
@@ -46,6 +49,13 @@ Kubernetes: `>=1.22.0-0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| admin-system-backend.enabled | bool | `true` |  |
+| admin-system-cron.enabled | bool | `true` |  |
+| admin-system-dashboard.enabled | bool | `true` |  |
+| admin-system-dashboard.ingress.main.enabled | bool | `true` |  |
+| admin-system-dashboard.ingress.main.hosts[0].host | string | `"admin-system-dashboard.scrollsdk"` |  |
+| admin-system-dashboard.ingress.main.hosts[0].paths[0].path | string | `"/"` |  |
+| admin-system-dashboard.ingress.main.hosts[0].paths[0].pathType | string | `"Prefix"` |  |
 | balance-checker.enabled | bool | `false` |  |
 | blockscout-sc-verifier.enabled | bool | `false` |  |
 | blockscout.enabled | bool | `true` |  |
@@ -63,7 +73,7 @@ Kubernetes: `>=1.22.0-0`
 | contracts.enabled | bool | `true` |  |
 | coordinator-api.enabled | bool | `false` |  |
 | coordinator-cron.enabled | bool | `false` |  |
-| db | object | `{"bridge_history_password":"test1234","chain_monitor_password":"test1234","event_watcher_password":"test1234","gas_oracle_password":"test1234","pg_host":"postgresql","pg_password":"qwerty12345","pg_port":"5432","pg_user":"postgres","rollup_node_password":"test1234","rpc_gateway_password":"test1234"}` | each services. A user with admin privilege is required. |
+| db | object | `{"bridge_history_password":"test1234","chain_monitor_password":"test1234","gas_oracle_password":"test1234","pg_host":"postgresql","pg_password":"qwerty12345","pg_port":"5432","pg_user":"postgres","rollup_node_password":"test1234","rpc_gateway_password":"test1234"}` | each services. A user with admin privilege is required. |
 | frontends.enabled | bool | `true` |  |
 | frontends.ingress.main.enabled | bool | `true` |  |
 | frontends.ingress.main.hosts[0].host | string | `"frontends.scrollsdk"` |  |
