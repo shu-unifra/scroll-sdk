@@ -296,3 +296,6 @@ ingress:
         paths:
           - path: /
             pathType: Prefix
+
+scrollConfig: |
+  {}
