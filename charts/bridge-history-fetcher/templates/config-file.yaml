@@ -1,10 +1,10 @@
-{{- if .Values.global.isStandalone }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: bridge-history-fetcher-config
+  labels:
+    {{- include "scroll-sdk.labels" $ | nindent 4 }}
 data:
-{{ (.Files.Glob "configs/bridge-history-config.json").AsConfig | indent 2 }}
----
-{{- end }}
+  bridge-history-fetcher-config.json: |
+{{ .Values.scrollConfig | indent 4 }}
