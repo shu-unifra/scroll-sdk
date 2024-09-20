@@ -1,6 +1,6 @@
 # rollup-node
 
-![Version: 0.0.10](https://img.shields.io/badge/Version-0.0.10-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
+![Version: 0.0.11](https://img.shields.io/badge/Version-0.0.11-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
 
 rollup-node helm charts
 
@@ -83,7 +83,7 @@ Kubernetes: `>=1.22.0-0`
 | persistence.migrate-db.name | string | `"rollup-node-migrate-db"` |  |
 | persistence.migrate-db.type | string | `"configMap"` |  |
 | persistence.wait-for-contracts-script.defaultMode | string | `"0777"` |  |
-| persistence.wait-for-contracts-script.enabled | bool | `true` |  |
+| persistence.wait-for-contracts-script.enabled | string | `"yes"` |  |
 | persistence.wait-for-contracts-script.name | string | `"wait-for-contracts-script"` |  |
 | persistence.wait-for-contracts-script.type | string | `"configMap"` |  |
 | persistence.wait-for-l1-script.defaultMode | string | `"0777"` |  |
