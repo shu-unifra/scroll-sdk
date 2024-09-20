@@ -27,7 +27,7 @@ Kubernetes: `>=1.22.0-0`
 | additionalContainers.redis.name | string | `"redis"` |  |
 | command[0] | string | `"/bin/sh"` |  |
 | command[1] | string | `"-c"` |  |
-| command[2] | string | `"bridgehistoryapi-api --config /app/conf/bridge-history-config.json --metrics --metrics.addr 0.0.0.0 --metrics.port ${METRICS_PORT} --log.debug"` |  |
+| command[2] | string | `"bridgehistoryapi-api --config /app/conf/bridge-history-api-config.json --metrics --metrics.addr 0.0.0.0 --metrics.port ${METRICS_PORT} --log.debug"` |  |
 | controller.replicas | int | `1` |  |
 | controller.strategy | string | `"RollingUpdate"` |  |
 | controller.type | string | `"deployment"` |  |
@@ -69,7 +69,7 @@ Kubernetes: `>=1.22.0-0`
 | initContainers.2-wait-for-l2-sequencer.image | string | `"atkrad/wait4x:latest"` |  |
 | persistence.bridge-history-api.enabled | bool | `true` |  |
 | persistence.bridge-history-api.mountPath | string | `"/app/conf/"` |  |
-| persistence.bridge-history-api.name | string | `"bridge-history-config"` |  |
+| persistence.bridge-history-api.name | string | `"bridge-history-api-config"` |  |
 | persistence.bridge-history-api.type | string | `"configMap"` |  |
 | persistence.wait-for-l1-script.defaultMode | string | `"0777"` |  |
 | persistence.wait-for-l1-script.enabled | bool | `true` |  |
@@ -91,7 +91,7 @@ Kubernetes: `>=1.22.0-0`
 | resources.limits.memory | string | `"500Mi"` |  |
 | resources.requests.cpu | string | `"50m"` |  |
 | resources.requests.memory | string | `"100Mi"` |  |
-| scroll_config | string | `"{}\n"` |  |
+| scrollConfig | string | `"{}\n"` |  |
 | service.main.enabled | bool | `true` |  |
 | service.main.ports.http.enabled | bool | `true` |  |
 | service.main.ports.http.port | int | `8080` |  |
