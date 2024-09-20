@@ -5,5 +5,5 @@ metadata:
     {{- include "scroll-common.labels" $ | nindent 4 }}
   name: genesis-config
 data:
-  genesis.json:
+  genesis.json: |
 {{ .Values.genesisConfig | indent 4 }}
