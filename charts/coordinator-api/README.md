@@ -35,7 +35,6 @@ Kubernetes: `>=1.22.0-0`
 | defaultProbes.enabled | bool | `false` |  |
 | defaultProbes.spec.httpGet.path | string | `"/"` |  |
 | defaultProbes.spec.httpGet.port | int | `8090` |  |
-| envFrom[0].configMapRef.name | string | `"coordinator-api-env"` |  |
 | env[0].name | string | `"HTTP_PORT"` |  |
 | env[0].value | int | `8080` |  |
 | env[1].name | string | `"METRICS_PORT"` |  |
@@ -108,7 +107,6 @@ Kubernetes: `>=1.22.0-0`
 | resources.limits.memory | string | `"24Gi"` |  |
 | resources.requests.cpu | string | `"50m"` |  |
 | resources.requests.memory | string | `"20Gi"` |  |
-| scrollConfig | string | `"{}\n"` |  |
 | service.main.enabled | bool | `true` |  |
 | service.main.ports.http.enabled | bool | `true` |  |
 | service.main.ports.http.port | int | `80` |  |
