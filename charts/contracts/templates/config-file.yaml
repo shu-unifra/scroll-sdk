@@ -1,11 +1,12 @@
-{{- if .Values.global.isStandalone }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: scroll-smart-contracts-config
+  labels:
+    {{- include "scroll-sdk.labels" $ | nindent 4 }}
 data:
-{{ (.Files.Glob "configs/config.toml").AsConfig | indent 2 }}
-{{ (.Files.Glob "configs/config-contracts.toml").AsConfig | indent 2 }}
----
-{{- end }}
+  config.toml: |
+{{ .Values.scrollConfig | indent 4 }}
+  config-contracts.toml: |
+{{ .Values.scrollConfigContracts | indent 4 }}

@@ -9,3 +9,11 @@ image:
 envFrom:
   - configMapRef:
       name: contracts-deployment-env
+
+# here is the place for the config.toml file
+scrollConfig: |
+  {}
+
+# here is the place for the config-contracts.toml file
+scrollConfigContracts: |
+  {}
