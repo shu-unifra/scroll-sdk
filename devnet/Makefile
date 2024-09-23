@@ -14,7 +14,7 @@ bootstrap:
 
 config:
 		echo "Creating configuration files..."
-		cd scroll-sdk && time docker run --rm -it -v .:/contracts/volume scrolltech/scroll-stack-contracts:gen-configs-v0.0.22
+		cd scroll-sdk && time docker run --rm -it -v .:/contracts/volume scrolltech/scroll-stack-contracts:gen-configs-v0.0.23
 		echo "Creating env files..."
 		./create-env-files.sh scroll-sdk
 
@@ -25,7 +25,8 @@ install:
 			--set l2-bootnode.image.tag=$(L2_IMAGE_TAG) \
 			--set l1-devnet.ingress.main.hosts[0].host=$(L1_RPC_HOST) \
 			--set l1-devnet.ingress.main.hosts[0].paths[0].path=/ \
-			--set l1-devnet.ingress.main.hosts[0].paths[0].pathType=Prefix
+			--set l1-devnet.ingress.main.hosts[0].paths[0].pathType=Prefix \
+			--set-file bridge-history-api.scrollConfig=scroll-sdk/bridge-history-config.yaml
 
 reload-env-files:
 		./create-env-files.sh scroll-sdk
