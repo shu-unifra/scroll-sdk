@@ -260,3 +260,11 @@ db:
   gas_oracle_password: "test1234"
   rollup_node_password: "test1234"
   rpc_gateway_password: "test1234"
+  scroll_rds: "your_scroll_rds_endpoint"
+  scroll_rds_username: "your_scroll_rds_username"
+  scroll_rds_db_name: "your_scroll_rds_db_name"
+
+l1:
+  scroll_chain_proxy_addr: "your_l1_scroll_chain_proxy_address"
+  forked_rpc_endpoint: "your_forked_l1_rpc_endpoint"
+  rpc_endpoint: "your_l1_rpc_endpoint"
