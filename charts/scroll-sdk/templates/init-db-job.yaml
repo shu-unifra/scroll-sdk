@@ -35,6 +35,20 @@ spec:
               value: {{ .Values.db.pg_password }}
             - name: DB_PASSWORD
               value: {{ .Values.db.bridge_history_password }}
+            - name: L1_SCROLL_CHAIN_PROXY_ADDR
+              value: {{ .Values.l1.scroll_chain_proxy_addr }}
+            - name: L1_RPC_ENDPOINT
+              value: {{ .Values.l1.rpc_endpoint }}
+            - name: SCROLL_RDS_HOST
+              value: {{ .Values.db.scroll_rds_host }}
+            - name: SCROLL_RDS_USER
+              value: {{ .Values.db.scroll_rds_user }}
+            - name: SCROLL_RDS_ROLLUP_NODE_DATABASE
+              value: {{ .Values.db.scroll_rds_rollup_node_database }}
+            - name: SCROLL_RDS_ROLLUP_NODE_PASSWORD
+              value: {{ .Values.db.scroll_rds_rollup_node_password }}
+            - name: SCROLL_RDS_PG_PORT
+              value: {{ .Values.db.scroll_rds_pg_port | quote }}
           command: ["bash", "-c", "./init-db.sh"]
           volumeMounts:
             - name: init-db

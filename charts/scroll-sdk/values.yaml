@@ -260,11 +260,12 @@ db:
   gas_oracle_password: "test1234"
   rollup_node_password: "test1234"
   rpc_gateway_password: "test1234"
-  scroll_rds: "your_scroll_rds_endpoint"
-  scroll_rds_username: "your_scroll_rds_username"
-  scroll_rds_db_name: "your_scroll_rds_db_name"
+  scroll_rds_host: "xxx"
+  scroll_rds_user: "yyy"
+  scroll_rds_rollup_node_database: "mainnet_rollup"
+  scroll_rds_rollup_node_password: "zzz"
+  scroll_rds_pg_port: "5432"
 
 l1:
-  scroll_chain_proxy_addr: "your_l1_scroll_chain_proxy_address"
-  forked_rpc_endpoint: "your_forked_l1_rpc_endpoint"
-  rpc_endpoint: "your_l1_rpc_endpoint"
+  scroll_chain_proxy_addr: "0xa13BAF47339d63B743e7Da8741db5456DAc1E556"
+  rpc_endpoint: "http://l1-devnet:8545"
