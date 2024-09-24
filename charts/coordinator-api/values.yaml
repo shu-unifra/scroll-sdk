@@ -13,10 +13,6 @@ image:
   pullPolicy: Always
   tag: v4.4.59
 
-envFrom:
-  - configMapRef:
-      name: coordinator-api-env
-
 env:
   - name: HTTP_PORT
     value: 8080
