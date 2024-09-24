@@ -189,6 +189,9 @@ rpc-gateway:
             - path: /
               pathType: Prefix
 
+scroll-common:
+  enabled: true
+
 admin-system-backend:
   enabled: true
 
