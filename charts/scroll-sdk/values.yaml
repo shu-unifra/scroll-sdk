@@ -38,7 +38,7 @@ chain-monitor:
   enabled: true
 
 contracts:
-  enabled: true
+  enabled: false
 
 coordinator-api:
   enabled: false
