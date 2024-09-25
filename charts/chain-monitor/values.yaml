@@ -126,3 +126,6 @@ serviceMonitor:
       - port: metrics
         interval: 1m
         scrapeTimeout: 10s
+
+scrollConfig: |
+  {}

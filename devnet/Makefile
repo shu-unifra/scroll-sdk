@@ -14,9 +14,10 @@ bootstrap:
 
 config:
 		echo "Creating configuration files..."
-		cd scroll-sdk && time docker run --rm -it -v .:/contracts/volume scrolltech/scroll-stack-contracts:gen-configs-v0.0.22
+		cd scroll-sdk && time docker run --rm -it -v .:/contracts/volume scrolltech/scroll-stack-contracts:gen-configs-v0.0.24
 		echo "Creating env files..."
 		./create-env-files.sh scroll-sdk
+		./prepare-config-files.sh
 
 install:
 		helm upgrade -i scroll-sdk scroll-sdk -n $(NAMESPACE) \
@@ -25,7 +26,21 @@ install:
 			--set l2-bootnode.image.tag=$(L2_IMAGE_TAG) \
 			--set l1-devnet.ingress.main.hosts[0].host=$(L1_RPC_HOST) \
 			--set l1-devnet.ingress.main.hosts[0].paths[0].path=/ \
-			--set l1-devnet.ingress.main.hosts[0].paths[0].pathType=Prefix
+			--set l1-devnet.ingress.main.hosts[0].paths[0].pathType=Prefix \
+			--values scroll-sdk/admin-system-backend-config.yaml \
+			--values scroll-sdk/admin-system-cron-config.yaml \
+			--values scroll-sdk/bridge-history-api-config.yaml \
+			--values scroll-sdk/bridge-history-fetcher-config.yaml \
+			--values scroll-sdk/chain-monitor-config.yaml \
+			--values scroll-sdk/coordinator-api-config.yaml \
+			--values scroll-sdk/coordinator-cron-config.yaml \
+			--values scroll-sdk/frontend-config.yaml \
+			--values scroll-sdk/gas-oracle-config.yaml \
+			--values scroll-sdk/genesis.yaml \
+			--values scroll-sdk/rollup-explorer-backend-config.yaml \
+			--values scroll-sdk/rollup-node.yaml \
+			--values scroll-sdk/scroll-common-config.yaml \
+			--values scroll-sdk/scroll-common-config-contracts.yaml
 
 reload-env-files:
 		./create-env-files.sh scroll-sdk

@@ -2,7 +2,7 @@
 apiVersion: v2
 description: scroll helm charts to deploy scroll sdk
 name: scroll-sdk
-version: 0.0.37
+version: 0.0.38
 appVersion: v0.1.0
 kubeVersion: ">=1.22.0-0"
 maintainers:
@@ -18,7 +18,7 @@ dependencies:
     repository: "oci://ghcr.io/scroll-tech/scroll-sdk/helm"
     condition: l1-devnet.enabled
   - name: balance-checker
-    version: 0.0.2
+    version: 0.0.3
     repository: "oci://ghcr.io/scroll-tech/scroll-sdk/helm"
     condition: balance-checker.enabled
   - name: blockscout
@@ -26,11 +26,11 @@ dependencies:
     repository: "oci://ghcr.io/scroll-tech/scroll-sdk/helm"
     condition: blockscout.enabled
   - name: bridge-history-api
-    version: 0.0.6
+    version: 0.0.7
     repository: "oci://ghcr.io/scroll-tech/scroll-sdk/helm"
     condition: bridge-history-api.enabled
   - name: bridge-history-fetcher
-    version: 0.0.8
+    version: 0.0.9
     repository: "oci://ghcr.io/scroll-tech/scroll-sdk/helm"
     condition: bridge-history-fetcher.enabled
   - name: blockscout-sc-verifier
@@ -38,23 +38,23 @@ dependencies:
     repository: "oci://ghcr.io/scroll-tech/scroll-sdk/helm"
     condition: blockscout-sc-verifier.enabled
   - name: chain-monitor
-    version: 0.0.7
+    version: 0.0.8
     repository: "oci://ghcr.io/scroll-tech/scroll-sdk/helm"
     condition: chain-monitor.enabled
   - name: contracts
-    version: 0.0.7
+    version: 0.0.9
     repository: "oci://ghcr.io/scroll-tech/scroll-sdk/helm"
     condition: contracts.enabled
   - name: coordinator-api
-    version: 0.0.8
+    version: 0.0.9
     repository: "oci://ghcr.io/scroll-tech/scroll-sdk/helm"
     condition: coordinator-api.enabled
   - name: coordinator-cron
-    version: 0.0.6
+    version: 0.0.7
     repository: "oci://ghcr.io/scroll-tech/scroll-sdk/helm"
     condition: coordinator-cron.enabled
   - name: frontends
-    version: 0.0.8
+    version: 0.0.9
     repository: "oci://ghcr.io/scroll-tech/scroll-sdk/helm"
     condition: frontends.enabled
   - name: gas-oracle
@@ -94,26 +94,30 @@ dependencies:
     version: 59.0.0
     condition: kube-prometheus-stack.enabled
   - name: rollup-explorer-backend
-    version: 0.0.3
+    version: 0.0.4
     repository: "oci://ghcr.io/scroll-tech/scroll-sdk/helm"
     condition: rollup-explorer-backend.enabled
   - name: rollup-node
-    version: 0.0.10
+    version: 0.0.11
     repository: "oci://ghcr.io/scroll-tech/scroll-sdk/helm"
     condition: rollup-node.enabled
   - name: rpc-gateway
     version: 0.0.2
     repository: "oci://ghcr.io/scroll-tech/scroll-sdk/helm"
     condition: rpc-gateway.enabled
+  - name: scroll-common
+    version: 0.0.3
+    repository: "oci://ghcr.io/scroll-tech/scroll-sdk/helm"
+    condition: scroll-common.enabled
   - name: admin-system-backend
-    version: 0.0.1
+    version: 0.0.2
     repository: "oci://ghcr.io/scroll-tech/scroll-sdk/helm"
     condition: admin-system-backend.enabled
   - name: admin-system-cron
-    version: 0.0.1
+    version: 0.0.2
     repository: "oci://ghcr.io/scroll-tech/scroll-sdk/helm"
     condition: admin-system-cron.enabled
   - name: admin-system-dashboard
-    version: 0.0.1
+    version: 0.0.2
     repository: "oci://ghcr.io/scroll-tech/scroll-sdk/helm"
     condition: admin-system-dashboard.enabled

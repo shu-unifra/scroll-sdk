@@ -1,6 +1,6 @@
 # rollup-explorer-backend
 
-![Version: 0.0.3](https://img.shields.io/badge/Version-0.0.3-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
+![Version: 0.0.4](https://img.shields.io/badge/Version-0.0.4-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
 
 rollup-explorer-backend helm charts
 
@@ -74,6 +74,7 @@ Kubernetes: `>=1.22.0-0`
 | resources.limits.memory | string | `"6Gi"` |  |
 | resources.requests.cpu | string | `"2"` |  |
 | resources.requests.memory | string | `"4Gi"` |  |
+| scrollConfig | string | `"{}\n"` |  |
 | service.main.enabled | bool | `true` |  |
 | service.main.labels.app | string | `"rollup-explorer-backend"` |  |
 | service.main.ports.http.enabled | bool | `true` |  |

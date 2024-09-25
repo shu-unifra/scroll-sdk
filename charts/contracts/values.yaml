@@ -4,8 +4,16 @@ global:
 
 image:
   repository: scrolltech/scroll-stack-contracts
-  tag: deploy-v0.0.22
+  tag: deploy-v0.0.24
 
 envFrom:
   - configMapRef:
       name: contracts-deployment-env
+
+# here is the place for the config.toml file
+scrollConfig: |
+  {}
+
+# here is the place for the config-contracts.toml file
+scrollConfigContracts: |
+  {}

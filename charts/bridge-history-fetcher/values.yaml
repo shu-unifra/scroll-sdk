@@ -16,7 +16,7 @@ command:
   [
     "/bin/sh",
     "-c",
-    "bridgehistoryapi-fetcher --config /app/conf/bridge-history-config.json --metrics --metrics.addr 0.0.0.0 --metrics.port ${METRICS_PORT} --log.debug",
+    "bridgehistoryapi-fetcher --config /app/conf/bridge-history-fetcher-config.json --metrics --metrics.addr 0.0.0.0 --metrics.port ${METRICS_PORT} --log.debug",
   ]
 
 env:
@@ -44,7 +44,7 @@ persistence:
     enabled: true
     type: configMap
     mountPath: /app/conf/
-    name: bridge-history-config
+    name: bridge-history-fetcher-config
   migrate-db:
     enabled: true
     type: configMap
@@ -154,3 +154,6 @@ serviceMonitor:
       - port: metrics
         interval: 1m
         scrapeTimeout: 10s
+
+scrollConfig: |
+  {}
