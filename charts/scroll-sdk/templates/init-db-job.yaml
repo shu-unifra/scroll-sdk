@@ -18,6 +18,12 @@ spec:
       containers:
         - name: init-db-and-get-batch-info
           image: postgres:latest
+            - configMapRef:
+                name: l1-devnet-env
+            - configMapRef:
+                name: rollup-node-env
+            - configMapRef:
+                name: balance-checker-env
           env:
             - name: PG_HOST
               value: {{ .Values.db.pg_host }}
@@ -27,29 +33,17 @@ spec:
               value: {{ .Values.db.pg_user }}
             - name: PG_PORT
               value: {{ .Values.db.pg_port | quote }}
-            - name: PGPASSWORD
-              value: {{ .Values.db.pg_password }}
             - name: DB_USER
               value: bridge_history
-            - name: POSTGRES_PASSWORD
-              value: {{ .Values.db.pg_password }}
             - name: DB_PASSWORD
               value: {{ .Values.db.bridge_history_password }}
-            - name: L1_SCROLL_CHAIN_PROXY_ADDR
-              value: {{ .Values.l1.scroll_chain_proxy_addr }}
-            - name: L1_RPC_ENDPOINT
-              value: {{ .Values.l1.rpc_endpoint }}
-            - name: SCROLL_RDS_HOST
-              value: {{ .Values.db.scroll_rds_host }}
-            - name: SCROLL_RDS_USER
-              value: {{ .Values.db.scroll_rds_user }}
-            - name: SCROLL_RDS_ROLLUP_NODE_DATABASE
-              value: {{ .Values.db.scroll_rds_rollup_node_database }}
-            - name: SCROLL_RDS_ROLLUP_NODE_PASSWORD
-              value: {{ .Values.db.scroll_rds_rollup_node_password }}
-            - name: SCROLL_RDS_PG_PORT
-              value: {{ .Values.db.scroll_rds_pg_port | quote }}
-          command: ["/bin/bash", "-c", "./init-db.sh && ./wait-l1-and-get-batch-info.sh"]
+            - name: L1_MAINNET_SCROLL_CHAIN_PROXY_ADDR
+              value: {{ .Values.l1.mainnet_scroll_chain_proxy_addr }}
+            - name: L1_MAINNET_SCROLL_OWNER_ADDR
+              value: {{ .Values.l1.mainnet_scroll_owner_addr }}
+            - name: SCROLL_RDS_ROLLUP_NODE_DSN
+              value: {{ .Values.db.scroll_rds_rollup_node_dsn }}
+          command: ["/bin/bash", "-c", "./init-db.sh && ./wait-l1-and-get-batch-info.sh && ./modify-l1-scroll-chain-contract-whitelist.sh"]
           volumeMounts:
             - name: init-db
               mountPath: /init-db.sh
@@ -57,6 +51,9 @@ spec:
             - name: wait-l1-and-get-batch-info
               mountPath: /wait-l1-and-get-batch-info.sh
               subPath: wait-l1-and-get-batch-info.sh
+            - name: modify-l1-scroll-chain-contract-whitelist
+              mountPath: /modify-l1-scroll-chain-contract-whitelist.sh
+              subPath: modify-l1-scroll-chain-contract-whitelist.sh
       restartPolicy: Never
       volumes:
         - name: init-db
@@ -66,5 +63,9 @@ spec:
         - name: wait-l1-and-get-batch-info
           configMap:
             name: wait-l1-and-get-batch-info
+            defaultMode: 0777
+        - name: modify-l1-scroll-chain-contract-whitelist
+          configMap:
+            name: modify-l1-scroll-chain-contract-whitelist
             defaultMode: 0777
   backoffLimit: 4

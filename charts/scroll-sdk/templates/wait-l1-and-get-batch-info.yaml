@@ -8,7 +8,7 @@ data:
   wait-l1-and-get-batch-info.sh: |
     #!/bin/bash
 
-    apt-get update && apt-get install -y curl git
+    apt-get update && apt-get install -y curl git postgresql-client
 
     echo "Waiting for L1 contract to be ready..."
     while true; do
@@ -29,13 +29,13 @@ data:
     foundryup
 
     # Get last finalized batch
-    export LAST_FINALIZED_BATCH=$(cast call "${L1_SCROLL_CHAIN_PROXY_ADDR}" "lastFinalizedBatchIndex()(uint256)" --rpc-url ${L1_RPC_ENDPOINT} | awk '{print $1}')
+    export LAST_FINALIZED_BATCH=$(cast call "${L1_MAINNET_SCROLL_CHAIN_PROXY_ADDR}" "lastFinalizedBatchIndex()(uint256)" --rpc-url ${L1_RPC_ENDPOINT} | awk '{print $1}')
 
     # Calculate last committed batch
     FIRST_UNCOMMITTED_BATCH=$((LAST_FINALIZED_BATCH + 1))
     echo "Starting search from batch: $FIRST_UNCOMMITTED_BATCH"
     while true; do
-        BATCH_HASH=$(cast call "${L1_SCROLL_CHAIN_PROXY_ADDR}" "committedBatches(uint256)(bytes32)" "$FIRST_UNCOMMITTED_BATCH" --rpc-url ${L1_RPC_ENDPOINT})
+        BATCH_HASH=$(cast call "${L1_MAINNET_SCROLL_CHAIN_PROXY_ADDR}" "committedBatches(uint256)(bytes32)" "$FIRST_UNCOMMITTED_BATCH" --rpc-url ${L1_RPC_ENDPOINT})
         echo "Batch $FIRST_UNCOMMITTED_BATCH - Hash: $BATCH_HASH"
         if [[ $BATCH_HASH == "0x0000000000000000000000000000000000000000000000000000000000000000" ]]; then
             echo "Found first uncommitted batch: $FIRST_UNCOMMITTED_BATCH"
@@ -52,4 +52,81 @@ data:
     echo "export LAST_FINALIZED_BATCH=$LAST_FINALIZED_BATCH"
     echo "export LAST_COMMITTED_BATCH=$LAST_COMMITTED_BATCH"
 
-    # TODO: Add logic for copying database here
+    # Database copy logic
+    local_sql_run() {
+      PGPASSWORD=$DB_PASSWORD psql -h $PG_HOST -p $PG_PORT -U $PG_USER -d $POSTGRES_DB -Aqt -c "$@"
+    }
+
+    remote_sql_run() {
+      psql "$SCROLL_RDS_ROLLUP_NODE_DSN" -Aqt -c "$@"
+    }
+
+    # Get the bundle containing the last finalized batch
+    BUNDLE_INDEX=$(remote_sql_run "SELECT index FROM bundle WHERE end_batch_index = $LAST_FINALIZED_BATCH")
+
+    if [ -z "$BUNDLE_INDEX" ]; then
+      echo "Warning: No bundle found for the last finalized batch. Skipping bundle copy."
+    else
+      # Copy bundles
+      echo "SHADOW: Copying bundle containing last finalized batch (index $BUNDLE_INDEX)"
+      remote_sql_run "COPY (SELECT * FROM bundle WHERE index = $BUNDLE_INDEX) TO STDOUT WITH CSV HEADER" | local_sql_run "COPY bundle FROM STDIN WITH CSV HEADER"
+    fi
+
+    # Copy batches
+    echo "SHADOW: Copying batches [$LAST_FINALIZED_BATCH, $LAST_COMMITTED_BATCH]"
+    remote_sql_run "COPY (SELECT * FROM batch WHERE index >= $LAST_FINALIZED_BATCH AND index <= $LAST_COMMITTED_BATCH) TO STDOUT WITH CSV HEADER" | local_sql_run "COPY batch FROM STDIN WITH CSV HEADER"
+    local_sql_run "UPDATE batch SET rollup_status = 3, finalize_tx_hash = NULL, finalized_at = NULL, committed_at = NOW() WHERE index > $LAST_FINALIZED_BATCH"
+    local_sql_run "UPDATE batch SET proving_status = 1, prover_assigned_at = NULL, total_attempts = 0, active_attempts = 0, chunk_proofs_status = 1"
+
+    # Get the start_chunk_index for the batch between the last finalized batch and end_chunk_index for the last committed batch
+    # Note: The range [finalized, committed] is used to handle corner cases and ensure data integrity.
+    # This approach ensures that even when committed == finalized, we still retrieve the necessary parent chunk data.
+    # It helps to maintain data consistency and prevents potential issues in edge scenarios.
+    CHUNK_INDICES=$(local_sql_run "
+      SELECT
+        MIN(start_chunk_index) as start_chunk_index,
+        MAX(end_chunk_index) as end_chunk_index
+      FROM batch
+      WHERE index BETWEEN $LAST_FINALIZED_BATCH AND $LAST_COMMITTED_BATCH
+    ")
+
+    # Extract start_chunk_index (first field) from CHUNK_INDICES
+    START_CHUNK_INDEX=$(echo $CHUNK_INDICES | cut -d '|' -f1)
+
+    # Extract end_chunk_index (second field) from CHUNK_INDICES
+    END_CHUNK_INDEX=$(echo $CHUNK_INDICES | cut -d '|' -f2)
+
+    # Print the values of START_CHUNK_INDEX and END_CHUNK_INDEX for verification
+    echo "Chunk index range: $START_CHUNK_INDEX to $END_CHUNK_INDEX"
+
+    # Copy chunks
+    echo "SHADOW: Copying chunks [$START_CHUNK_INDEX, $END_CHUNK_INDEX]"
+    remote_sql_run "COPY (SELECT * FROM chunk WHERE index >= $START_CHUNK_INDEX AND index <= $END_CHUNK_INDEX) TO STDOUT WITH CSV HEADER" | local_sql_run "COPY chunk FROM STDIN WITH CSV HEADER"
+
+    # Update chunks' proving status and reset attempt counters
+    local_sql_run "UPDATE chunk SET proving_status = 1, prover_assigned_at = NULL, total_attempts = 0, active_attempts = 0"
+
+    # Check how many chunks were updated to verified status
+    UPDATED_CHUNKS_NUM=$(local_sql_run "
+      SELECT COUNT(*)
+      FROM chunk
+      WHERE proving_status = 4
+      AND batch_hash = (
+        SELECT hash
+        FROM batch
+        WHERE index = $LAST_FINALIZED_BATCH
+      )
+    ")
+    echo "Number of chunks updated to verified status (proving_status = 4): $UPDATED_CHUNKS_NUM"
+
+    # Get the start and end block numbers for the copied chunks
+    BLOCK_NUMBERS=$(local_sql_run "SELECT MIN(start_block_number), MAX(end_block_number) FROM chunk WHERE index >= $START_CHUNK_INDEX AND index <= $END_CHUNK_INDEX")
+    START_BLOCK_NUM=$(echo $BLOCK_NUMBERS | cut -d '|' -f1)
+    END_BLOCK_NUM=$(echo $BLOCK_NUMBERS | cut -d '|' -f2)
+
+    # Print block number range for verification
+    echo "Block number range: $START_BLOCK_NUM to $END_BLOCK_NUM"
+
+    # Copy blocks
+    echo "SHADOW: Copying blocks [$START_BLOCK_NUM, $END_BLOCK_NUM]"
+    remote_sql_run "COPY (SELECT * FROM l2_block WHERE number >= $START_BLOCK_NUM AND number <= $END_BLOCK_NUM) TO STDOUT WITH CSV HEADER" | local_sql_run "COPY l2_block FROM STDIN WITH CSV HEADER"
