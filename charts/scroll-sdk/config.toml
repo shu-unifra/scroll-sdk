@@ -117,5 +117,5 @@ ADMIN_SYSTEM_DASHBOARD_HOST= "admin-system-dashboard.scrollsdk"
 GRAFANA_HOST = "http://grafana.scrollsdk"
 
 [shadowfork]
-L1_FULLNODE_RPC_ENDPOINT: "https://rpc.ankr.com/eth"
-L1_SHADOWFORK_BLOCK_NUMBER: "20800000"
+L1_FULLNODE_RPC_ENDPOINT = "https://rpc.ankr.com/eth"
+L1_SHADOWFORK_BLOCK_NUMBER = "20800000"
