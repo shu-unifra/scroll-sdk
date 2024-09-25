@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    {{- include "scroll-sdk.labels" $ | nindent 4 }}
+  name: wait-l1-and-get-batch-info
+data:
+  wait-l1-and-get-batch-info.sh: |
+    #!/bin/bash
+
+    apt-get update && apt-get install -y curl git
+
+    echo "Waiting for L1 contract to be ready..."
+    while true; do
+      HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST --data '{"jsonrpc":"2.0","method":"web3_clientVersion","params":[],"id":1}' -H "Content-Type: application/json" $L1_RPC_ENDPOINT)
+      if [ "$HTTP_CODE" -eq 200 ]; then
+        echo "L1 contract is ready!"
+        break
+      else
+        echo "L1 contract is not responding, HTTP code: $HTTP_CODE. Retrying in 5 seconds..."
+        sleep 5
+      fi
+    done
+
+    echo "Getting batch information..."
+
+    curl -L https://foundry.paradigm.xyz | bash
+    source /root/.bashrc
+    foundryup
+
+    # Get last finalized batch
+    export LAST_FINALIZED_BATCH=$(cast call "${L1_SCROLL_CHAIN_PROXY_ADDR}" "lastFinalizedBatchIndex()(uint256)" --rpc-url ${L1_RPC_ENDPOINT} | awk '{print $1}')
+
+    # Calculate last committed batch
+    FIRST_UNCOMMITTED_BATCH=$((LAST_FINALIZED_BATCH + 1))
+    echo "Starting search from batch: $FIRST_UNCOMMITTED_BATCH"
+    while true; do
+        BATCH_HASH=$(cast call "${L1_SCROLL_CHAIN_PROXY_ADDR}" "committedBatches(uint256)(bytes32)" "$FIRST_UNCOMMITTED_BATCH" --rpc-url ${L1_RPC_ENDPOINT})
+        echo "Batch $FIRST_UNCOMMITTED_BATCH - Hash: $BATCH_HASH"
+        if [[ $BATCH_HASH == "0x0000000000000000000000000000000000000000000000000000000000000000" ]]; then
+            echo "Found first uncommitted batch: $FIRST_UNCOMMITTED_BATCH"
+            break
+        fi
+        FIRST_UNCOMMITTED_BATCH=$((FIRST_UNCOMMITTED_BATCH + 1))
+    done
+    export LAST_COMMITTED_BATCH=$((FIRST_UNCOMMITTED_BATCH - 1))
+    echo "Last committed batch: $LAST_COMMITTED_BATCH"
+
+    echo "SHADOW: Last Finalized Batch: $LAST_FINALIZED_BATCH Last Committed Batch: $LAST_COMMITTED_BATCH"
+
+    # Export the variables to be used by other processes
+    echo "export LAST_FINALIZED_BATCH=$LAST_FINALIZED_BATCH"
+    echo "export LAST_COMMITTED_BATCH=$LAST_COMMITTED_BATCH"
+
+    # TODO: Add logic for copying database here

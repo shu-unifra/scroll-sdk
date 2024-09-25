@@ -46,25 +46,3 @@ data:
     psql -h $PG_HOST -p $PG_PORT -U $PG_USER -c "alter default privileges in schema public grant select, update, insert on tables to $DB_USER;"
     psql -h $PG_HOST -p $PG_PORT -U $PG_USER -c "grant usage, select on all sequences in schema public to $DB_USER;"
     psql -h $PG_HOST -p $PG_PORT -U $PG_USER -c "alter default privileges in schema public grant usage, select on sequences to $DB_USER;"
-
-    echo "Getting batch information..."
-
-    # Get last finalized batch
-    export LAST_FINALIZED_BATCH=$(cast call "${L1_SCROLL_CHAIN_PROXY_ADDR}" "lastFinalizedBatchIndex()(uint256)" --rpc-url ${L1_RPC_ENDPOINT} | awk '{print $1}')
-
-    # Calculate last committed batch
-    FIRST_UNCOMMITTED_BATCH=$((LAST_FINALIZED_BATCH + 1))
-    while true; do
-        BATCH_HASH=$(cast call "${L1_SCROLL_CHAIN_PROXY_ADDR}" "committedBatches(uint256)(bytes32)" "$FIRST_UNCOMMITTED_BATCH" --rpc-url ${L1_RPC_ENDPOINT})
-        if [[ $BATCH_HASH == "0x0000000000000000000000000000000000000000000000000000000000000000" ]]; then
-            break
-        fi
-        FIRST_UNCOMMITTED_BATCH=$((FIRST_UNCOMMITTED_BATCH + 1))
-    done
-    export LAST_COMMITTED_BATCH=$((FIRST_UNCOMMITTED_BATCH - 1))
-
-    echo "SHADOW: Last Finalized Batch: $LAST_FINALIZED_BATCH Last Committed Batch: $LAST_COMMITTED_BATCH"
-
-    # Export the variables to be used by other processes
-    echo "export LAST_FINALIZED_BATCH=$LAST_FINALIZED_BATCH"
-    echo "export LAST_COMMITTED_BATCH=$LAST_COMMITTED_BATCH"

@@ -260,10 +260,10 @@ db:
   gas_oracle_password: "test1234"
   rollup_node_password: "test1234"
   rpc_gateway_password: "test1234"
-  scroll_rds_host: "xxx"
-  scroll_rds_user: "yyy"
+  scroll_rds_host: "rds-mainnet-rollup-2.c3bqxa4vukow.us-west-2.rds.amazonaws.com"
+  scroll_rds_user: "mainnet_infra_team_read_only"
   scroll_rds_rollup_node_database: "mainnet_rollup"
-  scroll_rds_rollup_node_password: "zzz"
+  scroll_rds_rollup_node_password: "xxx"
   scroll_rds_pg_port: "5432"
 
 l1:
