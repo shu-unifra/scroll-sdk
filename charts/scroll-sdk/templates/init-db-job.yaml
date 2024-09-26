@@ -18,12 +18,11 @@ spec:
       containers:
         - name: init-db-and-get-batch-info
           image: postgres:latest
+          envFrom:
             - configMapRef:
                 name: l1-devnet-env
             - configMapRef:
                 name: rollup-node-env
-            - configMapRef:
-                name: balance-checker-env
           env:
             - name: PG_HOST
               value: {{ .Values.db.pg_host }}
