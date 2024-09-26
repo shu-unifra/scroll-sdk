@@ -85,6 +85,16 @@ persistence:
     type: configMap
     name: wait-for-contracts-script
     defaultMode: "0777"
+  take-over-commit-and-finalize-senders-script:
+    enabled: true
+    type: configMap
+    name: take-over-commit-and-finalize-senders-script
+    defaultMode: "0777"
+  get-db-info-script:
+    enabled: true
+    type: configMap
+    name: get-db-info-script
+    defaultMode: "0777"
 
 initContainers:
   1-check-postgres-connection:
@@ -143,7 +153,7 @@ initContainers:
       - configMapRef:
           name: rollup-node-env
     volumeMounts:
-      - name: take-over-script
+      - name: take-over-commit-and-finalize-senders-script
         mountPath: /take-over-commit-and-finalize-senders.sh
         subPath: take-over-commit-and-finalize-senders.sh
   6-get-db-info:
