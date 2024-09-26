@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   labels:
     {{- include "scroll-sdk.labels" $ | nindent 4 }}
-  name: get-db-info
+  name: get-db-info-script
 data:
   get-db-info.sh: |
     #!/bin/bash
