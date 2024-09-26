@@ -32,8 +32,12 @@ spec:
               value: {{ .Values.db.pg_user }}
             - name: PG_PORT
               value: {{ .Values.db.pg_port | quote }}
+            - name: PGPASSWORD
+              value: {{ .Values.db.pg_password }}
             - name: DB_USER
               value: bridge_history
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.db.pg_password }}
             - name: DB_PASSWORD
               value: {{ .Values.db.bridge_history_password }}
             - name: L1_MAINNET_SCROLL_CHAIN_PROXY_ADDR
