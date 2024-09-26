@@ -8,7 +8,7 @@ data:
   get-db-info.sh: |
     #!/bin/bash
 
-    apt-get update && apt-get install -y curl git postgresql-client
+    apt-get update && apt-get install -y git postgresql-client
 
     echo "Waiting for L1 contract to be ready..."
     while true; do

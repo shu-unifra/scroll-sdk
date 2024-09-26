@@ -16,7 +16,7 @@ spec:
           - --timeout
           - "0"
       containers:
-        - name: init-db-and-get-batch-info
+        - name: init-db
           image: postgres:latest
           env:
             - name: PG_HOST
@@ -35,12 +35,6 @@ spec:
               value: {{ .Values.db.pg_password }}
             - name: DB_PASSWORD
               value: {{ .Values.db.bridge_history_password }}
-            - name: L1_MAINNET_SCROLL_CHAIN_PROXY_ADDR
-              value: {{ .Values.l1.mainnet_scroll_chain_proxy_addr }}
-            - name: L1_MAINNET_SCROLL_OWNER_ADDR
-              value: {{ .Values.l1.mainnet_scroll_owner_addr }}
-            - name: SCROLL_RDS_ROLLUP_NODE_DSN
-              value: {{ .Values.db.scroll_rds_rollup_node_dsn }}
           command: ["/bin/bash", "-c", "./init-db.sh"]
           volumeMounts:
             - name: init-db
@@ -51,9 +45,5 @@ spec:
         - name: init-db
           configMap:
             name: init-db
-            defaultMode: 0777
-        - name: modify-l1-scroll-chain-contract-whitelist
-          configMap:
-            name: modify-l1-scroll-chain-contract-whitelist
             defaultMode: 0777
   backoffLimit: 4

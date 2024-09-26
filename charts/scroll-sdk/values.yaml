@@ -260,8 +260,3 @@ db:
   gas_oracle_password: "test1234"
   rollup_node_password: "test1234"
   rpc_gateway_password: "test1234"
-  scroll_rds_rollup_node_dsn: "xxx"
-
-l1:
-  mainnet_scroll_chain_proxy_addr: "0xa13BAF47339d63B743e7Da8741db5456DAc1E556"
-  mainnet_scroll_owner_addr: "0x798576400F7D662961BA15C6b3F3d813447a26a6"
