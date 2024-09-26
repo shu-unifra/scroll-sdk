@@ -3,9 +3,9 @@ kind: ConfigMap
 metadata:
   labels:
     {{- include "scroll-sdk.labels" $ | nindent 4 }}
-  name: wait-l1-and-get-batch-info
+  name: get-db-info
 data:
-  wait-l1-and-get-batch-info.sh: |
+  get-db-info.sh: |
     #!/bin/bash
 
     apt-get update && apt-get install -y curl git postgresql-client

@@ -20,6 +20,8 @@ env:
 envFrom:
   - configMapRef:
       name: rollup-node-env
+  - configMapRef:
+      name: l1-devnet-env
 
 command: [
   "/bin/sh",
@@ -131,6 +133,32 @@ initContainers:
       - name: wait-for-contracts-script
         mountPath: /wait-for-contract.sh
         subPath: wait-for-contract.sh
+  5-take-over-commit-and-finalize-senders:
+    image: scrolltech/scroll-alpine:v0.0.1
+    command:
+      - /bin/sh
+      - -c
+      - /take-over-commit-and-finalize-senders.sh
+    envFrom:
+      - configMapRef:
+          name: rollup-node-env
+    volumeMounts:
+      - name: take-over-script
+        mountPath: /take-over-commit-and-finalize-senders.sh
+        subPath: take-over-commit-and-finalize-senders.sh
+  6-get-db-info:
+    image: scrolltech/scroll-alpine:v0.0.1
+    command:
+      - /bin/sh
+      - -c
+      - /get-db-info.sh
+    envFrom:
+      - configMapRef:
+          name: rollup-node-env
+    volumeMounts:
+      - name: get-db-info-script
+        mountPath: /get-db-info.sh
+        subPath: get-db-info.sh
 
 configMaps:
   migrate-db:
