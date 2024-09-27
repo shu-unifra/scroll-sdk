@@ -4,7 +4,7 @@ metadata:
   name: take-over-commit-and-finalize-senders-script
 data:
   take-over-commit-and-finalize-senders.sh: |
-    #!/bin/bash
+    #!/bin/sh
 
     # Function to check if a variable is set
     check_var() {

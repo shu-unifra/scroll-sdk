@@ -4,7 +4,7 @@ metadata:
   name: get-db-info-script
 data:
   get-db-info.sh: |
-    #!/bin/bash
+    #!/bin/sh
 
     apt-get update && apt-get install -y git postgresql-client
 
