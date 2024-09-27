@@ -35,13 +35,13 @@ data:
     fi
 
     # Get last finalized batch
-    export LAST_FINALIZED_BATCH=$(cast call "${L1_MAINNET_SCROLL_CHAIN_PROXY_ADDR}" "lastFinalizedBatchIndex()(uint256)" --rpc-url ${L1_RPC_ENDPOINT} | awk '{print $1}')
+    export LAST_FINALIZED_BATCH=$(cast call "${L1_SCROLL_CHAIN_PROXY_ADDR}" "lastFinalizedBatchIndex()(uint256)" --rpc-url ${L1_RPC_ENDPOINT} | awk '{print $1}')
 
     # Calculate last committed batch
     FIRST_UNCOMMITTED_BATCH=$((LAST_FINALIZED_BATCH + 1))
     echo "Starting search from batch: $FIRST_UNCOMMITTED_BATCH"
     while true; do
-        BATCH_HASH=$(cast call "${L1_MAINNET_SCROLL_CHAIN_PROXY_ADDR}" "committedBatches(uint256)(bytes32)" "$FIRST_UNCOMMITTED_BATCH" --rpc-url ${L1_RPC_ENDPOINT})
+        BATCH_HASH=$(cast call "${L1_SCROLL_CHAIN_PROXY_ADDR}" "committedBatches(uint256)(bytes32)" "$FIRST_UNCOMMITTED_BATCH" --rpc-url ${L1_RPC_ENDPOINT})
         echo "Batch $FIRST_UNCOMMITTED_BATCH - Hash: $BATCH_HASH"
         if [[ $BATCH_HASH == "0x0000000000000000000000000000000000000000000000000000000000000000" ]]; then
             echo "Found first uncommitted batch: $FIRST_UNCOMMITTED_BATCH"

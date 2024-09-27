@@ -17,7 +17,7 @@ data:
     # Check required variables
     check_var L1_RPC_ENDPOINT
     check_var L1_MAINNET_SCROLL_OWNER_ADDR
-    check_var L1_MAINNET_SCROLL_CHAIN_PROXY_ADDR
+    check_var L1_SCROLL_CHAIN_PROXY_ADDR
     check_var L1_COMMIT_SENDER_ADDR
     check_var L1_FINALIZE_SENDER_ADDR
 
@@ -29,14 +29,14 @@ data:
     cast rpc --rpc-url ${L1_RPC_ENDPOINT} anvil_impersonateAccount ${L1_MAINNET_SCROLL_OWNER_ADDR}
 
     # Add a new sequencer
-    cast send ${L1_MAINNET_SCROLL_CHAIN_PROXY_ADDR} --rpc-url ${L1_RPC_ENDPOINT} \
+    cast send ${L1_SCROLL_CHAIN_PROXY_ADDR} --rpc-url ${L1_RPC_ENDPOINT} \
         --from ${L1_MAINNET_SCROLL_OWNER_ADDR} \
         --unlocked \
         "addSequencer(address)" \
         ${L1_COMMIT_SENDER_ADDR}
 
     # Add a new prover
-    cast send ${L1_MAINNET_SCROLL_CHAIN_PROXY_ADDR} --rpc-url ${L1_RPC_ENDPOINT} \
+    cast send ${L1_SCROLL_CHAIN_PROXY_ADDR} --rpc-url ${L1_RPC_ENDPOINT} \
         --from ${L1_MAINNET_SCROLL_OWNER_ADDR} \
         --unlocked \
         "addProver(address)" \
@@ -46,12 +46,12 @@ data:
     cast rpc --rpc-url ${L1_RPC_ENDPOINT} anvil_stopImpersonatingAccount ${L1_MAINNET_SCROLL_OWNER_ADDR}
 
     # Check if the new prover was successfully added
-    echo "SHADOW: isProver($L1_FINALIZE_SENDER_ADDR)= $(cast call ${L1_MAINNET_SCROLL_CHAIN_PROXY_ADDR} --rpc-url ${L1_RPC_ENDPOINT} \
+    echo "SHADOW: isProver($L1_FINALIZE_SENDER_ADDR)= $(cast call ${L1_SCROLL_CHAIN_PROXY_ADDR} --rpc-url ${L1_RPC_ENDPOINT} \
         "isProver(address)(bool)" \
         ${L1_FINALIZE_SENDER_ADDR})"
 
     # Check if the new sequencer was successfully added
-    echo "SHADOW: isSequencer($L1_COMMIT_SENDER_ADDR)= $(cast call ${L1_MAINNET_SCROLL_CHAIN_PROXY_ADDR} --rpc-url ${L1_RPC_ENDPOINT} \
+    echo "SHADOW: isSequencer($L1_COMMIT_SENDER_ADDR)= $(cast call ${L1_SCROLL_CHAIN_PROXY_ADDR} --rpc-url ${L1_RPC_ENDPOINT} \
         "isSequencer(address)(bool)" \
         ${L1_COMMIT_SENDER_ADDR})"
 
