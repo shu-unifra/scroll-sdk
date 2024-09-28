@@ -22,10 +22,6 @@ data:
 
     echo "Getting batch information..."
 
-    curl -L https://foundry.paradigm.xyz | bash
-    source /root/.bashrc
-    foundryup
-
     echo "Checking if cast is available..."
     if command -v cast &> /dev/null; then
       echo "cast is available"
