@@ -8,8 +8,9 @@ data:
 
     # Function to check if a variable is set
     check_var() {
-        if [ -z "${!1}" ]; then
-            echo "Error: $1 is not set"
+        eval "value=\$$1"
+        if [ -z "$value" ]; then
+            echo "Error: $1 is not set" >&2
             exit 1
         fi
     }
@@ -23,37 +24,37 @@ data:
 
     # Set the balance of the Scroll owner
     # We're setting it to 1000 ETH (0x3635C9ADC5DEA00000 in wei)
-    cast rpc --rpc-url ${L1_RPC_ENDPOINT} anvil_setBalance ${L1_MAINNET_SCROLL_OWNER_ADDR} 0x3635C9ADC5DEA00000
+    cast rpc --rpc-url "${L1_RPC_ENDPOINT}" anvil_setBalance "${L1_MAINNET_SCROLL_OWNER_ADDR}" 0x3635C9ADC5DEA00000
 
     # Start impersonating the Scroll owner account
-    cast rpc --rpc-url ${L1_RPC_ENDPOINT} anvil_impersonateAccount ${L1_MAINNET_SCROLL_OWNER_ADDR}
+    cast rpc --rpc-url "${L1_RPC_ENDPOINT}" anvil_impersonateAccount "${L1_MAINNET_SCROLL_OWNER_ADDR}"
 
     # Add a new sequencer
-    cast send ${L1_SCROLL_CHAIN_PROXY_ADDR} --rpc-url ${L1_RPC_ENDPOINT} \
-        --from ${L1_MAINNET_SCROLL_OWNER_ADDR} \
+    cast send "${L1_SCROLL_CHAIN_PROXY_ADDR}" --rpc-url "${L1_RPC_ENDPOINT}" \
+        --from "${L1_MAINNET_SCROLL_OWNER_ADDR}" \
         --unlocked \
         "addSequencer(address)" \
-        ${L1_COMMIT_SENDER_ADDR}
+        "${L1_COMMIT_SENDER_ADDR}"
 
     # Add a new prover
-    cast send ${L1_SCROLL_CHAIN_PROXY_ADDR} --rpc-url ${L1_RPC_ENDPOINT} \
-        --from ${L1_MAINNET_SCROLL_OWNER_ADDR} \
+    cast send "${L1_SCROLL_CHAIN_PROXY_ADDR}" --rpc-url "${L1_RPC_ENDPOINT}" \
+        --from "${L1_MAINNET_SCROLL_OWNER_ADDR}" \
         --unlocked \
         "addProver(address)" \
-        ${L1_FINALIZE_SENDER_ADDR}
+        "${L1_FINALIZE_SENDER_ADDR}"
 
     # Stop impersonating the L1_MAINNET_SCROLL_OWNER_ADDR account
-    cast rpc --rpc-url ${L1_RPC_ENDPOINT} anvil_stopImpersonatingAccount ${L1_MAINNET_SCROLL_OWNER_ADDR}
+    cast rpc --rpc-url "${L1_RPC_ENDPOINT}" anvil_stopImpersonatingAccount "${L1_MAINNET_SCROLL_OWNER_ADDR}"
 
     # Check if the new prover was successfully added
-    echo "SHADOW: isProver($L1_FINALIZE_SENDER_ADDR)= $(cast call ${L1_SCROLL_CHAIN_PROXY_ADDR} --rpc-url ${L1_RPC_ENDPOINT} \
+    echo "SHADOW: isProver($L1_FINALIZE_SENDER_ADDR)= $(cast call "${L1_SCROLL_CHAIN_PROXY_ADDR}" --rpc-url "${L1_RPC_ENDPOINT}" \
         "isProver(address)(bool)" \
-        ${L1_FINALIZE_SENDER_ADDR})"
+        "${L1_FINALIZE_SENDER_ADDR}")"
 
     # Check if the new sequencer was successfully added
-    echo "SHADOW: isSequencer($L1_COMMIT_SENDER_ADDR)= $(cast call ${L1_SCROLL_CHAIN_PROXY_ADDR} --rpc-url ${L1_RPC_ENDPOINT} \
+    echo "SHADOW: isSequencer($L1_COMMIT_SENDER_ADDR)= $(cast call "${L1_SCROLL_CHAIN_PROXY_ADDR}" --rpc-url "${L1_RPC_ENDPOINT}" \
         "isSequencer(address)(bool)" \
-        ${L1_COMMIT_SENDER_ADDR})"
+        "${L1_COMMIT_SENDER_ADDR}")"
 
     # Indicate that the process is complete
     echo "SHADOW: done taking over L1 contracts"
