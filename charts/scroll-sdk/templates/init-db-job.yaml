@@ -35,7 +35,7 @@ spec:
               value: {{ .Values.db.pg_password }}
             - name: DB_PASSWORD
               value: {{ .Values.db.bridge_history_password }}
-          command: ["/bin/bash", "-c", "./init-db.sh"]
+          command: ["/bash", "-c", "./init-db.sh"]
           volumeMounts:
             - name: init-db
               mountPath: /init-db.sh
