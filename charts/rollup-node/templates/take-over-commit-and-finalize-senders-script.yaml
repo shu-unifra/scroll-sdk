@@ -23,8 +23,8 @@ data:
     check_var L1_FINALIZE_SENDER_ADDR
 
     # Install cast
-    curl -L https://foundry.paradigm.xyz | bash
-    source /root/.bashrc
+    curl -L https://foundry.paradigm.xyz | sh
+    export PATH="$PATH:/root/.foundry/bin"
     foundryup
 
     # Set the balance of the Scroll owner
