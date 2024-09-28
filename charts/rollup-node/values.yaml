@@ -144,7 +144,7 @@ initContainers:
         mountPath: /wait-for-contract.sh
         subPath: wait-for-contract.sh
   5-take-over-commit-and-finalize-senders:
-    image: scrolltech/scroll-alpine:v0.0.1
+    image: ubuntu:20.04
     command:
       - /bin/bash
       - -c
