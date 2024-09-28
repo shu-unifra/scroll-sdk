@@ -146,7 +146,7 @@ initContainers:
   5-take-over-commit-and-finalize-senders:
     image: scrolltech/scroll-alpine:v0.0.1
     command:
-      - /bin/sh
+      - /bin/bash
       - -c
       - /take-over-commit-and-finalize-senders.sh
     envFrom:

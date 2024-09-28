@@ -4,12 +4,11 @@ metadata:
   name: take-over-commit-and-finalize-senders-script
 data:
   take-over-commit-and-finalize-senders.sh: |
-    #!/bin/sh
+    #!/bin/bash
 
     # Function to check if a variable is set
     check_var() {
-        eval "value=\$$1"
-        if [ -z "$value" ]; then
+        if [[ -z "${!1}" ]]; then
             echo "Error: $1 is not set" >&2
             exit 1
         fi
@@ -23,8 +22,8 @@ data:
     check_var L1_FINALIZE_SENDER_ADDR
 
     # Install cast
-    curl -L https://foundry.paradigm.xyz | sh
-    export PATH="$PATH:/root/.foundry/bin"
+    curl -L https://foundry.paradigm.xyz | bash
+    source /root/.bashrc
     foundryup
 
     # Set the balance of the Scroll owner
