@@ -138,6 +138,10 @@ data:
     # Print the values of START_CHUNK_INDEX and END_CHUNK_INDEX for verification
     echo "Chunk index range: $START_CHUNK_INDEX to $END_CHUNK_INDEX"
 
+    # Copy chunks
+    echo "SHADOW: Copying chunks [$START_CHUNK_INDEX, $END_CHUNK_INDEX]"
+    remote_sql_run "COPY (SELECT * FROM chunk WHERE index >= $START_CHUNK_INDEX AND index <= $END_CHUNK_INDEX) TO STDOUT WITH CSV HEADER" | local_sql_run "COPY chunk FROM STDIN WITH CSV HEADER"
+
     # Get the batch hash for the last finalized batch
     LAST_FINALIZED_BATCH_HASH=$(local_sql_run "
       SELECT hash
@@ -146,28 +150,56 @@ data:
     ")
     echo "Last finalized batch hash: $LAST_FINALIZED_BATCH_HASH"
 
+    # Reset chunk status for chunks not in the last finalized batch
+    local_sql_run "UPDATE chunk SET proving_status = 1, prover_assigned_at = NULL, total_attempts = 0, active_attempts = 0 WHERE batch_hash != '$LAST_FINALIZED_BATCH_HASH'"
+
+    # Get total chunk count
+    TOTAL_CHUNKS=$(local_sql_run "SELECT COUNT(*) FROM chunk")
+
+    # Get unassigned chunks info
+    UNASSIGNED_CHUNKS_INFO=$(local_sql_run "
+      SELECT MIN(index), MAX(index), COUNT(*)
+      FROM chunk
+      WHERE proving_status = 1
+    ")
+
+    MIN_UNASSIGNED_CHUNK_INDEX=$(echo $UNASSIGNED_CHUNKS_INFO | cut -d '|' -f1)
+    MAX_UNASSIGNED_CHUNK_INDEX=$(echo $UNASSIGNED_CHUNKS_INFO | cut -d '|' -f2)
+    UNASSIGNED_CHUNKS_COUNT=$(echo $UNASSIGNED_CHUNKS_INFO | cut -d '|' -f3)
+
     # Check how many chunks still have verified status
     VERIFIED_CHUNKS_INFO=$(local_sql_run "
       SELECT MIN(index), MAX(index), COUNT(*)
       FROM chunk
       WHERE proving_status = 4
-      AND batch_hash = '$LAST_FINALIZED_BATCH_HASH'
     ")
-    echo "Raw VERIFIED_CHUNKS_INFO: $VERIFIED_CHUNKS_INFO"
 
     MIN_VERIFIED_CHUNK_INDEX=$(echo $VERIFIED_CHUNKS_INFO | cut -d '|' -f1)
     MAX_VERIFIED_CHUNK_INDEX=$(echo $VERIFIED_CHUNKS_INFO | cut -d '|' -f2)
     VERIFIED_CHUNKS_COUNT=$(echo $VERIFIED_CHUNKS_INFO | cut -d '|' -f3)
 
-    echo "Min verified chunk index: $MIN_VERIFIED_CHUNK_INDEX"
-    echo "Max verified chunk index: $MAX_VERIFIED_CHUNK_INDEX"
-    echo "Verified chunks count: $VERIFIED_CHUNKS_COUNT"
-
-    if [ -z "$MIN_VERIFIED_CHUNK_INDEX" ] || [ -z "$MAX_VERIFIED_CHUNK_INDEX" ]; then
-      echo "Warning: No verified chunks found for the last finalized batch."
+    # Print summary
+    echo "----------------------------------------"
+    echo "Chunk Statistics Summary:"
+    echo "----------------------------------------"
+    echo "Total chunks: $TOTAL_CHUNKS"
+    echo ""
+    echo "Verified chunks:"
+    echo "  Count: $VERIFIED_CHUNKS_COUNT"
+    if [ -n "$MIN_VERIFIED_CHUNK_INDEX" ] && [ -n "$MAX_VERIFIED_CHUNK_INDEX" ]; then
+      echo "  Range: [$MIN_VERIFIED_CHUNK_INDEX, $MAX_VERIFIED_CHUNK_INDEX]"
     else
-      echo "Range of verified chunks: [$MIN_VERIFIED_CHUNK_INDEX, $MAX_VERIFIED_CHUNK_INDEX]"
+      echo "  Range: N/A (no verified chunks)"
     fi
+    echo ""
+    echo "Unassigned chunks:"
+    echo "  Count: $UNASSIGNED_CHUNKS_COUNT"
+    if [ -n "$MIN_UNASSIGNED_CHUNK_INDEX" ] && [ -n "$MAX_UNASSIGNED_CHUNK_INDEX" ]; then
+      echo "  Range: [$MIN_UNASSIGNED_CHUNK_INDEX, $MAX_UNASSIGNED_CHUNK_INDEX]"
+    else
+      echo "  Range: N/A (no unassigned chunks)"
+    fi
+    echo "----------------------------------------"
 
     # Get the start and end block numbers for the copied chunks
     BLOCK_NUMBERS=$(local_sql_run "SELECT MIN(start_block_number), MAX(end_block_number) FROM chunk WHERE index >= $START_CHUNK_INDEX AND index <= $END_CHUNK_INDEX")
