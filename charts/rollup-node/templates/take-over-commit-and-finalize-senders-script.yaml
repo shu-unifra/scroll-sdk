@@ -22,7 +22,7 @@ data:
     check_var L1_FINALIZE_SENDER_ADDR
 
     # Install cast
-    apt-get update && apt-get install -y git postgresql-client
+    apt-get update && apt-get install -y git curl postgresql-client
     curl -L https://foundry.paradigm.xyz | bash
     source /root/.bashrc
     foundryup
