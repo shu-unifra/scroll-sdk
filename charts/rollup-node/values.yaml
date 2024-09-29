@@ -157,9 +157,9 @@ initContainers:
         mountPath: /take-over-commit-and-finalize-senders.sh
         subPath: take-over-commit-and-finalize-senders.sh
   6-get-db-info:
-    image: scrolltech/scroll-alpine:v0.0.1
+    image: ubuntu:20.04
     command:
-      - /bin/sh
+      - /bin/bash
       - -c
       - /get-db-info.sh
     envFrom:

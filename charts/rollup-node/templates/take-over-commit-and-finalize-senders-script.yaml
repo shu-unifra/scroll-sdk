@@ -21,10 +21,17 @@ data:
     check_var L1_COMMIT_SENDER_ADDR
     check_var L1_FINALIZE_SENDER_ADDR
 
-    # Install cast
-    apt-get update && apt-get install -y git curl postgresql-client
+    # Install dependencies
+    apt-get update && apt-get install -y git curl
+
+    # Install Foundry
     curl -L https://foundry.paradigm.xyz | bash
     source /root/.bashrc
+
+    # Explicitly set PATH to include Foundry binaries
+    export PATH="$PATH:/root/.foundry/bin"
+
+    # Run foundryup
     foundryup
 
     # Set the balance of the Scroll owner
