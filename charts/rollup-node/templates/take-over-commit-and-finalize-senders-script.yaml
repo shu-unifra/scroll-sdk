@@ -59,12 +59,12 @@ data:
     cast rpc --rpc-url "${L1_RPC_ENDPOINT}" anvil_stopImpersonatingAccount "${L1_MAINNET_SCROLL_OWNER_ADDR}"
 
     # Check if the new prover was successfully added
-    echo "SHADOW: isProver($L1_FINALIZE_SENDER_ADDR)= $(cast call "${L1_SCROLL_CHAIN_PROXY_ADDR}" --rpc-url "${L1_RPC_ENDPOINT}" \
+    echo "SHADOW: isProver($L1_FINALIZE_SENDER_ADDR) = $(cast call "${L1_SCROLL_CHAIN_PROXY_ADDR}" --rpc-url "${L1_RPC_ENDPOINT}" \
         "isProver(address)(bool)" \
         "${L1_FINALIZE_SENDER_ADDR}")"
 
     # Check if the new sequencer was successfully added
-    echo "SHADOW: isSequencer($L1_COMMIT_SENDER_ADDR)= $(cast call "${L1_SCROLL_CHAIN_PROXY_ADDR}" --rpc-url "${L1_RPC_ENDPOINT}" \
+    echo "SHADOW: isSequencer($L1_COMMIT_SENDER_ADDR) = $(cast call "${L1_SCROLL_CHAIN_PROXY_ADDR}" --rpc-url "${L1_RPC_ENDPOINT}" \
         "isSequencer(address)(bool)" \
         "${L1_COMMIT_SENDER_ADDR}")"
 
