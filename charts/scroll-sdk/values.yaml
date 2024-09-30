@@ -11,10 +11,10 @@ l1-devnet:
               pathType: Prefix
 
 blockscout:
-  enabled: true
+  enabled: false
 
 bridge-history-api:
-  enabled: true
+  enabled: false
   ingress:
     main:
       enabled: true
@@ -29,13 +29,13 @@ bridge-history-api:
               pathType: Prefix
 
 bridge-history-fetcher:
-  enabled: true
+  enabled: false
 
 balance-checker:
   enabled: false
 
 chain-monitor:
-  enabled: true
+  enabled: false
 
 contracts:
   enabled: false
@@ -47,7 +47,7 @@ coordinator-cron:
   enabled: false
 
 frontends:
-  enabled: true
+  enabled: false
   ingress:
     main:
       enabled: true
@@ -58,10 +58,10 @@ frontends:
               pathType: Prefix
 
 gas-oracle:
-  enabled: true
+  enabled: false
 
 grafana:
-  enabled: true
+  enabled: false
   fullnameOverride: grafana
   nameOverride: grafana
   adminUser: admin
@@ -104,7 +104,7 @@ grafana:
     hosts: ["grafana.scrollsdk"]
 
 rollup-explorer-backend:
-  enabled: true
+  enabled: false
   ingress:
     main:
       enabled: true
@@ -122,7 +122,7 @@ rollup-node:
   enabled: true
 
 l1-explorer:
-  enabled: true
+  enabled: false
   ingress:
     main:
       enabled: true
@@ -137,7 +137,7 @@ l2-sequencer:
   enabled: true
 
 l2-rpc:
-  enabled: true
+  enabled: false
   ingress:
     main:
       enabled: true
@@ -149,10 +149,10 @@ l2-rpc:
               pathType: Prefix
 
 l2-bootnode:
-  enabled: true
+  enabled: false
 
 loki-stack:
-  enabled: true
+  enabled: false
   loki:
     fullnameOverride: loki
     nameOverride: loki
@@ -181,13 +181,13 @@ rpc-gateway:
               pathType: Prefix
 
 admin-system-backend:
-  enabled: true
+  enabled: false
 
 admin-system-cron:
-  enabled: true
+  enabled: false
 
 admin-system-dashboard:
-  enabled: true
+  enabled: false
   ingress:
     main:
       enabled: true
@@ -232,7 +232,7 @@ postgresql:
 
 
 kube-prometheus-stack:
-  enabled: true
+  enabled: false
   nameOverride: prometheus
   fullnameOverride: prometheus
   prometheus:
