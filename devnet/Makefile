@@ -17,8 +17,6 @@ config:
 		echo "Creating env files..."
 		./create-env-files.sh scroll-sdk
 		echo "Overwriting genesis.json..."
-		cp scroll-sdk/configs/genesis.json scroll-sdk/configs/genesis.json.backup
-		cp genesis.shadow.json scroll-sdk/configs/genesis.json
 		cp scroll-sdk/genesis.json scroll-sdk/genesis.json.backup
 		cp genesis.shadow.json scroll-sdk/genesis.json
 

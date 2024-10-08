@@ -232,7 +232,7 @@ postgresql:
 
 
 kube-prometheus-stack:
-  enabled: false
+  enabled: true
   nameOverride: prometheus
   fullnameOverride: prometheus
   prometheus:
