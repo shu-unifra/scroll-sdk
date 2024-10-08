@@ -21,16 +21,6 @@ data:
       fi
     done
 
-    echo "Getting batch information..."
-
-    echo "Checking if cast is available..."
-    if command -v cast &> /dev/null; then
-      echo "cast is available"
-    else
-      echo "cast is not available. Foundry installation might have failed."
-      exit 1
-    fi
-
     # Get last finalized batch
     export LAST_FINALIZED_BATCH=$(cast call "${L1_SCROLL_CHAIN_PROXY_ADDR}" "lastFinalizedBatchIndex()(uint256)" --rpc-url ${L1_RPC_ENDPOINT} | awk '{print $1}')
 
