@@ -133,7 +133,7 @@ initContainers:
   4-wait-for-contract:
     image: scrolltech/scroll-alpine:v0.0.1
     command:
-      - /bin/bash
+      - /bin/sh
       - -c
       - /wait-for-contract.sh $L1_RPC_ENDPOINT $L1_SCROLL_CHAIN_PROXY_ADDR
     envFrom:
@@ -159,7 +159,7 @@ initContainers:
   6-get-db-info:
     image: scrolltech/scroll-foundry:v0.0.1
     command:
-      - /bin/sh
+      - /bin/bash
       - -c
       - /get-db-info.sh
     envFrom:
