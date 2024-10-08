@@ -16,6 +16,11 @@ config:
 		cd scroll-sdk && time docker run --rm -it -v .:/contracts/volume scrolltech/scroll-stack-contracts:gen-configs-v0.0.22
 		echo "Creating env files..."
 		./create-env-files.sh scroll-sdk
+		echo "Overwriting genesis.json..."
+		cp scroll-sdk/configs/genesis.json scroll-sdk/configs/genesis.json.backup
+		cp genesis.shadow.json scroll-sdk/configs/genesis.json
+		cp scroll-sdk/genesis.json scroll-sdk/genesis.json.backup
+		cp genesis.shadow.json scroll-sdk/genesis.json
 
 install:
 		helm upgrade -i scroll-sdk scroll-sdk/ \
