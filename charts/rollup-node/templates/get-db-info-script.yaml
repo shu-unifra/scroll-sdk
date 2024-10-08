@@ -6,9 +6,6 @@ data:
   get-db-info.sh: |
     #!/bin/bash
 
-    # Install dependencies
-    apk add --no-cache curl
-
     echo "Waiting for L1 contract to be ready..."
     while true; do
       HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST --data '{"jsonrpc":"2.0","method":"web3_clientVersion","params":[],"id":1}' -H "Content-Type: application/json" $L1_RPC_ENDPOINT)
