@@ -144,9 +144,9 @@ initContainers:
         mountPath: /wait-for-contract.sh
         subPath: wait-for-contract.sh
   5-take-over-commit-and-finalize-senders:
-    image: ghcr.io/foundry-rs/foundry:nightly-e215f3fdeada259a8886a7611151794d280ca298
+    image: ghcr.io/foundry-rs/foundry
     command:
-      - /bin/bash
+      - /bin/sh
       - -c
       - /take-over-commit-and-finalize-senders.sh
     envFrom:
@@ -157,9 +157,9 @@ initContainers:
         mountPath: /take-over-commit-and-finalize-senders.sh
         subPath: take-over-commit-and-finalize-senders.sh
   6-get-db-info:
-    image: ghcr.io/foundry-rs/foundry:nightly-e215f3fdeada259a8886a7611151794d280ca298
+    image: ghcr.io/foundry-rs/foundry
     command:
-      - /bin/bash
+      - /bin/sh
       - -c
       - /get-db-info.sh
     envFrom:
