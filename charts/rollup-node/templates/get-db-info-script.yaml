@@ -61,6 +61,9 @@ data:
       psql "${SCROLL_RDS_ROLLUP_NODE_DSN}" -Aqt -c "$@"
     }
 
+    # Install PostgreSQL client
+    apt-get install -y postgresql-client
+
     # Check database connections
     echo "Checking database connections..."
     if ! local_sql_run "SELECT 1;" > /dev/null 2>&1; then
