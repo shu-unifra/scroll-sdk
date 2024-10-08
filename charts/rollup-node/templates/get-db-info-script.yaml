@@ -7,17 +7,7 @@ data:
     #!/bin/bash
 
     # Install dependencies
-    apt-get update && apt-get install -y git curl postgresql-client
-
-    # Install Foundry
-    curl -L https://foundry.paradigm.xyz | bash
-    source /root/.bashrc
-
-    # Explicitly set PATH to include Foundry binaries
-    export PATH="$PATH:/root/.foundry/bin"
-
-    # Run foundryup
-    foundryup
+    apk add --no-cache curl
 
     echo "Waiting for L1 contract to be ready..."
     while true; do

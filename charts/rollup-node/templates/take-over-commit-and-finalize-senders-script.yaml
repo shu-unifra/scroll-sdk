@@ -22,17 +22,7 @@ data:
     check_var L1_FINALIZE_SENDER_ADDR
 
     # Install dependencies
-    apt-get update && apt-get install -y git curl
-
-    # Install Foundry
-    curl -L https://foundry.paradigm.xyz | bash
-    source /root/.bashrc
-
-    # Explicitly set PATH to include Foundry binaries
-    export PATH="$PATH:/root/.foundry/bin"
-
-    # Run foundryup
-    foundryup
+    apk add --no-cache curl
 
     # Set the balance of the Scroll owner
     # We're setting it to 1000 ETH (0x3635C9ADC5DEA00000 in wei)
