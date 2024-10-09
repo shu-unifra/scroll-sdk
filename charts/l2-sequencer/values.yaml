@@ -45,7 +45,7 @@ command:
     "-c",
     "mkdir -p /l2geth/data/keystore && \
     mkdir -p /l2geth/data/geth && \
-    apt-get install -y rsync curl && \
+    apt-get update && apt-get install -y rsync curl && \
     rsync -av --progress /host/snapshot/ /l2geth/data/ && \
     echo ${L2GETH_PASSWORD} > /l2geth/password && \
     echo ${L2GETH_KEYSTORE}  > /l2geth/data/keystore/keystore.json && \
