@@ -41,13 +41,6 @@ envFrom:
   - configMapRef:
       name: l2-sequencer-env
 
-persistence:
-  snapshot:
-    enabled: true
-    type: hostPath
-    hostPath: /var/scroll/l2geth/snapshot
-    mountPath: /host/snapshot
-
 command:
   [
     "bash",
@@ -149,7 +142,7 @@ persistence:
     type: pvc
     mountPath: /l2geth/data/
     name: l2geth-data
-    size: 10Gi
+    size: 100Gi
     accessMode: ReadWriteOnce
   env:
     enabled: true
@@ -166,6 +159,11 @@ persistence:
     type: configMap
     name: wait-for-l1-script
     defaultMode: "0777"
+  snapshot:
+    enabled: true
+    type: hostPath
+    hostPath: /var/scroll/l2geth/snapshot
+    mountPath: /host/snapshot
 
 configMaps:
   config:
