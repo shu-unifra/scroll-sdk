@@ -17,9 +17,9 @@ config:
 		cd scroll-sdk && time docker run --rm -it -v .:/contracts/volume scrolltech/scroll-stack-contracts:gen-configs-v0.0.25
 		echo "Creating env files..."
 		./create-env-files.sh scroll-sdk
-		echo "Overwriting genesis.json..."
-		cp scroll-sdk/genesis.json scroll-sdk/genesis.json.backup
-		cp genesis.shadow.json scroll-sdk/genesis.json
+		echo "Overwriting genesis.yaml..."
+		cp scroll-sdk/genesis.yaml scroll-sdk/genesis.yaml.backup
+		cp genesis.shadow.yaml scroll-sdk/genesis.yaml
 		./prepare-config-files.sh
 
 install:
