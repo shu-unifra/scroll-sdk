@@ -70,7 +70,7 @@ command:
     --l1.endpoint \"$L2GETH_L1_ENDPOINT\" --l1.confirmations \"$L2GETH_L1_WATCHER_CONFIRMATIONS\" --l1.sync.startblock \"$L2GETH_L1_CONTRACT_DEPLOYMENT_BLOCK\" \
     --rollup.verify \
     --metrics --metrics.expensive \
-    $L2GETH_EXTRA_PARAMS \
+    $L2GETH_EXTRA_PARAMS & \
     sleep 120 && \
     curl -X POST -H \"Content-Type: application/json\" --data '{\"jsonrpc\":\"2.0\",\"method\":\"debug_setHead\",\"params\":[\"${L2_SHADOWFORK_BLOCK_NUMBER}\"],\"id\":1}' http://localhost:$L2GETH_RPC_HTTP_PORT"
   ]
