@@ -149,7 +149,7 @@ persistence:
     type: pvc
     mountPath: /l2geth/data/
     name: l2geth-data
-    size: 80Gi
+    size: 10Gi
     accessMode: ReadWriteOnce
   env:
     enabled: true
