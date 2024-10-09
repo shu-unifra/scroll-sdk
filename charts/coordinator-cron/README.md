@@ -1,6 +1,6 @@
 # coordinator-cron
 
-![Version: 0.0.6](https://img.shields.io/badge/Version-0.0.6-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
+![Version: 0.0.7](https://img.shields.io/badge/Version-0.0.7-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
 
 coordinator-cron helm charts
 
@@ -25,7 +25,7 @@ Kubernetes: `>=1.22.0-0`
 |-----|------|---------|-------------|
 | command[0] | string | `"/bin/sh"` |  |
 | command[1] | string | `"-c"` |  |
-| command[2] | string | `"coordinator_cron --config /app/conf/coordinator-config.json --metrics --metrics.addr 0.0.0.0 --metrics.port ${METRICS_PORT} --log.debug"` |  |
+| command[2] | string | `"coordinator_cron --config /app/conf/coordinator-cron-config.json --metrics --metrics.addr 0.0.0.0 --metrics.port ${METRICS_PORT} --log.debug"` |  |
 | defaultProbes.custom | bool | `true` |  |
 | defaultProbes.enabled | bool | `true` |  |
 | defaultProbes.spec.httpGet.path | string | `"/health"` |  |
@@ -76,6 +76,7 @@ Kubernetes: `>=1.22.0-0`
 | resources.limits.memory | string | `"200Mi"` |  |
 | resources.requests.cpu | string | `"50m"` |  |
 | resources.requests.memory | string | `"50Mi"` |  |
+| scrollConfig | string | `"{}\n"` |  |
 | service.main.enabled | bool | `true` |  |
 | service.main.ports.http.enabled | bool | `true` |  |
 | service.main.ports.http.port | int | `80` |  |

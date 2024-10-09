@@ -1,6 +1,6 @@
 # frontends
 
-![Version: 0.0.7](https://img.shields.io/badge/Version-0.0.7-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
+![Version: 0.0.9](https://img.shields.io/badge/Version-0.0.9-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
 
 frontends helm charts
 
@@ -37,7 +37,7 @@ Kubernetes: `>=1.22.0-0`
 | global.nameOverride | string | `"frontends"` |  |
 | image.pullPolicy | string | `"Always"` |  |
 | image.repository | string | `"scrolltech/frontends"` |  |
-| image.tag | string | `"2.2.19"` |  |
+| image.tag | string | `"2.2.20"` |  |
 | ingress.main.annotations | object | `{}` |  |
 | ingress.main.enabled | bool | `true` |  |
 | ingress.main.hosts[0].host | string | `"frontends.scrollsdk"` |  |
@@ -66,6 +66,7 @@ Kubernetes: `>=1.22.0-0`
 | resources.limits.memory | string | `"500Mi"` |  |
 | resources.requests.cpu | string | `"50m"` |  |
 | resources.requests.memory | string | `"100Mi"` |  |
+| scrollConfig | string | `"{}\n"` |  |
 | service.main.enabled | bool | `true` |  |
 | service.main.ports.http.enabled | bool | `true` |  |
 | service.main.ports.http.port | int | `80` |  |

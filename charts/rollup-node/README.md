@@ -1,6 +1,6 @@
 # rollup-node
 
-![Version: 0.0.10](https://img.shields.io/badge/Version-0.0.10-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
+![Version: 0.0.11](https://img.shields.io/badge/Version-0.0.11-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
 
 rollup-node helm charts
 
@@ -97,6 +97,7 @@ Kubernetes: `>=1.22.0-0`
 | resources.limits.memory | string | `"200Mi"` |  |
 | resources.requests.cpu | string | `"50m"` |  |
 | resources.requests.memory | string | `"50Mi"` |  |
+| scrollConfig | string | `"{}\n"` |  |
 | service.main.enabled | bool | `true` |  |
 | service.main.ports.http.enabled | bool | `true` |  |
 | service.main.ports.http.port | int | `8090` |  |

@@ -1,6 +1,3 @@
-global:
-  isStandalone: true
-
 envFrom:
   - secretRef:
       name: bridge-history-fetcher-secret-env
@@ -38,7 +35,7 @@ initContainers:
         mountPath: /config/migrate-db.json
         subPath: migrate-db.json
     envFrom:
-      - configMapRef:
+      - secretRef:
           name: bridge-history-fetcher-secret-env
 
 configMaps:
@@ -47,15 +44,6 @@ configMaps:
     data:
       SCROLL_L1_RPC: ""
       SCROLL_L2_RPC: "http://l2-rpc:8545"
-
-ingress:
-  main:
-    ingressClassName: "nginx"
-    hosts:
-      - host: ""
-        paths:
-          - path: /
-            pathType: Prefix
 
 externalSecrets:
   bridge-history-fetcher-secret-env:

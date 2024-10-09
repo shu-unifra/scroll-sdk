@@ -57,7 +57,6 @@ probes:
   startup:
     enabled: false
 
-
 persistence:
   *app_name:
     enabled: true
@@ -190,3 +189,6 @@ serviceMonitor:
       - port: http
         interval: 1m
         scrapeTimeout: 10s
+
+scrollConfig: |
+  {}

@@ -1,6 +1,6 @@
 # gas-oracle
 
-![Version: 0.0.7](https://img.shields.io/badge/Version-0.0.7-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
+![Version: 0.0.9](https://img.shields.io/badge/Version-0.0.9-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
 
 gas-oracle helm charts
 
@@ -71,7 +71,7 @@ Kubernetes: `>=1.22.0-0`
 | initContainers.4-wait-for-l2-sequencer.image | string | `"atkrad/wait4x:latest"` |  |
 | persistence.app_name.enabled | bool | `true` |  |
 | persistence.app_name.mountPath | string | `"/app/conf/"` |  |
-| persistence.app_name.name | string | `"rollup-config"` |  |
+| persistence.app_name.name | string | `"gas-oracle-config"` |  |
 | persistence.app_name.type | string | `"configMap"` |  |
 | persistence.genesis.enabled | bool | `true` |  |
 | persistence.genesis.mountPath | string | `"/app/genesis/"` |  |
@@ -104,6 +104,7 @@ Kubernetes: `>=1.22.0-0`
 | resources.limits.memory | string | `"500Mi"` |  |
 | resources.requests.cpu | string | `"50m"` |  |
 | resources.requests.memory | string | `"100Mi"` |  |
+| scrollConfig | string | `"{}\n"` |  |
 | service.main.enabled | bool | `true` |  |
 | service.main.ports.http.enabled | bool | `true` |  |
 | service.main.ports.http.port | int | `80` |  |

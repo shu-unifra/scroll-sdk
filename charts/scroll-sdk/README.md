@@ -1,6 +1,6 @@
 # scroll-sdk
 
-![Version: 0.0.36](https://img.shields.io/badge/Version-0.0.36-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
+![Version: 0.0.45](https://img.shields.io/badge/Version-0.0.45-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
 
 scroll helm charts to deploy scroll sdk
 
@@ -21,28 +21,29 @@ Kubernetes: `>=1.22.0-0`
 | https://grafana.github.io/helm-charts | grafana | 7.3.11 |
 | https://grafana.github.io/helm-charts | loki-stack | 2.10.2 |
 | https://prometheus-community.github.io/helm-charts | kube-prometheus-stack | 59.0.0 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | admin-system-backend | 0.0.1 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | admin-system-cron | 0.0.1 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | admin-system-dashboard | 0.0.1 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | balance-checker | 0.0.2 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | admin-system-backend | 0.0.2 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | admin-system-cron | 0.0.2 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | admin-system-dashboard | 0.0.2 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | balance-checker | 0.0.3 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | blockscout | 0.0.3 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | blockscout-sc-verifier | 0.0.2 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | bridge-history-api | 0.0.6 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | bridge-history-fetcher | 0.0.8 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | chain-monitor | 0.0.7 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | contracts | 0.0.7 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | coordinator-api | 0.0.8 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | coordinator-cron | 0.0.6 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | frontends | 0.0.7 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | gas-oracle | 0.0.7 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | bridge-history-api | 0.0.7 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | bridge-history-fetcher | 0.0.11 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | chain-monitor | 0.0.9 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | contracts | 0.0.11 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | coordinator-api | 0.0.9 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | coordinator-cron | 0.0.7 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | frontends | 0.0.9 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | gas-oracle | 0.0.9 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | l1-devnet | 0.0.3 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | l1-explorer | 0.0.2 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | l2-bootnode | 0.0.10 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | l2-rpc | 0.0.10 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | l2-sequencer | 0.0.9 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | rollup-explorer-backend | 0.0.3 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | rollup-node | 0.0.10 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | l2-bootnode | 0.0.13 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | l2-rpc | 0.0.12 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | l2-sequencer | 0.0.11 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | rollup-explorer-backend | 0.0.4 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | rollup-node | 0.0.11 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | rpc-gateway | 0.0.2 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | scroll-common | 0.0.4 |
 | oci://registry-1.docker.io/bitnamicharts | postgresql | 15.5.0 |
 
 ## Values
@@ -86,11 +87,19 @@ Kubernetes: `>=1.22.0-0`
 | grafana.dashboardProviders."dashboardproviders.yaml".providers[0].disableDeletion | bool | `false` |  |
 | grafana.dashboardProviders."dashboardproviders.yaml".providers[0].editable | bool | `true` |  |
 | grafana.dashboardProviders."dashboardproviders.yaml".providers[0].folder | string | `"scroll"` |  |
-| grafana.dashboardProviders."dashboardproviders.yaml".providers[0].name | string | `"default"` |  |
-| grafana.dashboardProviders."dashboardproviders.yaml".providers[0].options.path | string | `"/var/lib/grafana/dashboards/default/"` |  |
+| grafana.dashboardProviders."dashboardproviders.yaml".providers[0].name | string | `"scroll"` |  |
+| grafana.dashboardProviders."dashboardproviders.yaml".providers[0].options.path | string | `"/var/lib/grafana/dashboards/scroll/"` |  |
 | grafana.dashboardProviders."dashboardproviders.yaml".providers[0].orgId | int | `1` |  |
 | grafana.dashboardProviders."dashboardproviders.yaml".providers[0].type | string | `"file"` |  |
-| grafana.dashboardsConfigMaps.default | string | `"grafana-dashboards"` |  |
+| grafana.dashboardProviders."dashboardproviders.yaml".providers[1].disableDeletion | bool | `false` |  |
+| grafana.dashboardProviders."dashboardproviders.yaml".providers[1].editable | bool | `true` |  |
+| grafana.dashboardProviders."dashboardproviders.yaml".providers[1].folder | string | `"kubernetes"` |  |
+| grafana.dashboardProviders."dashboardproviders.yaml".providers[1].name | string | `"kubernetes"` |  |
+| grafana.dashboardProviders."dashboardproviders.yaml".providers[1].options.path | string | `"/var/lib/grafana/dashboards/kubernetes/"` |  |
+| grafana.dashboardProviders."dashboardproviders.yaml".providers[1].orgId | int | `1` |  |
+| grafana.dashboardProviders."dashboardproviders.yaml".providers[1].type | string | `"file"` |  |
+| grafana.dashboardsConfigMaps.kubernetes | string | `"kubernetes-grafana-dashboards"` |  |
+| grafana.dashboardsConfigMaps.scroll | string | `"scroll-grafana-dashboards"` |  |
 | grafana.datasources."datasources.yaml".apiVersion | int | `1` |  |
 | grafana.datasources."datasources.yaml".datasources[0].access | string | `"proxy"` |  |
 | grafana.datasources."datasources.yaml".datasources[0].isDefault | bool | `true` |  |
@@ -180,6 +189,7 @@ Kubernetes: `>=1.22.0-0`
 | rpc-gateway.ingress.main.hosts[0].paths[0].path | string | `"/"` |  |
 | rpc-gateway.ingress.main.hosts[0].paths[0].pathType | string | `"Prefix"` |  |
 | rpc-gateway.ingress.main.ingressClassName | string | `"nginx"` |  |
+| scroll-common.enabled | bool | `true` |  |
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.14.2](https://github.com/norwoodj/helm-docs/releases/v1.14.2)
