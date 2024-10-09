@@ -70,6 +70,11 @@ command:
     --rollup.verify \
     --metrics --metrics.expensive \
     $L2GETH_EXTRA_PARAMS & \
+    until command -v curl > /dev/null 2>&1; do \
+    echo \"Waiting for curl to be installed...\"; \
+      sleep 5; \
+    done && \
+    echo \"curl is now available. Proceeding with RPC check...\" && \
     while ! curl -s -X POST -H \"Content-Type: application/json\" --data '{\"jsonrpc\":\"2.0\",\"method\":\"net_version\",\"params\":[],\"id\":1}' http://localhost:$L2GETH_RPC_HTTP_PORT > /dev/null; do \
       echo \"Waiting for RPC to become available...\"; \
       sleep 10; \
