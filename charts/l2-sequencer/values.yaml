@@ -141,7 +141,7 @@ persistence:
     enabled: true
     type: pvc
     mountPath: /l2geth/data/
-    name: l2geth-data
+    name: l2-sequencer-data
     size: 100Gi
     accessMode: ReadWriteOnce
   env:
