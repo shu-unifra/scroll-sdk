@@ -34,6 +34,8 @@ env:
     value: "1000000"
   - name: VERBOSITY
     value: "3"
+  - name: L2_SHADOWFORK_BLOCK_NUMBER
+    value: "0xf4233"
 
 envFrom:
   - configMapRef:
@@ -45,6 +47,7 @@ command:
     "-c",
     "mkdir -p /l2geth/data/keystore && \
     mkdir -p /l2geth/data/geth && \
+    cp -r ls /var/scroll/l2geth/snapshot/* /l2geth/data/ && \
     echo ${L2GETH_PASSWORD} > /l2geth/password && \
     echo ${L2GETH_KEYSTORE}  > /l2geth/data/keystore/keystore.json && \
     echo ${L2GETH_NODEKEY} > /l2geth/data/geth/nodekey && \
@@ -67,7 +70,9 @@ command:
     --l1.endpoint \"$L2GETH_L1_ENDPOINT\" --l1.confirmations \"$L2GETH_L1_WATCHER_CONFIRMATIONS\" --l1.sync.startblock \"$L2GETH_L1_CONTRACT_DEPLOYMENT_BLOCK\" \
     --rollup.verify \
     --metrics --metrics.expensive \
-    $L2GETH_EXTRA_PARAMS"
+    $L2GETH_EXTRA_PARAMS \
+    sleep 120 && \
+    curl -X POST -H \"Content-Type: application/json\" --data '{\"jsonrpc\":\"2.0\",\"method\":\"debug_setHead\",\"params\":[\"${L2_SHADOWFORK_BLOCK_NUMBER}\"],\"id\":1}' http://localhost:$L2GETH_RPC_HTTP_PORT"
   ]
 
 initContainers:
