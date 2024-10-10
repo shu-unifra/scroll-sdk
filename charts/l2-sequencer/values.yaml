@@ -69,18 +69,13 @@ command:
     --rollup.verify \
     --metrics --metrics.expensive \
     $L2GETH_EXTRA_PARAMS & \
-    apt-get update && apt-get install -y curl && \
-    until command -v curl > /dev/null 2>&1; do \
-    echo \"Waiting for curl to be installed...\"; \
+    until geth attach http://localhost:$L2GETH_RPC_HTTP_PORT --exec \"eth.blockNumber\" > /dev/null 2>&1; do \
+      echo \"Waiting for RPC to become available...\"; \
       sleep 5; \
     done && \
-    echo \"curl is now available. Proceeding with RPC check...\" && \
-    while ! curl -s -X POST -H \"Content-Type: application/json\" --data '{\"jsonrpc\":\"2.0\",\"method\":\"net_version\",\"params\":[],\"id\":1}' http://localhost:$L2GETH_RPC_HTTP_PORT > /dev/null; do \
-      echo \"Waiting for RPC to become available...\"; \
-      sleep 10; \
-    done && \
     echo \"RPC is now available. Executing debug_setHead...\" && \
-    curl -X POST -H \"Content-Type: application/json\" --data '{\"jsonrpc\":\"2.0\",\"method\":\"debug_setHead\",\"params\":[\"${L2_SHADOWFORK_BLOCK_NUMBER}\"],\"id\":1}' http://localhost:$L2GETH_RPC_HTTP_PORT"
+    geth attach http://localhost:$L2GETH_RPC_HTTP_PORT --exec \"debug.setHead('${L2_SHADOWFORK_BLOCK_NUMBER}')\" && \
+    echo \"debug_setHead executed. Exiting.\"“
   ]
 
 initContainers:
