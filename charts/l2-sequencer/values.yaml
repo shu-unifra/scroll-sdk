@@ -75,7 +75,7 @@ command:
     done && \
     echo \"RPC is now available. Executing debug_setHead...\" && \
     geth attach http://localhost:$L2GETH_RPC_HTTP_PORT --exec \"debug.setHead('${L2_SHADOWFORK_BLOCK_NUMBER}')\" && \
-    echo \"debug_setHead executed. Exiting.\"“
+    echo \"debug_setHead executed. Exiting.\""
   ]
 
 initContainers:
