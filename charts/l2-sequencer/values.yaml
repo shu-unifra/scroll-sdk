@@ -33,7 +33,7 @@ env:
   - name: VERBOSITY
     value: "3"
   - name: L2_SHADOWFORK_BLOCK_NUMBER
-    value: "0xf4233"
+    value: "0xe9a5"
 
 envFrom:
   - configMapRef:

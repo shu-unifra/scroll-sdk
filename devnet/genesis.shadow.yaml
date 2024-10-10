@@ -21,7 +21,7 @@ scrollConfig: |
         "period": 3,
         "epoch": 30000,
         "relaxed_period": true,
-        "shadow_fork_height": 999987,
+        "shadow_fork_height": 59813,
         "shadow_fork_signer": "0x4e1f062ffab6dca974947f82a6e836e678a7d435"
       },
       "scroll": {
