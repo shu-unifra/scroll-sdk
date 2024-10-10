@@ -121,11 +121,11 @@ service:
 
 resources:
   requests:
-    memory: "150Mi"
-    cpu: "50m"
+    memory: "4Gi"
+    cpu: "1"
   limits:
     memory: "8Gi"
-    cpu: "100m"
+    cpu: "2"
 
 defaultProbes: &default_probes
   enabled: true
