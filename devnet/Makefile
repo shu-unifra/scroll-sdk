@@ -2,19 +2,19 @@
 ARCH_ARM64 := $(shell if [ "$$(uname -m)" = "arm64" ] || [ "$$(uname -m)" = "aarch64" ]; then echo "-arm64"; else echo ""; fi)
 ARCH_OTHER := $(shell if [ "$$(uname -m)" != "arm64" ] && [ "$$(uname -m)" != "aarch64" ]; then echo "scroll-"; else echo ""; fi)
 NAMESPACE ?= default
-L2_IMAGE_TAG := $(ARCH_OTHER)v5.7.11$(ARCH_ARM64)
+L2_IMAGE_TAG := $(ARCH_OTHER)v5.7.21$(ARCH_ARM64)
 L1_RPC_HOST := l1-devnet.scrollsdk
 
 bootstrap:
 		echo "Pulling helm chart..."
-		helm pull oci://ghcr.io/scroll-tech/scroll-sdk/helm/scroll-sdk --version 0.0.50
+		helm pull oci://ghcr.io/scroll-tech/scroll-sdk/helm/scroll-sdk --version 0.0.51
 		echo "Extracting helm chart..."
 		tar -xvf *.tgz
 		$(MAKE) config
 
 config:
 		echo "Creating configuration files..."
-		cd scroll-sdk && time docker run --rm -it -v .:/contracts/volume scrolltech/scroll-stack-contracts:gen-configs-aa80925c5c4cacd62a35380a5ec081a6865621eb
+		cd scroll-sdk && time docker run --rm -it -v .:/contracts/volume scrolltech/scroll-stack-contracts:gen-configs-50c2661f6d3a40c34cc5b4fffbd0d7ba59d3dbae
 		echo "Creating env files..."
 		./create-env-files.sh scroll-sdk
 		./prepare-config-files.sh
