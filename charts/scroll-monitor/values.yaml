@@ -56,7 +56,7 @@ loki:
   deploymentMode: SingleBinary
   persistence:
     enabled: true
-    # storageClassName: 
+    # storageClassName:
     accessModes:
       - ReadWriteOnce
     size: 10Gi
@@ -118,4 +118,3 @@ kube-prometheus-stack:
   kube-state-metrics:
     nameOverride: kube-state-metrics
     fullnameOverride: kube-state-metrics
-
