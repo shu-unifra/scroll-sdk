@@ -11,7 +11,7 @@ controller:
 image:
   repository: scrolltech/l2geth
   pullPolicy: Always
-  tag: scroll-v5.5.17
+  tag: scroll-v5.7.25
 
 service:
   main:
@@ -45,12 +45,8 @@ probes:
     <<: *default_probes
 
 env:
-  - name: L2GETH_ROLE
-    value: rpc
   - name: L2GETH_NODEKEY
     value: ""
-  - name: L2GETH_PEER_LIST
-    value: '["enode://848a7d59dd8f60dd1a51160e6bc15c194937855443de9be4b2abd83e11a5c4ac21d61d065448c5c520826fe83f1f29eb5a452daccca27b8113aa897074132507@l2-sequencer:30303"]'
   - name: L2GETH_L1_WATCHER_CONFIRMATIONS
     value: "0x6"
   - name: L2GETH_RPC_HTTP_PORT
@@ -59,18 +55,24 @@ env:
     value: 8546
   - name: L2GETH_P2P_PORT
     value: 30303
-  - name: L2GETH_ENABLE_CCC
-    value: false
-  - name: L2GETH_CCC_RUST_LOG_LEVEL
-    value: info
+  - name: L2GETH_CCC_FLAG
+    value: "--ccc"
+  - name: L2GETH_CCC_NUMWORKERS
+    value: "5"
   - name: L2GETH_MAX_PEERS
     value: 500
   - name: VERBOSITY
     value: 3
-  - name: CCC_FLAG
-    value: "--ccc"
   - name: L2GETH_MIN_GAS_PRICE
     value: "1000000"
+  - name: L2GETH_GLOBAL_QUEUE
+    value: "4096"
+  - name: L2GETH_ACCOUNT_QUEUE
+    value: "256"
+  - name: L2GETH_GLOBAL_SLOTS
+    value: "40960"
+  - name: L2GETH_ACCOUNT_SLOTS
+    value: "128"
   - name: L2GETH_EXTRA_PARAMS
     value: ""
 
@@ -91,15 +93,17 @@ command:
     --http --http.port \"$L2GETH_RPC_HTTP_PORT\" --http.addr \"0.0.0.0\" --http.vhosts=\"*\" --http.corsdomain '*' --http.api \"eth,scroll,net,web3,debug\" \
     --pprof --pprof.addr \"0.0.0.0\" --pprof.port 6060 \
     --ws --ws.port \"$L2GETH_RPC_WS_PORT\" --ws.addr \"0.0.0.0\" --ws.api \"eth,scroll,net,web3,debug\" \
-    $CCC_FLAG \
+    $L2GETH_CCC_FLAG --ccc.numworkers \"$L2GETH_CCC_NUMWORKERS\" \
     $METRICS_FLAGS \
     --gcmode archive \
     --cache.noprefetch \
     --verbosity 3 \
-    --txpool.globalqueue 4096 --txpool.globalslots 40960 --txpool.pricelimit \"$L2GETH_MIN_GAS_PRICE\" $LOCALS_FLAG \
-    --miner.gasprice \"$L2GETH_MIN_GAS_PRICE\" --rpc.gascap 0 --gpo.ignoreprice \"$L2GETH_MIN_GAS_PRICE\" \
-    --gpo.percentile 20 \
-    --gpo.blocks 100 \
+    --txpool.globalqueue \"$L2GETH_GLOBAL_QUEUE\" --txpool.accountqueue \"$L2GETH_ACCOUNT_QUEUE\" \
+    --txpool.globalslots \"$L2GETH_GLOBAL_SLOTS\" --txpool.accountslots \"$L2GETH_ACCOUNT_SLOTS\" \
+    --txpool.pricelimit \"$L2GETH_MIN_GAS_PRICE\" $LOCALS_FLAG \
+    --miner.gasprice \"$L2GETH_MIN_GAS_PRICE\" --rpc.gascap 0 \
+    --gpo.ignoreprice \"$L2GETH_MIN_GAS_PRICE\" --gpo.percentile 20 --gpo.blocks 100 \
+    --gpo.congestionthreshold 500 \
     --l1.endpoint \"$L2GETH_L1_ENDPOINT\" --l1.confirmations \"$L2GETH_L1_WATCHER_CONFIRMATIONS\" --l1.sync.startblock \"$L2GETH_L1_CONTRACT_DEPLOYMENT_BLOCK\" \
     --rollup.verify \
     --metrics --metrics.expensive \
@@ -122,12 +126,6 @@ initContainers:
         subPath: wait-for-l1.sh
 
 persistence:
-  data:
-    enabled: true
-    type: pvc
-    mountPath: /l2geth/data
-    accessMode: ReadWriteOnce
-    size: 10Gi
   env:
     enabled: true
     type: configMap
@@ -144,6 +142,12 @@ persistence:
     name: wait-for-l1-script
     defaultMode: "0777"
 
+volumeClaimTemplates:
+  - name: data
+    accessMode: "ReadWriteOnce"
+    size: "100Gi"
+    mountPath: "/l2geth/data"
+
 ingress:
   main:
     enabled: true
@@ -156,6 +160,16 @@ ingress:
         paths:
           - path: /
             pathType: Prefix
+  websocket:  #  dedicated websocket ingress
+    enabled: true
+    ingressClassName: "nginx"
+    hosts:
+      - host: l2-rpc-ws.scrollsdk
+        paths:
+          - path: /
+            pathType: Prefix
+            service:
+              port: 8546
 
 serviceMonitor:
   main:

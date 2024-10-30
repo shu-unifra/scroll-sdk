@@ -10,16 +10,16 @@ controller:
 image:
   repository: scrolltech/frontends
   pullPolicy: Always
-  tag: 2.2.16
+  tag: 2.2.24
 
 command:
-  [
-    "/bin/bash",
-    "-c",
-    "awk 'NF {gsub(/ /, \"\"); print \"export \" $0}' /app/conf/frontend-config > /usr/share/nginx/html/.env && \
-    source /usr/share/nginx/html/.env && \
-    /usr/local/bin/entrypoint.sh"
-  ]
+  - "/bin/bash"
+  - "-cx"
+  - |
+    awk 'NF {gsub(/ /, ""); print "export " $0}' /app/conf/frontend-config > /usr/share/nginx/html/.env
+    source /usr/share/nginx/html/.env
+    sed -i "s|src=\"/runtime-env.js\"|src=\"/runtime-env.js?rand=$RANDOM\"|" index.html
+    exec /usr/local/bin/entrypoint.sh
 
 service:
   main:
@@ -72,3 +72,6 @@ ingress:
         paths:
           - path: /
             pathType: Prefix
+
+scrollConfig: |
+  {}

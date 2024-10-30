@@ -1,6 +1,6 @@
 # coordinator-cron
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
+![Version: 0.0.7](https://img.shields.io/badge/Version-0.0.7-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
 
 coordinator-cron helm charts
 
@@ -17,7 +17,7 @@ Kubernetes: `>=1.22.0-0`
 | Repository | Name | Version |
 |------------|------|---------|
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | common | 1.5.1 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | external-secrets-lib | 0.0.2 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | external-secrets-lib | 0.0.3 |
 
 ## Values
 
@@ -25,11 +25,12 @@ Kubernetes: `>=1.22.0-0`
 |-----|------|---------|-------------|
 | command[0] | string | `"/bin/sh"` |  |
 | command[1] | string | `"-c"` |  |
-| command[2] | string | `"coordinator_cron --config /app/conf/coordinator-config.json --metrics --metrics.addr 0.0.0.0 --metrics.port ${METRICS_PORT} --log.debug"` |  |
+| command[2] | string | `"coordinator_cron --config /app/conf/coordinator-cron-config.json --metrics --metrics.addr 0.0.0.0 --metrics.port ${METRICS_PORT} --log.debug"` |  |
 | defaultProbes.custom | bool | `true` |  |
 | defaultProbes.enabled | bool | `true` |  |
 | defaultProbes.spec.httpGet.path | string | `"/health"` |  |
 | defaultProbes.spec.httpGet.port | int | `8090` |  |
+| envFrom[0].configMapRef.name | string | `"coordinator-cron-env"` |  |
 | env[0].name | string | `"HTTP_PORT"` |  |
 | env[0].value | string | `"8555"` |  |
 | env[1].name | string | `"WS_PORT"` |  |
@@ -44,12 +45,12 @@ Kubernetes: `>=1.22.0-0`
 | global.nameOverride | string | `"coordinator-cron"` |  |
 | image.pullPolicy | string | `"Always"` |  |
 | image.repository | string | `"scrolltech/coordinator-cron"` |  |
-| image.tag | string | `"v4.4.26"` |  |
+| image.tag | string | `"v4.4.58"` |  |
 | initContainers.1-check-postgres-connection.args[0] | string | `"postgresql"` |  |
-| initContainers.1-check-postgres-connection.args[1] | string | `"$(DATABASE_URL)"` |  |
+| initContainers.1-check-postgres-connection.args[1] | string | `"$(SCROLL_COORDINATOR_DB_DSN)"` |  |
 | initContainers.1-check-postgres-connection.args[2] | string | `"--timeout"` |  |
 | initContainers.1-check-postgres-connection.args[3] | string | `"0"` |  |
-| initContainers.1-check-postgres-connection.envFrom[0].configMapRef.name | string | `"coordinator-env"` |  |
+| initContainers.1-check-postgres-connection.envFrom[0].configMapRef.name | string | `"coordinator-cron-env"` |  |
 | initContainers.1-check-postgres-connection.image | string | `"atkrad/wait4x:latest"` |  |
 | persistence.app_name.enabled | bool | `true` |  |
 | persistence.app_name.mountPath | string | `"/app/conf/"` |  |
@@ -75,6 +76,7 @@ Kubernetes: `>=1.22.0-0`
 | resources.limits.memory | string | `"200Mi"` |  |
 | resources.requests.cpu | string | `"50m"` |  |
 | resources.requests.memory | string | `"50Mi"` |  |
+| scrollConfig | string | `"{}\n"` |  |
 | service.main.enabled | bool | `true` |  |
 | service.main.ports.http.enabled | bool | `true` |  |
 | service.main.ports.http.port | int | `80` |  |

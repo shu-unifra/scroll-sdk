@@ -1,6 +1,3 @@
-global:
-  isStandalone: true
-
 initContainers:
   1-check-postgres-connection:
     image: atkrad/wait4x:latest
@@ -9,6 +6,16 @@ initContainers:
       - $(SCROLL_ROLLUP_DB_CONFIG_DSN)
       - --timeout
       - "0"
+    envFrom:
+      - secretRef:
+          name: rollup-node-secret-env
+  2-migrate-db:
+    image: scrolltech/rollup-db-cli:v4.4.60
+    command: ["/bin/sh", "-c", "db_cli migrate --config /config/migrate-db.json"]
+    volumeMounts:
+      - name: migrate-db
+        mountPath: /config/migrate-db.json
+        subPath: migrate-db.json
     envFrom:
       - secretRef:
           name: rollup-node-secret-env
@@ -25,15 +32,6 @@ persistence:
     name: rollup-node-migrate-db
     defaultMode: "0777"
 
-ingress:
-  main:
-    ingressClassName: "nginx"
-    hosts:
-      - host: rollup-node.scrollsdk
-        paths:
-          - path: /
-            pathType: Prefix
-
 configMaps:
   env:
     enabled: true
@@ -41,8 +39,6 @@ configMaps:
       L1_RPC_ENDPOINT: ""
       L2_RPC_ENDPOINT: ""
       L1_SCROLL_CHAIN_PROXY_ADDR: ""
-  migrate-db:
-    enabled: false
 
 externalSecrets:
   rollup-node-secret-env:
@@ -52,14 +48,6 @@ externalSecrets:
           key: scroll/rollup-node-secret-env
           property: SCROLL_ROLLUP_DB_CONFIG_DSN
         secretKey: SCROLL_ROLLUP_DB_CONFIG_DSN
-      - remoteRef:
-          key: scroll/rollup-node-secret-env
-          property: SCROLL_ROLLUP_L1_CONFIG_RELAYER_CONFIG_GAS_ORACLE_SENDER_PRIVATE_KEY
-        secretKey: SCROLL_ROLLUP_L1_CONFIG_RELAYER_CONFIG_GAS_ORACLE_SENDER_PRIVATE_KEY
-      - remoteRef:
-          key: scroll/rollup-node-secret-env
-          property: SCROLL_ROLLUP_L2_CONFIG_RELAYER_CONFIG_GAS_ORACLE_SENDER_PRIVATE_KEY
-        secretKey: SCROLL_ROLLUP_L2_CONFIG_RELAYER_CONFIG_GAS_ORACLE_SENDER_PRIVATE_KEY
       - remoteRef:
           key: scroll/rollup-node-secret-env
           property: SCROLL_ROLLUP_L2_CONFIG_RELAYER_CONFIG_COMMIT_SENDER_PRIVATE_KEY

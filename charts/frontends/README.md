@@ -1,6 +1,6 @@
 # frontends
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
+![Version: 0.0.10](https://img.shields.io/badge/Version-0.0.10-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
 
 frontends helm charts
 
@@ -17,15 +17,15 @@ Kubernetes: `>=1.22.0-0`
 | Repository | Name | Version |
 |------------|------|---------|
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | common | 1.5.1 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | external-secrets-lib | 0.0.2 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | external-secrets-lib | 0.0.3 |
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | command[0] | string | `"/bin/bash"` |  |
-| command[1] | string | `"-c"` |  |
-| command[2] | string | `"awk 'NF {gsub(/ /, \"\"); print \"export \" $0}' /app/conf/frontend-config > /usr/share/nginx/html/.env && source /usr/share/nginx/html/.env && /usr/local/bin/entrypoint.sh"` |  |
+| command[1] | string | `"-cx"` |  |
+| command[2] | string | `"awk 'NF {gsub(/ /, \"\"); print \"export \" $0}' /app/conf/frontend-config > /usr/share/nginx/html/.env\nsource /usr/share/nginx/html/.env\nsed -i \"s|src=\\\"/runtime-env.js\\\"|src=\\\"/runtime-env.js?rand=$RANDOM\\\"|\" index.html\nexec /usr/local/bin/entrypoint.sh\n"` |  |
 | controller.replicas | int | `1` |  |
 | controller.strategy | string | `"RollingUpdate"` |  |
 | controller.type | string | `"deployment"` |  |
@@ -37,7 +37,7 @@ Kubernetes: `>=1.22.0-0`
 | global.nameOverride | string | `"frontends"` |  |
 | image.pullPolicy | string | `"Always"` |  |
 | image.repository | string | `"scrolltech/frontends"` |  |
-| image.tag | string | `"2.2.16"` |  |
+| image.tag | string | `"2.2.24"` |  |
 | ingress.main.annotations | object | `{}` |  |
 | ingress.main.enabled | bool | `true` |  |
 | ingress.main.hosts[0].host | string | `"frontends.scrollsdk"` |  |
@@ -66,6 +66,7 @@ Kubernetes: `>=1.22.0-0`
 | resources.limits.memory | string | `"500Mi"` |  |
 | resources.requests.cpu | string | `"50m"` |  |
 | resources.requests.memory | string | `"100Mi"` |  |
+| scrollConfig | string | `"{}\n"` |  |
 | service.main.enabled | bool | `true` |  |
 | service.main.ports.http.enabled | bool | `true` |  |
 | service.main.ports.http.port | int | `80` |  |

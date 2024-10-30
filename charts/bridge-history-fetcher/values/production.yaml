@@ -1,6 +1,3 @@
-global:
-  isStandalone: true
-
 envFrom:
   - secretRef:
       name: bridge-history-fetcher-secret-env
@@ -30,24 +27,23 @@ initContainers:
     envFrom:
       - secretRef:
           name: bridge-history-fetcher-secret-env
+  2-migrate-db:
+    image: scrolltech/bridgehistoryapi-db-cli:v4.4.59
+    command: ["/bin/sh", "-c", "db_cli --config /config/migrate-db.json migrate"]
+    volumeMounts:
+      - name: migrate-db
+        mountPath: /config/migrate-db.json
+        subPath: migrate-db.json
+    envFrom:
+      - secretRef:
+          name: bridge-history-fetcher-secret-env
 
 configMaps:
   env:
     enabled: true
     data:
       SCROLL_L1_RPC: ""
-      SCROLL_L2_RPC: "http://l2-sequencer:8545"
-  migrate-db:
-    enabled: false
-
-ingress:
-  main:
-    ingressClassName: "nginx"
-    hosts:
-      - host: bridge-history-api.scrollsdk
-        paths:
-          - path: /
-            pathType: Prefix
+      SCROLL_L2_RPC: "http://l2-rpc:8545"
 
 externalSecrets:
   bridge-history-fetcher-secret-env:

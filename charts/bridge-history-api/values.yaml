@@ -10,18 +10,22 @@ controller:
 image:
   repository: scrolltech/bridgehistoryapi-api
   pullPolicy: Always
-  tag: v4.4.57
+  tag: v4.4.59
 
 command:
   [
     "/bin/sh",
     "-c",
-    "bridgehistoryapi-api --config /app/conf/bridge-history-config.json --metrics --metrics.addr 0.0.0.0 --metrics.port ${METRICS_PORT} --log.debug",
+    "bridgehistoryapi-api --config /app/conf/bridge-history-api-config.json --metrics --metrics.addr 0.0.0.0 --metrics.port ${METRICS_PORT} --log.debug",
   ]
 
 env:
   - name: METRICS_PORT
     value: "8090"
+
+envFrom:
+  - configMapRef:
+      name: bridge-history-api-env
 
 initContainers:
   1-wait-for-l1:
@@ -68,7 +72,7 @@ persistence:
     enabled: true
     type: configMap
     mountPath: /app/conf/
-    name: bridge-history-config
+    name: bridge-history-api-config
   wait-for-l1-script:
     enabled: true
     type: configMap
@@ -127,3 +131,6 @@ serviceMonitor:
       - port: metrics
         interval: 1m
         scrapeTimeout: 10s
+
+scrollConfig: |
+  {}

@@ -1,6 +1,3 @@
-global:
-  isStandalone: true
-
 persistence:
   #TODO is it still needed or can I use the default value ?
   gas-oracle:
@@ -30,14 +27,35 @@ initContainers:
     envFrom:
       - secretRef:
           name: gas-oracle-secret-env
+  2-migrate-db:
+    image: scrolltech/rollup-db-cli:v4.4.60
+    command: ["/bin/sh", "-c", "db_cli migrate --config /config/migrate-db.json"]
+    volumeMounts:
+      - name: migrate-db
+        mountPath: /config/migrate-db.json
+        subPath: migrate-db.json
+    envFrom:
+      - secretRef:
+          name: gas-oracle-secret-env
+  4-wait-for-l2-sequencer:
+    image: atkrad/wait4x:latest
+    args:
+      - http
+      - $(SCROLL_L2_RPC)
+      - --expect-status-code
+      - "200"
+      - --timeout
+      - "0"
+    envFrom:
+      - configMapRef:
+          name: gas-oracle-env
 
 configMaps:
   env:
     enabled: true
     data:
       SCROLL_L1_RPC: ""
-  migrate-db:
-    enabled: false
+      SCROLL_L2_RPC: ""
 
 externalSecrets:
   gas-oracle-secret-env:
@@ -55,14 +73,6 @@ externalSecrets:
           key: scroll/gas-oracle-secret-env
           property: SCROLL_ROLLUP_L2_CONFIG_RELAYER_CONFIG_GAS_ORACLE_SENDER_PRIVATE_KEY
         secretKey: SCROLL_ROLLUP_L2_CONFIG_RELAYER_CONFIG_GAS_ORACLE_SENDER_PRIVATE_KEY
-      - remoteRef:
-          key: scroll/gas-oracle-secret-env
-          property: SCROLL_ROLLUP_L2_CONFIG_RELAYER_CONFIG_COMMIT_SENDER_PRIVATE_KEY
-        secretKey: SCROLL_ROLLUP_L2_CONFIG_RELAYER_CONFIG_COMMIT_SENDER_PRIVATE_KEY
-      - remoteRef:
-          key: scroll/gas-oracle-secret-env
-          property: SCROLL_ROLLUP_L2_CONFIG_RELAYER_CONFIG_FINALIZE_SENDER_PRIVATE_KEY
-        secretKey: SCROLL_ROLLUP_L2_CONFIG_RELAYER_CONFIG_FINALIZE_SENDER_PRIVATE_KEY
     refreshInterval: 2m
     serviceAccount: external-secrets
   gas-oracle-migrate-db:

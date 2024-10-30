@@ -6,13 +6,17 @@ global:
 image:
   repository: scrolltech/chain-monitorv2
   pullPolicy: Always
-  tag: v1.1.26
+  tag: v1.1.29
 
 env:
   - name: CHAIN_MONITOR_SERVER_PORT
     value: 8080
   - name: CHAIN_MONITOR_METRICS_PORT
     value: 8090
+
+envFrom:
+  - configMapRef:
+      name: chain-monitor-env
 
 command:
   [
@@ -41,6 +45,11 @@ persistence:
     enabled: true
     type: configMap
     name: wait-for-l1-script
+    defaultMode: "0777"
+  wait-for-contracts-script:
+    enabled: true
+    type: configMap
+    name: wait-for-contracts-script
     defaultMode: "0777"
 
 service:
@@ -71,14 +80,14 @@ initContainers:
     image: atkrad/wait4x:latest
     args:
       - postgresql
-      - $(DATABASE_URL)
+      - $(SCROLL_CHAIN_MONITOR_DB_CONFIG_DSN)
       - --timeout
       - "0"
     envFrom:
       - configMapRef:
           name: chain-monitor-env
   2-migrate-db:
-    image: scrolltech/chain-monitorv2:v1.1.26
+    image: scrolltech/chain-monitorv2:v1.1.29
     command:
       - /bin/sh
       - -c
@@ -86,6 +95,9 @@ initContainers:
     volumeMounts:
       - name: *app_name
         mountPath: /app/config/
+    envFrom:
+      - configMapRef:
+          name: chain-monitor-env
   3-wait-for-l1:
     image: scrolltech/scroll-alpine:v0.0.1
     command:
@@ -108,6 +120,19 @@ initContainers:
       - "200"
       - --timeout
       - "0"
+  5-wait-for-contract:
+    image: scrolltech/scroll-alpine:v0.0.1
+    command:
+      - /bin/sh
+      - -c
+      - /wait-for-contract.sh $SCROLL_L1_RPC $L1_SCROLL_CHAIN_PROXY_ADDR
+    envFrom:
+      - configMapRef:
+          name: chain-monitor-env
+    volumeMounts:
+      - name: wait-for-contracts-script
+        mountPath: /wait-for-contract.sh
+        subPath: wait-for-contract.sh
 
 serviceMonitor:
   main:
@@ -119,3 +144,6 @@ serviceMonitor:
       - port: metrics
         interval: 1m
         scrapeTimeout: 10s
+
+scrollConfig: |
+  {}

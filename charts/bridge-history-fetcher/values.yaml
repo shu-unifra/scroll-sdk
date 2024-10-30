@@ -10,18 +10,22 @@ controller:
 image:
   repository: scrolltech/bridgehistoryapi-fetcher
   pullPolicy: Always
-  tag: v4.4.57
+  tag: v4.4.59
 
 command:
   [
     "/bin/sh",
     "-c",
-    "bridgehistoryapi-fetcher --config /app/conf/bridge-history-config.json --metrics --metrics.addr 0.0.0.0 --metrics.port ${METRICS_PORT} --log.debug",
+    "bridgehistoryapi-fetcher --config /app/conf/bridge-history-fetcher-config.json --metrics --metrics.addr 0.0.0.0 --metrics.port ${METRICS_PORT} --log.debug",
   ]
 
 env:
   - name: METRICS_PORT
     value: "8090"
+
+envFrom:
+  - configMapRef:
+      name: bridge-history-fetcher-env
 
 service:
   main:
@@ -40,7 +44,7 @@ persistence:
     enabled: true
     type: configMap
     mountPath: /app/conf/
-    name: bridge-history-config
+    name: bridge-history-fetcher-config
   migrate-db:
     enabled: true
     type: configMap
@@ -82,19 +86,22 @@ initContainers:
     image: atkrad/wait4x:latest
     args:
       - postgresql
-      - $(DATABASE_URL)
+      - $(SCROLL_BRIDGE_HISTORY_DB_DSN)
       - --timeout
       - "0"
     envFrom:
       - configMapRef:
           name: bridge-history-fetcher-env
   2-migrate-db:
-    image: scrolltech/bridgehistoryapi-db-cli:v4.4.14
+    image: scrolltech/bridgehistoryapi-db-cli:v4.4.59
     command: ["/bin/sh", "-c", "db_cli --config /config/migrate-db.json migrate"]
     volumeMounts:
       - name: migrate-db
         mountPath: /config/migrate-db.json
         subPath: migrate-db.json
+    envFrom:
+      - configMapRef:
+          name: bridge-history-fetcher-env
   3-wait-for-l1:
     image: scrolltech/scroll-alpine:v0.0.1
     command:
@@ -133,7 +140,7 @@ configMaps:
             "driver_name": "postgres",
             "maxOpenNum": 50,
             "maxIdleNume": 5,
-            "dsn": "postgres://postgres:qwerty12345@postgresql:5432/scroll?sslmode=disable"
+            "dsn": ""
           }
         }
 
@@ -147,3 +154,6 @@ serviceMonitor:
       - port: metrics
         interval: 1m
         scrapeTimeout: 10s
+
+scrollConfig: |
+  {}

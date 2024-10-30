@@ -6,7 +6,7 @@ global:
 image:
   repository: scrolltech/coordinator-cron
   pullPolicy: Always
-  tag: v4.4.26
+  tag: v4.4.58
 
 env:
   - name: HTTP_PORT
@@ -20,10 +20,14 @@ env:
   - name: GIN_MODE
     value: "release"
 
+envFrom:
+  - configMapRef:
+      name: coordinator-cron-env
+
 command: [
   "/bin/sh",
   "-c",
-  "coordinator_cron --config /app/conf/coordinator-config.json \
+  "coordinator_cron --config /app/conf/coordinator-cron-config.json \
     --metrics --metrics.addr 0.0.0.0 --metrics.port ${METRICS_PORT} \
     --log.debug",
 ]
@@ -33,12 +37,12 @@ initContainers:
     image: atkrad/wait4x:latest
     args:
       - postgresql
-      - $(DATABASE_URL)
+      - $(SCROLL_COORDINATOR_DB_DSN)
       - --timeout
       - "0"
     envFrom:
       - configMapRef:
-          name: coordinator-env
+          name: coordinator-cron-env
 
 resources:
   requests:
@@ -98,3 +102,6 @@ serviceMonitor:
       - port: metrics
         interval: 1m
         scrapeTimeout: 10s
+
+scrollConfig: |
+  {}
