@@ -1,6 +1,6 @@
 # rollup-node
 
-![Version: 0.0.14](https://img.shields.io/badge/Version-0.0.14-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
+![Version: 0.0.15](https://img.shields.io/badge/Version-0.0.15-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
 
 rollup-node helm charts
 
@@ -49,7 +49,7 @@ Kubernetes: `>=1.22.0-0`
 | initContainers.2-migrate-db.command[1] | string | `"-c"` |  |
 | initContainers.2-migrate-db.command[2] | string | `"db_cli migrate --config /config/migrate-db.json"` |  |
 | initContainers.2-migrate-db.envFrom[0].configMapRef.name | string | `"rollup-node-env"` |  |
-| initContainers.2-migrate-db.image | string | `"scrolltech/rollup-db-cli:v4.4.60"` |  |
+| initContainers.2-migrate-db.image | string | `"scrolltech/rollup-db-cli:v4.4.71"` |  |
 | initContainers.2-migrate-db.volumeMounts[0].mountPath | string | `"/config/migrate-db.json"` |  |
 | initContainers.2-migrate-db.volumeMounts[0].name | string | `"migrate-db"` |  |
 | initContainers.2-migrate-db.volumeMounts[0].subPath | string | `"migrate-db.json"` |  |
