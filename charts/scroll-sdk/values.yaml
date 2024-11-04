@@ -112,7 +112,7 @@ l2-bootnode:
   enabled: true
 
 blockscout-sc-verifier:
-  enabled: false
+  enabled: true
 
 rpc-gateway:
   enabled: false
