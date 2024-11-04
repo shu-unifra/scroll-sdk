@@ -54,7 +54,6 @@ blockscout-stack:
       NEXT_PUBLIC_API_PROTOCOL: https
       NEXT_PUBLIC_API_WEBSOCKET_PROTOCOL: wss
       NEXT_PUBLIC_API_HOST: "" # Backend host, example  "blockscout.scrollsdk"
-      NEXT_PUBLIC_APP_HOST: "" # Backend host, example  "blockscout.scrollsdk"
       NEXT_PUBLIC_APP_PROTOCOL: https
 
     ingress:
