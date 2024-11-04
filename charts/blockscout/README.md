@@ -47,11 +47,11 @@ Kubernetes: `>=1.22.0-0`
 | blockscout-stack.blockscout.ingress.annotations."nginx.ingress.kubernetes.io/enable-cors" | string | `"true"` |  |
 | blockscout-stack.blockscout.ingress.className | string | `"nginx"` |  |
 | blockscout-stack.blockscout.ingress.enabled | bool | `true` |  |
-| blockscout-stack.blockscout.ingress.hostname | string | `"blockscout-backend.scrollsdk"` |  |
+| blockscout-stack.blockscout.ingress.hostname | string | `"blockscout.scrollsdk"` |  |
 | blockscout-stack.frontend.env.FAVICON_MASTER_URL | string | `"https://raw.githubusercontent.com/blockscout/frontend-configs/main/configs/favicons/scroll_180x180.png"` |  |
 | blockscout-stack.frontend.env.NEXT_PUBLIC_AD_BANNER_PROVIDER | string | `"none"` |  |
 | blockscout-stack.frontend.env.NEXT_PUBLIC_AD_TEXT_PROVIDER | string | `"none"` |  |
-| blockscout-stack.frontend.env.NEXT_PUBLIC_API_HOST | string | `"blockscout-backend.scrollsdk"` |  |
+| blockscout-stack.frontend.env.NEXT_PUBLIC_API_HOST | string | `"blockscout.scrollsdk"` |  |
 | blockscout-stack.frontend.env.NEXT_PUBLIC_API_PROTOCOL | string | `"http"` |  |
 | blockscout-stack.frontend.env.NEXT_PUBLIC_API_WEBSOCKET_PROTOCOL | string | `"ws"` |  |
 | blockscout-stack.frontend.env.NEXT_PUBLIC_APP_PROTOCOL | string | `"http"` |  |
