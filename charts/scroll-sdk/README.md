@@ -27,7 +27,7 @@ Kubernetes: `>=1.22.0-0`
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | bridge-history-api | 0.1.0 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | bridge-history-fetcher | 0.1.0 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | chain-monitor | 0.1.0 |
-| oci://ghcr.io/scroll-tech/scroll-sdk/helm | contracts | 0.1.0 |
+| oci://ghcr.io/scroll-tech/scroll-sdk/helm | contracts | 0.1.1 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | coordinator-api | 0.1.0 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | coordinator-cron | 0.1.0 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | frontends | 0.1.0 |
@@ -56,7 +56,7 @@ Kubernetes: `>=1.22.0-0`
 | admin-system-dashboard.ingress.main.hosts[0].paths[0].path | string | `"/"` |  |
 | admin-system-dashboard.ingress.main.hosts[0].paths[0].pathType | string | `"Prefix"` |  |
 | balance-checker.enabled | bool | `true` |  |
-| blockscout-sc-verifier.enabled | bool | `false` |  |
+| blockscout-sc-verifier.enabled | bool | `true` |  |
 | blockscout.blockscout-stack.frontend.replicaCount | int | `1` |  |
 | blockscout.enabled | bool | `true` |  |
 | bridge-history-api.enabled | bool | `true` |  |
