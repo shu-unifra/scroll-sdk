@@ -7,7 +7,7 @@ L1_RPC_HOST := l1-devnet.scrollsdk
 
 bootstrap:
 		echo "Pulling helm chart..."
-		helm pull oci://ghcr.io/scroll-tech/scroll-sdk/helm/scroll-sdk --version 0.1.1
+		helm pull oci://ghcr.io/scroll-tech/scroll-sdk/helm/dev/scroll-sdk --version 0.1.1
 		echo "Extracting helm chart..."
 		tar -xvf *.tgz
 		$(MAKE) config
@@ -21,9 +21,6 @@ config:
 
 install:
 		helm upgrade -i scroll-sdk scroll-sdk -n $(NAMESPACE) \
-			--set l2-rpc.image.tag=$(L2_IMAGE_TAG) \
-			--set l2-sequencer.image.tag=$(L2_IMAGE_TAG) \
-			--set l2-bootnode.image.tag=$(L2_IMAGE_TAG) \
 			--set l1-devnet.ingress.main.hosts[0].host=$(L1_RPC_HOST) \
 			--set l1-devnet.ingress.main.hosts[0].paths[0].path=/ \
 			--set l1-devnet.ingress.main.hosts[0].paths[0].pathType=Prefix \
