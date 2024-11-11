@@ -206,3 +206,83 @@ jobs:
             export CHART_VERSION=$(grep 'version:' charts/$chart/Chart.yaml | head -n1 | awk '{ print $2 }')
             helm push $chart-${CHART_VERSION}.tgz oci://${HELM_REGISTRY}
           done
+
+  kubeconform:
+    name: kubeconform-check
+    runs-on: ubuntu-latest
+    needs:
+    - publish-ghcr-scroll-sdk
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          base: ${{ github.event.repository.default_branch }}
+          list-files: shell
+          filters: |
+            addedOrModified:
+              - added|modified: 'charts/scroll-sdk/**'
+
+      - name: Helm registry login
+        run: |
+          helm registry login ghcr.io/scroll-tech/helm/scroll-sdk --username ${{ github.actor }} --password ${{ secrets.HELM_GITHUB_PASSWORD }}
+        env:
+          HELM_GITHUB_PASSWORD: "${{ secrets.HELM_GITHUB_PASSWORD }}"
+
+      - name: Replace helm registry by helm/dev
+        run: |
+          find charts/ -type f -exec sed -i 's|oci://ghcr.io/scroll-tech/scroll-sdk/helm|oci://ghcr.io/scroll-tech/scroll-sdk/helm/dev|g' {} +
+
+      - name: Install Kubeconform
+        run: |
+          set -e
+          wget https://github.com/yannh/kubeconform/releases/download/v0.6.4/kubeconform-linux-amd64.tar.gz
+          tar xf kubeconform-linux-amd64.tar.gz
+          sudo mv kubeconform /usr/local/bin/
+
+      - name: Validate rendered templates
+        run: |
+          set -e
+          failed_charts=()
+          for chart in charts/*; do
+            if [ -d "$chart" ]; then
+              echo "Processing chart $chart"
+              if [[ $(basename $chart) == "common" ]] || [[ $(basename $chart) == "external-secrets-lib" ]]; then
+                echo "Skipping library chart: $chart"
+                continue
+              fi
+
+              if ! helm dependency update $chart; then
+                failed_charts+=("$chart - dependency update failed")
+                continue
+              fi
+
+              if ! helm dependency build $chart; then
+                failed_charts+=("$chart - dependency build failed")
+                continue
+              fi
+
+              if ! helm template $(basename $chart) $chart | kubeconform \
+                -summary \
+                -output json \
+                -kubernetes-version 1.25.0 \
+                -schema-location default \
+                -schema-location https://github.com/prometheus-operator/prometheus-operator/blob/main/jsonnet/prometheus-operator/alertmanagers-crd.json \
+                -schema-location https://github.com/prometheus-operator/prometheus-operator/blob/main/jsonnet/prometheus-operator/prometheusrules-crd.json \
+                -schema-location https://github.com/prometheus-operator/prometheus-operator/blob/main/jsonnet/prometheus-operator/servicemonitors-crd.json \
+                -schema-location https://github.com/prometheus-operator/prometheus-operator/blob/main/jsonnet/prometheus-operator/podmonitors-crd.json \
+                -strict \
+                -; then
+                failed_charts+=("$chart - validation failed")
+              fi
+            fi
+          done
+          
+          if [ ${#failed_charts[@]} -ne 0 ]; then
+            echo "faild charts are:"
+            printf '%s\n' "${failed_charts[@]}"
+            exit 1
+          fi
