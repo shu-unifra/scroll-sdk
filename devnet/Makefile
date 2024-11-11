@@ -14,7 +14,7 @@ bootstrap:
 
 config:
 		echo "Creating configuration files..."
-		cd scroll-sdk && time docker run --rm -it -v .:/contracts/volume scrolltech/scroll-stack-contracts:gen-configs-2eba3d2c418b16f4a66d9baadeb1c1bafdca81b1
+		cd scroll-sdk && time docker run --rm -v .:/contracts/volume scrolltech/scroll-stack-contracts:gen-configs-2eba3d2c418b16f4a66d9baadeb1c1bafdca81b1
 		echo "Creating env files..."
 		./create-env-files.sh scroll-sdk
 		./prepare-config-files.sh
