@@ -6,7 +6,7 @@ on:
       - 'charts/**'
 
 env:
-  HELM_REGISTRY: ghcr.io/scroll-tech/scroll-sdk/helm/dev
+  HELM_REGISTRY: ghcr.io/shu-unifra/scroll-sdk/helm/dev
 
 jobs:
   helm-chart-testing-not-scroll-sdk:
@@ -34,7 +34,7 @@ jobs:
 
       - name: Helm registry login
         run: |
-          helm registry login ghcr.io/scroll-tech/helm/scroll-sdk --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }}
+          helm registry login ghcr.io/shu-unifra/helm/scroll-sdk --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }}
         env:
           HELM_GITHUB_PASSWORD: "${{ secrets.HELM_GITHUB_PASSWORD }}"
 
@@ -74,7 +74,7 @@ jobs:
 
       - name: Helm registry login
         run: |
-          helm registry login ghcr.io/scroll-tech/helm/scroll-sdk --username ${{ github.actor }} --password ${{ secrets.HELM_GITHUB_PASSWORD }}
+          helm registry login ghcr.io/shu-unifra/helm/scroll-sdk --username ${{ github.actor }} --password ${{ secrets.HELM_GITHUB_PASSWORD }}
         env:
           HELM_GITHUB_PASSWORD: "${{ secrets.HELM_GITHUB_PASSWORD }}"
 
@@ -135,7 +135,7 @@ jobs:
 
       - name: Helm registry login
         run: |
-          helm registry login ghcr.io/scroll-tech/helm/scroll-sdk --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }}
+          helm registry login ghcr.io/shu-unifra/helm/scroll-sdk --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }}
         env:
           HELM_GITHUB_PASSWORD: "${{ secrets.HELM_GITHUB_PASSWORD }}"
 
@@ -175,13 +175,18 @@ jobs:
 
       - name: Helm registry login
         run: |
-          helm registry login ghcr.io/scroll-tech/helm/scroll-sdk --username ${{ github.actor }} --password ${{ secrets.HELM_GITHUB_PASSWORD }}
+          helm registry login ghcr.io/shu-unifra/helm/scroll-sdk --username ${{ github.actor }} --password ${{ secrets.HELM_GITHUB_PASSWORD }}
         env:
           HELM_GITHUB_PASSWORD: "${{ secrets.HELM_GITHUB_PASSWORD }}"
 
       - name: Replace helm registry by helm/dev
         run: |
           sed -i 's|oci://ghcr.io/scroll-tech/scroll-sdk/helm|oci://ghcr.io/scroll-tech/scroll-sdk/helm/dev|g' charts/scroll-sdk/Chart.yaml
+
+      #TODO delete this when merge to scroll
+      - name: Replace helm registry by helm/dev
+        run: |
+          sed -i 's|oci://ghcr.io/scroll-tech/scroll-sdk/helm/dev|oci://ghcr.io/shu-unifra/scroll-sdk/helm/dev|g' charts/scroll-sdk/Chart.yaml
 
       - name: Push chart to ghcr
         if: steps.filter.outputs.addedOrModified == 'true'
@@ -228,13 +233,18 @@ jobs:
 
       - name: Helm registry login
         run: |
-          helm registry login ghcr.io/scroll-tech/helm/scroll-sdk --username ${{ github.actor }} --password ${{ secrets.HELM_GITHUB_PASSWORD }}
+          helm registry login ghcr.io/shu-unifra/helm/scroll-sdk --username ${{ github.actor }} --password ${{ secrets.HELM_GITHUB_PASSWORD }}
         env:
           HELM_GITHUB_PASSWORD: "${{ secrets.HELM_GITHUB_PASSWORD }}"
 
       - name: Replace helm registry by helm/dev
         run: |
           find charts/ -type f -exec sed -i 's|oci://ghcr.io/scroll-tech/scroll-sdk/helm|oci://ghcr.io/scroll-tech/scroll-sdk/helm/dev|g' {} +
+
+      #TODO delete this when merge to scroll
+      - name: Replace helm registry by helm/dev
+        run: |
+          find charts/ -type f -exec sed -i 's|oci://ghcr.io/scroll-tech/scroll-sdk/helm/dev|oci://ghcr.io/shu-unifra/scroll-sdk/helm/dev|g' {} +
 
       - name: Install Kubeconform
         run: |
