@@ -293,3 +293,67 @@ jobs:
             printf '%s\n' "${failed_charts[@]}"
             exit 1
           fi
+
+  run-k8s-test:
+    name: check-services-up-and-running
+    runs-on: ubuntu-latest
+    needs: 
+      - kubeconform
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          base: ${{ github.event.repository.default_branch }}
+          list-files: shell
+          filters: |
+            addedOrModified:
+              - added|modified: 'charts/scroll-sdk/**'
+
+      - name: Helm registry login
+        run: |
+          helm registry login ghcr.io/scroll-tech/helm/scroll-sdk --username ${{ github.actor }} --password ${{ secrets.HELM_GITHUB_PASSWORD }}
+        env:
+          HELM_GITHUB_PASSWORD: "${{ secrets.HELM_GITHUB_PASSWORD }}"
+
+      - name: Replace helm registry by helm/dev
+        run: |
+          find charts/ -type f -exec sed -i 's|oci://ghcr.io/scroll-tech/scroll-sdk/helm|oci://ghcr.io/scroll-tech/scroll-sdk/helm/dev|g' {} +
+
+      - name: Create Kind Cluster
+        uses: helm/kind-action@v1.8.0
+        with:
+          cluster_name: chart-testing
+
+      - name: Install Chart Testing Tool
+        uses: helm/chart-testing-action@v2.6.1
+
+      - name: Run devnet
+        run: |
+          cd devnet
+          make bootstrap && make install
+
+      - name: Check Service Status
+        run: |
+          echo "Waiting for all pods to be ready..."
+
+          kubectl wait --for=condition=Ready pods --all --timeout=600s --namespace=default
+
+          for ns in $(kubectl get ns -o name); do
+            echo "Checking pods in ${ns}..."
+            if ! kubectl wait --for=condition=Ready pods --all --timeout=300s -n ${ns#namespace/}; then
+              echo "Pods in ${ns} failed to become ready"
+              kubectl describe pods -n ${ns#namespace/}
+              exit 1
+            fi
+          done
+
+          if [ $(kubectl get pods --all-namespaces -o json | jq '.items[] | select(.status.phase != "Running" and .status.phase != "Completed") | .metadata.name' | wc -l) -gt 0 ]; then
+            echo "Found pods not in Running/Completed state:"
+            kubectl get pods --all-namespaces -o wide | grep -v Running | grep -v Completed
+            kubectl describe pods --all-namespaces | grep -A 10 "Events:"
+            exit 1
+          fi
