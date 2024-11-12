@@ -249,7 +249,7 @@ jobs:
       - name: Install Kubeconform
         run: |
           set -e
-          wget https://github.com/yannh/kubeconform/releases/download/v0.6.4/kubeconform-linux-amd64.tar.gz
+          wget https://github.com/yannh/kubeconform/releases/download/v0.6.7/kubeconform-linux-amd64.tar.gz
           tar xf kubeconform-linux-amd64.tar.gz
           sudo mv kubeconform /usr/local/bin/
 
@@ -328,15 +328,6 @@ jobs:
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.6.0
 
-      - name: Setup scroll-sdk values
-        run: cd charts/scroll-sdk && docker run --rm -t -v .:/contracts/volume scrolltech/scroll-stack-contracts:gen-configs-50c2661f6d3a40c34cc5b4fffbd0d7ba59d3dbae
-
-      - name: Helm registry login
-        run: |
-          helm registry login ghcr.io/shu-unifra/helm/scroll-sdk --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }}
-        env:
-          HELM_GITHUB_PASSWORD: "${{ secrets.HELM_GITHUB_PASSWORD }}"
-
       - name: Replace helm registry by helm/dev
         run: |
           find charts/ -type f -exec sed -i 's|oci://ghcr.io/scroll-tech/scroll-sdk/helm|oci://ghcr.io/scroll-tech/scroll-sdk/helm/dev|g' {} +
@@ -346,19 +337,33 @@ jobs:
         run: |
           find charts/ -type f -exec sed -i 's|oci://ghcr.io/scroll-tech/scroll-sdk/helm/dev|oci://ghcr.io/shu-unifra/scroll-sdk/helm/dev|g' {} +
 
+      - name: Helm registry login
+        run: |
+          helm registry login ghcr.io/shu-unifra/helm/scroll-sdk --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }}
+        env:
+          HELM_GITHUB_PASSWORD: "${{ secrets.HELM_GITHUB_PASSWORD }}"
+
       - name: Create Kind Cluster
         uses: helm/kind-action@v1.8.0
         with:
           cluster_name: chart-testing
 
-      - name: Run chart-testing (list-changed)
-        id: list-changed
-        run: |
-          changed=$(ct list-changed --chart-dirs charts/scroll-sdk --target-branch ${{ github.event.repository.default_branch }} )
-          if [[ -n "$changed" ]]; then
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Run chart-testing (install)
         if: steps.list-changed.outputs.changed == 'true'
         run: ct install --config ct.yaml --charts scroll-sdk --target-branch ${{ github.event.repository.default_branch }}
+
+      - name: Run Devnet Bootstrap
+        run: cd devnet && make bootstrap
+
+      - name: Install Charts using Makefile
+        run: |
+          cd devnet
+          make install
+          echo "Waiting for installation to complete..."
+          sleep 100
+
+      - name: Ensure all services are up and running
+        run: |
+          kubectl wait --for=condition=Ready pod --all --field-selector=status.phase!=Succeeded,status.phase!=Failed --timeout=3s
+          kubectl wait --for=condition=available deployments --all --timeout=3s
+          kubectl wait --for=condition=complete jobs --all  --timeout=3s
