@@ -18,14 +18,14 @@ Kubernetes: `>=1.22.0-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| oci://ghcr.io/dogeos69/scroll-sdk/helm | blockscout | 0.1.2-dogeos |
-| oci://ghcr.io/dogeos69/scroll-sdk/helm | contracts | 0.1.2-dogeos |
-| oci://ghcr.io/dogeos69/scroll-sdk/helm | l2-bootnode | 0.1.3-dogeos |
-| oci://ghcr.io/dogeos69/scroll-sdk/helm | l2-rpc | 0.1.3-dogeos |
-| oci://ghcr.io/dogeos69/scroll-sdk/helm | l2-sequencer | 0.1.3-dogeos |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | l1-devnet | 0.1.3 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | scroll-common | 0.1.0 |
 | oci://ghcr.io/scroll-tech/scroll-sdk/helm | scroll-monitor | 0.1.0 |
+| oci://ghcr.io/shu-unifra/scroll-sdk/helm | blockscout | 0.1.2-dogeos |
+| oci://ghcr.io/shu-unifra/scroll-sdk/helm | contracts | 0.1.2-dogeos |
+| oci://ghcr.io/shu-unifra/scroll-sdk/helm | l2-bootnode | 0.1.3-dogeos |
+| oci://ghcr.io/shu-unifra/scroll-sdk/helm | l2-rpc | 0.1.3-dogeos |
+| oci://ghcr.io/shu-unifra/scroll-sdk/helm | l2-sequencer | 0.1.3-dogeos |
 | oci://registry-1.docker.io/bitnamicharts | postgresql | 15.5.0 |
 
 ## Values

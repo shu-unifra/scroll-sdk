@@ -6,7 +6,7 @@ on:
       - 'charts/**'
 
 env:
-  HELM_REGISTRY: ghcr.io/dogeos69/scroll-sdk/helm/dev
+  HELM_REGISTRY: ghcr.io/shu-unifra/scroll-sdk/helm/dev
 
 jobs:
   helm-chart-testing-not-scroll-sdk:
@@ -52,6 +52,9 @@ jobs:
   publish-ghcr-not-scroll-sdk:
     name: publish-to-github-without-scroll-sdk
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     needs:
       - helm-chart-testing-not-scroll-sdk
     outputs:
@@ -149,6 +152,9 @@ jobs:
   publish-ghcr-scroll-sdk:
     name: publish-scroll-sdk-to-github
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     needs:
       - helm-chart-testing-scroll-sdk
     outputs:
@@ -173,7 +179,7 @@ jobs:
 
       - name: Replace helm registry by helm/dev
         run: |
-          sed -i 's|oci://ghcr.io/dogeos69/scroll-sdk/helm|oci://ghcr.io/dogeos69/scroll-sdk/helm/dev|g' charts/scroll-sdk/Chart.yaml
+          sed -i 's|oci://ghcr.io/shu-unifra/scroll-sdk/helm|oci://ghcr.io/shu-unifra/scroll-sdk/helm/dev|g' charts/scroll-sdk/Chart.yaml
 
       - name: Push chart to ghcr
         if: steps.filter.outputs.addedOrModified == 'true'
