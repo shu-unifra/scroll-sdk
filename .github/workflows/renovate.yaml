@@ -16,6 +16,6 @@ jobs:
       - name: Renovate
         uses: renovatebot/github-action@v40.1.6
         env:
-          RENOVATE_REPOSITORIES: "scroll-tech/scroll-sdk"
+          RENOVATE_REPOSITORIES: "dogeos69/scroll-sdk"
         with:
           token: "${{ secrets.RENOVATE_TOKEN }}"
